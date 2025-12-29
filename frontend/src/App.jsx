@@ -12,6 +12,8 @@ import {
 } from 'recharts';
 import api, { WebSocketClient } from './api';
 import clsx from 'clsx';
+import PerformanceMetrics from './PerformanceMetrics';
+import FraudRingVisualization from './FraudRingVisualization';
 
 // ============ CONSTANTS ============
 
@@ -900,6 +902,7 @@ function App() {
   const [alerts, setAlerts] = useState([]);
   const [modelStats, setModelStats] = useState({});
   const [filters, setFilters] = useState({ riskLevel: 'all', channel: 'all', search: '' });
+  const [activeTab, setActiveTab] = useState('monitoring'); // monitoring, performance, fraudRings
   
   const wsRef = useRef(null);
   const newTxnIds = useRef(new Set());
@@ -970,6 +973,7 @@ function App() {
         api.getSimulationStatus()
       ]);
       setOverallStats(prev => ({ ...prev, ...statsRes }));
+      setSessionStats(prev => ({ ...prev, ...statsRes })); // FIX: Initialize session stats with current data
       setModelStats(modelRes);
       setSimulationActive(simStatus.active);
     } catch (e) {
@@ -1073,6 +1077,65 @@ function App() {
           <StatCard icon={Zap} title="Latency" value={`${(stats.avg_latency_ms || 5).toFixed(0)}ms`} subtitle="P50" color="cyan" />
         </div>
         
+        {/* Tab Navigation */}
+        <div className="mb-4 border-b border-gray-700">
+          <div className="flex gap-4">
+            <button
+              onClick={() => setActiveTab('monitoring')}
+              className={`pb-3 px-1 font-medium text-sm transition-colors relative ${
+                activeTab === 'monitoring' 
+                  ? 'text-cyan-400' 
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              <Activity size={16} className="inline mr-2" />
+              Live Monitoring
+              {activeTab === 'monitoring' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab('performance')}
+              className={`pb-3 px-1 font-medium text-sm transition-colors relative ${
+                activeTab === 'performance' 
+                  ? 'text-cyan-400' 
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              <BarChart3 size={16} className="inline mr-2" />
+              Model Performance
+              {activeTab === 'performance' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab('fraudRings')}
+              className={`pb-3 px-1 font-medium text-sm transition-colors relative ${
+                activeTab === 'fraudRings' 
+                  ? 'text-cyan-400' 
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              <Network size={16} className="inline mr-2" />
+              Fraud Rings
+              {activeTab === 'fraudRings' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
+              )}
+            </button>
+          </div>
+        </div>
+        
+        {/* Tab Content */}
+        {activeTab === 'performance' && (
+          <PerformanceMetrics modelStats={modelStats} />
+        )}
+        
+        {activeTab === 'fraudRings' && (
+          <FraudRingVisualization transactions={transactions} alerts={alerts} />
+        )}
+        
+        {activeTab === 'monitoring' && (
+          <>
         <Filters 
           filters={filters}
           onChange={setFilters}
@@ -1153,11 +1216,13 @@ function App() {
             <ModelStatsCard stats={modelStats} />
           </div>
         </div>
+        </>
+        )}
       </main>
       
       <footer className="glass mt-6 px-4 py-3 text-center text-xs text-gray-500 border-t border-cyan-500/10">
-        <p className="gradient-text font-semibold">ARGUS v3.0.0-india</p>
-        <p className="text-[10px] mt-0.5">Real-time AI Fraud Detection • XGBoost + Isolation Forest + Rule Engine</p>
+        <p className="gradient-text font-semibold">ARGUS v3.2.0-india</p>
+        <p className="text-[10px] mt-0.5">Real-time AI Fraud Detection • XGBoost + Isolation Forest + UPI Detector + Rule Engine</p>
       </footer>
     </div>
   );

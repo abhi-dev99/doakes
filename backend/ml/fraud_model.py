@@ -7,6 +7,7 @@ Supports UPI, Cards, NetBanking, Wallets with DYNAMIC thresholds.
 Key Features:
 - XGBoost + Isolation Forest ensemble
 - India-specific rule engine (RBI/NPCI compliant)
+- **UPI-SPECIFIC FRAUD DETECTION** - Digital arrest, SIM swap, mule accounts
 - **DYNAMIC User Behavior Analysis** - Personalized anomaly detection
 - **PERSISTENT User Profiles** - Survives server restarts
 - 0.1% realistic fraud rate
@@ -26,6 +27,14 @@ from datetime import datetime, timedelta
 from collections import deque
 
 logger = logging.getLogger("ARGUS.FraudEngine")
+
+# Import UPI-specific fraud detector
+try:
+    from .upi_fraud_patterns import UPIFraudDetector
+    UPI_DETECTOR_AVAILABLE = True
+except ImportError:
+    UPI_DETECTOR_AVAILABLE = False
+    logger.warning("UPI fraud detector not available")
 
 # ============ CONFIGURATION ============
 
@@ -358,6 +367,9 @@ class FraudDetectionEngine:
         self.scaler = None
         self.model_loaded = False
         
+        # Initialize UPI fraud detector
+        self.upi_detector = UPIFraudDetector() if UPI_DETECTOR_AVAILABLE else None
+        
         # Dynamic user behavior profiles (PERSISTENT)
         self.user_profiles: Dict[str, UserBehaviorProfile] = {}
         self._profiles_dirty = False  # Track if profiles need saving
@@ -679,13 +691,22 @@ class FraudDetectionEngine:
         # Add dynamic anomaly score component
         dynamic_anomaly_score = self._calculate_dynamic_anomaly_score(anomaly_info)
         
-        # Ensemble scoring with weights (adjusted for dynamic analysis)
+        # Ensemble scoring with weights (adjusted for dynamic analysis + UPI detection)
         final_score = (
-            xgb_score * 0.35 +
+            xgb_score * 0.3 +
             anomaly_score * 0.15 +
             rule_score * 0.25 +
-            dynamic_anomaly_score * 0.25  # New dynamic component
+            dynamic_anomaly_score * 0.2
         )
+        
+        # Run UPI-specific fraud detection
+        upi_fraud_result = None
+        if self.upi_detector and transaction.get('channel') in ['upi', 'UPI']:
+            upi_fraud_result = self.upi_detector.analyze_transaction(transaction)
+            if upi_fraud_result['is_upi_fraud']:
+                # Boost score if UPI-specific fraud detected
+                final_score = min(final_score + upi_fraud_result['upi_risk_score'] * 0.1, 1.0)
+                triggered_rules.extend(upi_fraud_result['fraud_types'])
         
         # Determine risk level
         risk_level = self._get_risk_level(final_score)
@@ -695,7 +716,7 @@ class FraudDetectionEngine:
         
         latency_ms = (time.perf_counter() - start_time) * 1000
         
-        # Build response with dynamic analysis info
+        # Build response with dynamic analysis + UPI fraud info
         response = {
             'risk_score': round(final_score, 4),
             'risk_level': risk_level,
@@ -724,6 +745,15 @@ class FraudDetectionEngine:
                 'transactions_analyzed': user_profile.txn_count
             }
         }
+        
+        # Add UPI fraud detection results if available
+        if upi_fraud_result:
+            response['upi_fraud_analysis'] = {
+                'detected': upi_fraud_result['is_upi_fraud'],
+                'fraud_types': upi_fraud_result['fraud_types'],
+                'rbi_category': upi_fraud_result['rbi_category'],
+                'reasons': upi_fraud_result['reasons']
+            }
         
         # Mark profiles as needing save and maybe save periodically
         self._profiles_dirty = True
