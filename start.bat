@@ -10,7 +10,7 @@ echo  ║   / _ \ | |_) | |  _| | | \___ \                          ║
 echo  ║  / ___ \|  _ ^<| |_| | |_| |___) |                         ║
 echo  ║ /_/   \_\_| \_\\____|\___/|____/                          ║
 echo  ║                                                           ║
-echo  ║           AI Fraud Detection System v3.0.0-india          ║
+echo  ║           AI Fraud Detection System v3.2.0-india          ║
 echo  ╚═══════════════════════════════════════════════════════════╝
 echo.
 

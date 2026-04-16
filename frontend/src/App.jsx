@@ -4,7 +4,7 @@ import {
   TrendingUp, Users, Clock, Play, Square, Eye, Bell, 
   BarChart3, Zap, Globe, Filter, ChevronRight, RefreshCw, 
   Search, X, Download, Sun, Moon, Smartphone, CreditCard, 
-  Wallet, Building2, Banknote
+  Wallet, Building2, Banknote, Network, Brain, Store, AlertOctagon
 } from 'lucide-react';
 import { 
   PieChart, Pie, Cell, BarChart, Bar,
@@ -12,6 +12,8 @@ import {
 } from 'recharts';
 import api, { WebSocketClient } from './api';
 import clsx from 'clsx';
+import PerformanceMetrics from './PerformanceMetrics';
+import FraudRingVisualization from './FraudRingVisualization';
 
 // ============ CONSTANTS ============
 
@@ -328,26 +330,220 @@ const TransactionRow = memo(function TransactionRow({ transaction, isNew }) {
       
       {expanded && (
         <div className="px-3 pb-3 animate-fade-in">
-          <div className="glass-card p-3 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          {/* Advanced Features Panel */}
+          {(transaction.graph_fraud || transaction.sequence_risk || transaction.merchant_risk || transaction.pre_auth || transaction.phishing_detected) && (
+            <div className="mb-3 space-y-2">
+              {/* Graph Fraud Detection */}
+              {transaction.graph_fraud && transaction.graph_fraud.enabled && (
+                <div className="glass-card p-2 border-l-2 border-purple-500">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Network className="w-3.5 h-3.5 text-purple-400" />
+                    <span className="text-xs font-semibold text-purple-400">Graph Analysis</span>
+                    <span className={`ml-auto text-xs font-mono px-2 py-0.5 rounded-full ${
+                      transaction.graph_fraud.graph_risk_score >= 70 ? 'bg-red-500/20 text-red-400' :
+                      transaction.graph_fraud.graph_risk_score >= 40 ? 'bg-amber-500/20 text-amber-400' :
+                      'bg-emerald-500/20 text-emerald-400'
+                    }`}>
+                      {transaction.graph_fraud.graph_risk_score?.toFixed(0)}%
+                    </span>
+                  </div>
+                  {transaction.graph_fraud.risk_factors && transaction.graph_fraud.risk_factors.length > 0 && (
+                    <div className="text-xs text-gray-400 space-y-0.5 pl-5">
+                      {transaction.graph_fraud.risk_factors.slice(0, 2).map((factor, i) => (
+                        <div key={i}>• {factor}</div>
+                      ))}
+                    </div>
+                  )}
+                  {transaction.graph_fraud.sender_analysis?.is_mule && (
+                    <div className="text-xs text-red-400 font-semibold pl-5 mt-1">
+                      ⚠️ Mule Account Detected
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {/* Sequence Risk (Deep Learning) */}
+              {transaction.sequence_risk && transaction.sequence_risk.sequence_length > 0 && (
+                <div className="glass-card p-2 border-l-2 border-cyan-500">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Brain className="w-3.5 h-3.5 text-cyan-400" />
+                    <span className="text-xs font-semibold text-cyan-400">
+                      {transaction.sequence_risk.model_type || 'ML'} Sequence
+                    </span>
+                    <span className="text-xs text-gray-500">({transaction.sequence_risk.sequence_length} txns)</span>
+                    <span className={`ml-auto text-xs font-mono px-2 py-0.5 rounded-full ${
+                      transaction.sequence_risk.sequence_risk_score >= 70 ? 'bg-red-500/20 text-red-400' :
+                      transaction.sequence_risk.sequence_risk_score >= 40 ? 'bg-amber-500/20 text-amber-400' :
+                      'bg-emerald-500/20 text-emerald-400'
+                    }`}>
+                      {transaction.sequence_risk.sequence_risk_score?.toFixed(0)}%
+                    </span>
+                  </div>
+                  {transaction.sequence_risk.risk_factors && transaction.sequence_risk.risk_factors.length > 0 && (
+                    <div className="text-xs text-gray-400 pl-5">
+                      {transaction.sequence_risk.risk_factors[0]}
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {/* Merchant Reputation */}
+              {transaction.merchant_risk && (
+                <div className="glass-card p-2 border-l-2 border-amber-500">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Store className="w-3.5 h-3.5 text-amber-400" />
+                    <span className="text-xs font-semibold text-amber-400">Merchant Risk</span>
+                    <span className="text-xs text-gray-500">
+                      Rep: {transaction.merchant_risk.merchant_reputation || 50}/100
+                    </span>
+                    <span className={`ml-auto text-xs font-mono px-2 py-0.5 rounded-full ${
+                      transaction.merchant_risk.merchant_risk_score >= 70 ? 'bg-red-500/20 text-red-400' :
+                      transaction.merchant_risk.merchant_risk_score >= 40 ? 'bg-amber-500/20 text-amber-400' :
+                      'bg-emerald-500/20 text-emerald-400'
+                    }`}>
+                      {transaction.merchant_risk.merchant_risk_score?.toFixed(0)}%
+                    </span>
+                  </div>
+                  {transaction.merchant_risk.risk_factors && transaction.merchant_risk.risk_factors.length > 0 && (
+                    <div className="text-xs text-gray-400 pl-5">
+                      {transaction.merchant_risk.risk_factors[0]}
+                    </div>
+                  )}
+                  {transaction.merchant_risk.chargeback_ratio > 0.01 && (
+                    <div className="text-xs text-red-400 pl-5 mt-1">
+                      Chargeback: {(transaction.merchant_risk.chargeback_ratio * 100).toFixed(2)}%
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {/* Pre-Auth Decision */}
+              {transaction.pre_auth && (
+                <div className={`glass-card p-2 border-l-2 ${
+                  transaction.pre_auth.decision === 'BLOCK' ? 'border-red-500' :
+                  transaction.pre_auth.decision === 'CHALLENGE' ? 'border-amber-500' :
+                  'border-emerald-500'
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <Shield className={`w-3.5 h-3.5 ${
+                      transaction.pre_auth.decision === 'BLOCK' ? 'text-red-400' :
+                      transaction.pre_auth.decision === 'CHALLENGE' ? 'text-amber-400' :
+                      'text-emerald-400'
+                    }`} />
+                    <span className={`text-xs font-semibold ${
+                      transaction.pre_auth.decision === 'BLOCK' ? 'text-red-400' :
+                      transaction.pre_auth.decision === 'CHALLENGE' ? 'text-amber-400' :
+                      'text-emerald-400'
+                    }`}>
+                      {transaction.pre_auth.decision}
+                    </span>
+                    {transaction.pre_auth.decision === 'CHALLENGE' && transaction.pre_auth.auth_method && (
+                      <span className="text-xs text-gray-500">
+                        → {transaction.pre_auth.auth_method}
+                      </span>
+                    )}
+                    <span className="ml-auto text-xs text-gray-500">
+                      {transaction.pre_auth.latency_ms?.toFixed(1)}ms
+                    </span>
+                  </div>
+                  {transaction.pre_auth.block_reasons && transaction.pre_auth.block_reasons.length > 0 && (
+                    <div className="text-xs text-red-400 pl-5 mt-1">
+                      {transaction.pre_auth.block_reasons[0]}
+                    </div>
+                  )}
+                  {transaction.pre_auth.challenge_reasons && transaction.pre_auth.challenge_reasons.length > 0 && (
+                    <div className="text-xs text-amber-400 pl-5 mt-1">
+                      {transaction.pre_auth.challenge_reasons[0]}
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {/* Phishing Attack Detected */}
+              {transaction.phishing_detected && (
+                <div className="glass-card p-2 border-l-2 border-rose-500 bg-rose-500/5">
+                  <div className="flex items-center gap-2">
+                    <AlertOctagon className="w-3.5 h-3.5 text-rose-400" />
+                    <span className="text-xs font-semibold text-rose-400">
+                      PHISHING ATTACK
+                    </span>
+                    <span className="text-xs text-gray-500">{transaction.attack_type}</span>
+                  </div>
+                  {transaction.phishing_indicators && transaction.phishing_indicators.length > 0 && (
+                    <div className="text-xs text-rose-300 pl-5 mt-1">
+                      {transaction.phishing_indicators[0]}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+          
+          <div className="glass-card p-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
             {/* Scores */}
             <div>
               <p className="text-gray-500 mb-2 font-semibold uppercase tracking-wide text-[10px]">ML Scores</p>
-              {['xgboost', 'anomaly_detection', 'rule_engine'].map((key) => (
+              {['xgboost', 'anomaly_detection', 'rule_engine', 'dynamic_behavior'].map((key) => (
                 <div key={key} className="flex justify-between items-center mb-1.5">
-                  <span className="text-gray-400 capitalize">{key.replace('_', ' ')}</span>
+                  <span className="text-gray-400 capitalize text-[10px]">{key.replace(/_/g, ' ')}</span>
                   <div className="flex items-center gap-2">
-                    <div className="w-16 h-1.5 bg-argus-border rounded-full overflow-hidden">
+                    <div className="w-12 h-1.5 bg-argus-border rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full"
                         style={{ width: `${(transaction.model_scores?.[key] || 0) * 100}%` }}
                       />
                     </div>
-                    <span className="font-mono w-8 text-right">
+                    <span className="font-mono w-8 text-right text-[10px]">
                       {((transaction.model_scores?.[key] || 0) * 100).toFixed(0)}%
                     </span>
                   </div>
                 </div>
               ))}
+            </div>
+            
+            {/* Behavior Analysis */}
+            <div>
+              <p className="text-gray-500 mb-2 font-semibold uppercase tracking-wide text-[10px]">
+                Behavior Analysis
+                {transaction.behavior_analysis?.is_behavioral_anomaly && (
+                  <span className="ml-1 text-orange-400">⚠️</span>
+                )}
+              </p>
+              <div className="space-y-1 text-gray-400">
+                <p className="flex justify-between">
+                  <span className="text-gray-500">User Avg:</span> 
+                  <span className="font-mono">{formatINR(transaction.behavior_analysis?.user_avg_amount || 0)}</span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="text-gray-500">Z-Score:</span> 
+                  <span className={clsx(
+                    "font-mono",
+                    Math.abs(transaction.behavior_analysis?.amount_zscore || 0) > 3 ? "text-red-400" :
+                    Math.abs(transaction.behavior_analysis?.amount_zscore || 0) > 2 ? "text-orange-400" : ""
+                  )}>
+                    {(transaction.behavior_analysis?.amount_zscore || 0).toFixed(1)}σ
+                  </span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="text-gray-500">vs Avg:</span> 
+                  <span className={clsx(
+                    "font-mono",
+                    (transaction.behavior_analysis?.amount_vs_avg_ratio || 1) > 5 ? "text-red-400" :
+                    (transaction.behavior_analysis?.amount_vs_avg_ratio || 1) > 3 ? "text-orange-400" : ""
+                  )}>
+                    {(transaction.behavior_analysis?.amount_vs_avg_ratio || 1).toFixed(1)}x
+                  </span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="text-gray-500">Profile:</span> 
+                  <span className={clsx(
+                    "font-mono",
+                    transaction.behavior_analysis?.profile_maturity === 'mature' ? "text-emerald-400" : "text-amber-400"
+                  )}>
+                    {transaction.behavior_analysis?.profile_maturity || 'new'} ({transaction.behavior_analysis?.transactions_analyzed || 0})
+                  </span>
+                </p>
+              </div>
             </div>
             
             {/* Details */}
@@ -368,12 +564,22 @@ const TransactionRow = memo(function TransactionRow({ transaction, isNew }) {
               </p>
               {transaction.triggered_rules?.length > 0 ? (
                 <ul className="space-y-1">
-                  {transaction.triggered_rules.slice(0, 4).map((rule, i) => (
-                    <li key={i} className="text-orange-400/90 flex items-start gap-1 text-[11px]">
+                  {transaction.triggered_rules.slice(0, 5).map((rule, i) => (
+                    <li key={i} className={clsx(
+                      "flex items-start gap-1 text-[10px]",
+                      rule.includes('AMOUNT_ZSCORE') || rule.includes('AMOUNT_SPIKE') || rule.includes('DAILY_SPIKE') 
+                        ? "text-purple-400" 
+                        : "text-orange-400/90"
+                    )}>
                       <AlertTriangle className="w-3 h-3 shrink-0 mt-0.5" />
                       <span className="truncate">{rule}</span>
                     </li>
                   ))}
+                  {transaction.triggered_rules.length > 5 && (
+                    <li className="text-gray-500 text-[10px]">
+                      +{transaction.triggered_rules.length - 5} more...
+                    </li>
+                  )}
                 </ul>
               ) : (
                 <p className="text-emerald-400/70 flex items-center gap-1">
@@ -557,23 +763,34 @@ const ModelStatsCard = memo(function ModelStatsCard({ stats }) {
     [stats?.feature_importance]
   );
   
+  const dynamicStats = stats?.dynamic_detection || {};
+  
   return (
     <div className="glass-card p-4">
       <h3 className="text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wide flex items-center gap-2">
         <BarChart3 className="w-3 h-3" />
-        Model {stats?.version || 'v3.0.0'}
+        Model {stats?.version || 'v3.1.0'}
       </h3>
       
       <div className="grid grid-cols-2 gap-2 mb-3">
         <div className="glass-card p-2 text-center">
-          <p className="text-[10px] text-gray-500">Precision</p>
-          <p className="font-mono text-sm text-emerald-400">95%</p>
+          <p className="text-[10px] text-gray-500">User Profiles</p>
+          <p className="font-mono text-sm text-cyan-400">{dynamicStats.active_user_profiles || 0}</p>
         </div>
         <div className="glass-card p-2 text-center">
-          <p className="text-[10px] text-gray-500">Recall</p>
-          <p className="font-mono text-sm text-emerald-400">92%</p>
+          <p className="text-[10px] text-gray-500">Mature</p>
+          <p className="font-mono text-sm text-emerald-400">{dynamicStats.mature_profiles || 0}</p>
         </div>
       </div>
+      
+      {dynamicStats.enabled && (
+        <div className="mb-3 p-2 glass-card border-l-2 border-purple-500">
+          <p className="text-[10px] text-purple-400 font-semibold">Dynamic Detection Active</p>
+          <p className="text-[9px] text-gray-500 mt-0.5">
+            Personalized thresholds based on user behavior
+          </p>
+        </div>
+      )}
       
       {features.length > 0 && (
         <>
@@ -685,6 +902,7 @@ function App() {
   const [alerts, setAlerts] = useState([]);
   const [modelStats, setModelStats] = useState({});
   const [filters, setFilters] = useState({ riskLevel: 'all', channel: 'all', search: '' });
+  const [activeTab, setActiveTab] = useState('monitoring'); // monitoring, performance, fraudRings
   
   const wsRef = useRef(null);
   const newTxnIds = useRef(new Set());
@@ -755,6 +973,7 @@ function App() {
         api.getSimulationStatus()
       ]);
       setOverallStats(prev => ({ ...prev, ...statsRes }));
+      setSessionStats(prev => ({ ...prev, ...statsRes })); // FIX: Initialize session stats with current data
       setModelStats(modelRes);
       setSimulationActive(simStatus.active);
     } catch (e) {
@@ -858,6 +1077,65 @@ function App() {
           <StatCard icon={Zap} title="Latency" value={`${(stats.avg_latency_ms || 5).toFixed(0)}ms`} subtitle="P50" color="cyan" />
         </div>
         
+        {/* Tab Navigation */}
+        <div className="mb-4 border-b border-gray-700">
+          <div className="flex gap-4">
+            <button
+              onClick={() => setActiveTab('monitoring')}
+              className={`pb-3 px-1 font-medium text-sm transition-colors relative ${
+                activeTab === 'monitoring' 
+                  ? 'text-cyan-400' 
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              <Activity size={16} className="inline mr-2" />
+              Live Monitoring
+              {activeTab === 'monitoring' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab('performance')}
+              className={`pb-3 px-1 font-medium text-sm transition-colors relative ${
+                activeTab === 'performance' 
+                  ? 'text-cyan-400' 
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              <BarChart3 size={16} className="inline mr-2" />
+              Model Performance
+              {activeTab === 'performance' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab('fraudRings')}
+              className={`pb-3 px-1 font-medium text-sm transition-colors relative ${
+                activeTab === 'fraudRings' 
+                  ? 'text-cyan-400' 
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+            >
+              <Network size={16} className="inline mr-2" />
+              Fraud Rings
+              {activeTab === 'fraudRings' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-400" />
+              )}
+            </button>
+          </div>
+        </div>
+        
+        {/* Tab Content */}
+        {activeTab === 'performance' && (
+          <PerformanceMetrics modelStats={modelStats} />
+        )}
+        
+        {activeTab === 'fraudRings' && (
+          <FraudRingVisualization transactions={transactions} alerts={alerts} />
+        )}
+        
+        {activeTab === 'monitoring' && (
+          <>
         <Filters 
           filters={filters}
           onChange={setFilters}
@@ -938,11 +1216,13 @@ function App() {
             <ModelStatsCard stats={modelStats} />
           </div>
         </div>
+        </>
+        )}
       </main>
       
       <footer className="glass mt-6 px-4 py-3 text-center text-xs text-gray-500 border-t border-cyan-500/10">
-        <p className="gradient-text font-semibold">ARGUS v3.0.0-india</p>
-        <p className="text-[10px] mt-0.5">Real-time AI Fraud Detection • XGBoost + Isolation Forest + Rule Engine</p>
+        <p className="gradient-text font-semibold">ARGUS v3.2.0-india</p>
+        <p className="text-[10px] mt-0.5">Real-time AI Fraud Detection • XGBoost + Isolation Forest + UPI Detector + Rule Engine</p>
       </footer>
     </div>
   );

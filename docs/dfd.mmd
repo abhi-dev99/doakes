@@ -1,0 +1,164 @@
+%%{init: {'flowchart': {'nodeSpacing': 50, 'rankSpacing': 60, 'curve': 'linear'}, 'theme': 'base', 'themeVariables': { 'edgeLabelBackground':'#ffffff' }}}%%
+graph LR
+    subgraph "User Interface"
+        direction TB
+        UI[React UI<br/>App.jsx]
+        WS_CLIENT[WS Client]
+        API_CLIENT[REST Client]
+    end
+
+    subgraph "Transport"
+        direction TB
+        HTTP[REST Endpoints]
+        WS[WS Connection]
+    end
+
+    subgraph "Backend API"
+        direction TB
+        CONN_MGR[Conn Manager]
+        API_ROUTER[API Router]
+        SIM_CTRL[Simulator Ctrl]
+    end
+
+    subgraph "Transaction Generation"
+        GEN[Transaction Generator]
+        CHANNEL_LOGIC[Channel Logic Module]
+        CITY_DATA[Indian Cities Data]
+        MERCHANT_CAT[Merchant Categories]
+        
+        GEN --> CHANNEL_LOGIC
+        GEN --> CITY_DATA
+        GEN --> MERCHANT_CAT
+    end
+
+    subgraph "ML Engine"
+        direction TB
+        FRAUD_ENGINE[Fraud Engine]
+        FEATURE_ENG[Feature Eng]
+        ENSEMBLE[Ensemble]
+
+        XGBOOST[XGBoost]
+        ISO_FOREST[IsolationForest]
+        RULE_ENGINE[Rule Engine]
+
+        FEATURE_ENG --> ENSEMBLE
+        ENSEMBLE --> XGBOOST
+        ENSEMBLE --> ISO_FOREST
+        ENSEMBLE --> RULE_ENGINE
+    end
+
+    subgraph "Storage"
+        direction TB
+        DB[(argus_data.db)]
+        TXN_TABLE[Transactions]
+        ALERTS_TABLE[Alerts]
+
+        DB --> TXN_TABLE
+        DB --> ALERTS_TABLE
+    end
+
+    subgraph "Pre-trained Models Storage"
+           MODEL_STORE["/models/<br/>Directory"]
+           XGB_FILE["xgb_model.joblib"]
+           ISO_FILE["isolation_forest.joblib"]
+           SCALER_FILE["scaler.joblib"]
+
+           MODEL_STORE --> XGB_FILE
+           MODEL_STORE --> ISO_FILE
+           MODEL_STORE --> SCALER_FILE
+    end
+
+    subgraph "User Profile Management"
+        PROFILE_CACHE[User Profile Cache]
+        VELOCITY_TRACK[Velocity Tracker]
+        BEHAVIOR_ANALYZE[Behavior Analyzer]
+        
+        PROFILE_CACHE --> VELOCITY_TRACK
+        PROFILE_CACHE --> BEHAVIOR_ANALYZE
+    end
+
+    subgraph "Risk Assessment"
+        RISK_CALC[Risk Calculator]
+        THRESHOLD_CHECK[Threshold Checker]
+        RECOMMENDATION[Recommendation Engine]
+        
+        RISK_CALC --> THRESHOLD_CHECK
+        THRESHOLD_CHECK --> RECOMMENDATION
+    end
+
+    %% UI to Transport
+    UI --> API_CLIENT
+    UI --> WS_CLIENT
+    API_CLIENT --> HTTP
+    WS_CLIENT --> WS
+
+    %% Transport to Backend
+    HTTP --> API_ROUTER
+    WS --> CONN_MGR
+
+    %% API Router Interactions
+    API_ROUTER --> |Start/Stop| SIM_CTRL
+    API_ROUTER --> |Analyze Request| FRAUD_ENGINE
+    API_ROUTER --> |Query Stats| DB
+    API_ROUTER --> |Get Transactions| TXN_TABLE
+    API_ROUTER --> |Manage Alerts| ALERTS_TABLE
+    API_ROUTER --> |Export Data| TXN_TABLE
+
+    %% Simulation Flow
+    SIM_CTRL --> |Generate| GEN
+    GEN --> |New Transaction| API_ROUTER
+    API_ROUTER --> |Broadcast| CONN_MGR
+    CONN_MGR --> |Stream| WS
+
+    %% Transaction Analysis Flow
+    API_ROUTER --> |Transaction Data| FRAUD_ENGINE
+    FRAUD_ENGINE --> |Load Models| XGB_FILE
+    FRAUD_ENGINE --> |Load Models| ISO_FILE
+    FRAUD_ENGINE --> |Load Scaler| SCALER_FILE
+    
+    FRAUD_ENGINE --> |Extract Features| FEATURE_ENG
+    FEATURE_ENG --> |Get User History| PROFILE_CACHE
+    PROFILE_CACHE --> |Query History| TXN_TABLE
+    
+    FEATURE_ENG --> |Engineered Features| ENSEMBLE
+    ENSEMBLE --> |Risk Scores| RISK_CALC
+    
+    RULE_ENGINE --> |Check Thresholds| THRESHOLD_CHECK
+    RISK_CALC --> |Final Risk| RECOMMENDATION
+    
+    %% Persistence Flow
+    FRAUD_ENGINE --> |Analysis Result| API_ROUTER
+    API_ROUTER --> |Save Transaction| TXN_TABLE
+    API_ROUTER --> |Create Alert if HIGH/CRITICAL| ALERTS_TABLE
+    
+    %% Real-time Updates
+    API_ROUTER --> |Transaction Result| CONN_MGR
+    CONN_MGR --> |Broadcast to All Clients| WS
+    WS --> |Real-time Update| WS_CLIENT
+    WS_CLIENT --> |Update State| UI
+
+    %% User Actions
+    UI --> |Update Alert Status| API_CLIENT
+    API_CLIENT --> |PUT Request| API_ROUTER
+    API_ROUTER --> |Update Record| ALERTS_TABLE
+
+    %% Velocity & Behavior Tracking
+    FRAUD_ENGINE --> |Update Profile| PROFILE_CACHE
+    VELOCITY_TRACK --> |Track Metrics| BEHAVIOR_ANALYZE
+    BEHAVIOR_ANALYZE --> |Feedback| FEATURE_ENG
+
+    %% Styling
+    classDef frontend fill:#3b82f6,stroke:#2563eb,color:#fff
+    classDef backend fill:#8b5cf6,stroke:#7c3aed,color:#fff
+    classDef ml fill:#ec4899,stroke:#db2777,color:#fff
+    classDef storage fill:#10b981,stroke:#059669,color:#fff
+    classDef generator fill:#f59e0b,stroke:#d97706,color:#fff
+    classDef transport fill:#6366f1,stroke:#4f46e5,color:#fff
+    
+    class UI,WS_CLIENT,API_CLIENT frontend
+    class HTTP,WS transport
+    class CONN_MGR,API_ROUTER,SIM_CTRL backend
+    class FRAUD_ENGINE,FEATURE_ENG,ENSEMBLE,XGBOOST,ISO_FOREST,RULE_ENGINE,RISK_CALC,THRESHOLD_CHECK,RECOMMENDATION ml
+    class DB,TXN_TABLE,ALERTS_TABLE,MODEL_STORE,XGB_FILE,ISO_FILE,SCALER_FILE storage
+    class GEN,CHANNEL_LOGIC,CITY_DATA,MERCHANT_CAT generator
+    class PROFILE_CACHE,VELOCITY_TRACK,BEHAVIOR_ANALYZE ml

@@ -1,0 +1,205 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.5.6">
+  <diagram name="Page-1" id="-aSFNNcz-eFfvgZZILzF">
+    <mxGraphModel dx="1261" dy="859" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sys-boundary" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;strokeWidth=2;verticalAlign=top;fontSize=13;fontStyle=1;align=center;dashed=0;" value="&lt;font face=&quot;Inter&quot;&gt;ARGUS — Fraud Detection System&lt;/font&gt;" vertex="1">
+          <mxGeometry height="835" width="500" x="310" y="5" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-5" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="&lt;font face=&quot;Inter&quot;&gt;End-User&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="30" x="100" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-6" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="&lt;font face=&quot;Inter&quot;&gt;RBI Authority&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="30" x="820" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-3" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="&lt;font face=&quot;Inter&quot;&gt;Bank System&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="30" x="100" y="256" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-1" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="&lt;font face=&quot;Inter&quot;&gt;Fraud Analyst&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="30" x="100" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-4" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="&lt;font face=&quot;Inter&quot;&gt;System Admin&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="30" x="850" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-eu-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;View Fraud Alerts&lt;/font&gt;" vertex="1">
+          <mxGeometry height="50" width="150" x="360" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-eu-2" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Report Suspicious Activity&lt;/font&gt;" vertex="1">
+          <mxGeometry height="50" width="160" x="360" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-rbi-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;View Compliance Report&lt;/font&gt;" vertex="1">
+          <mxGeometry height="50" width="160" x="570" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-rbi-2" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Export Regulatory Audit Log&lt;/font&gt;" vertex="1">
+          <mxGeometry height="50" width="160" x="570" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-7" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Block Transaction&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="400" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-10" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Allow Transaction&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="400" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-11" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Challenge Transaction&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="400" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-12" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Send Alert&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="400" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-13" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;View Fraud Alert&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="400" y="495" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-14" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Investigate Case&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="400" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-15" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Update Case Status&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="400" y="645" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-16" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;View Fraud Graph&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="400" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-22" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Configure Risk Thresholds&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="160" x="590" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-23" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Update Fraud Rules&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="590" y="395" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-24" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Manage Users&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="590" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-25" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;Monitor System Performance&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="160" x="590" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-sa-5" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="&lt;font face=&quot;Inter&quot;&gt;View Audit Logs&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="590" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-21" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-3" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="Jpy_7Gza0opoXAqtSSgx-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="286" />
+              <mxPoint x="360" y="210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-26" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-3" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="Jpy_7Gza0opoXAqtSSgx-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-27" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-3" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="Jpy_7Gza0opoXAqtSSgx-11">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="286" />
+              <mxPoint x="360" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-28" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-1" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="Jpy_7Gza0opoXAqtSSgx-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="600" />
+              <mxPoint x="360" y="450" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-30" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-1" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="Jpy_7Gza0opoXAqtSSgx-13">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="600" />
+              <mxPoint x="360" y="525" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-31" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-1" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="Jpy_7Gza0opoXAqtSSgx-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-32" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-1" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="Jpy_7Gza0opoXAqtSSgx-15">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="600" />
+              <mxPoint x="360" y="675" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Jpy_7Gza0opoXAqtSSgx-33" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-1" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="Jpy_7Gza0opoXAqtSSgx-16">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="600" />
+              <mxPoint x="360" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sa-e1" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-4" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="Jpy_7Gza0opoXAqtSSgx-22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="450" />
+              <mxPoint x="800" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sa-e2" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-4" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="Jpy_7Gza0opoXAqtSSgx-23">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="450" />
+              <mxPoint x="800" y="425" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sa-e3" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-4" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="Jpy_7Gza0opoXAqtSSgx-24">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="450" />
+              <mxPoint x="800" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sa-e4" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-4" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="Jpy_7Gza0opoXAqtSSgx-25">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="450" />
+              <mxPoint x="800" y="575" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sa-e5" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-4" style="endArrow=open;endFill=0;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="uc-sa-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="450" />
+              <mxPoint x="800" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eu-e1" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-5" style="endArrow=open;endFill=0;rounded=0;html=1;" target="uc-eu-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eu-e2" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-5" style="endArrow=open;endFill=0;rounded=0;html=1;" target="uc-eu-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eu-e3" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-5" style="endArrow=open;endFill=0;rounded=0;html=1;dashed=1;strokeColor=#999999;edgeStyle=orthogonalEdgeStyle;curved=1;" target="Jpy_7Gza0opoXAqtSSgx-13">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="80" />
+              <mxPoint x="240" y="525" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rbi-e1" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-6" style="endArrow=open;endFill=0;rounded=0;html=1;" target="uc-rbi-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rbi-e2" edge="1" parent="1" source="Jpy_7Gza0opoXAqtSSgx-6" style="endArrow=open;endFill=0;rounded=0;html=1;" target="uc-rbi-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rbi-e3" edge="1" parent="1" style="endArrow=open;endFill=0;rounded=0;html=1;dashed=1;strokeColor=#999999;edgeStyle=orthogonalEdgeStyle;curved=1;" target="uc-sa-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="940" y="80" />
+              <mxPoint x="940" y="650" />
+            </Array>
+            <mxPoint x="860" y="80" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="3J0Hrs0vFc7HsGftct7E-1" edge="1" parent="1" source="sys-boundary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="sys-boundary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

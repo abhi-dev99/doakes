@@ -1,12 +1,15 @@
 """
-ARGUS - AI Fraud Detection Engine v3.0.0-india
+ARGUS - AI Fraud Detection Engine v3.2.0-india
 ===============================================
 Production-ready fraud detection for Indian payment ecosystem.
-Supports UPI, Cards, NetBanking, Wallets with realistic thresholds.
+Supports UPI, Cards, NetBanking, Wallets with DYNAMIC thresholds.
 
 Key Features:
 - XGBoost + Isolation Forest ensemble
 - India-specific rule engine (RBI/NPCI compliant)
+- **UPI-SPECIFIC FRAUD DETECTION** - Digital arrest, SIM swap, mule accounts
+- **DYNAMIC User Behavior Analysis** - Personalized anomaly detection
+- **PERSISTENT User Profiles** - Survives server restarts
 - 0.1% realistic fraud rate
 - Sub-10ms inference latency
 """
@@ -15,12 +18,23 @@ import numpy as np
 import joblib
 import logging
 import time
+import json
+import sqlite3
 from pathlib import Path
 from typing import Dict, Any, Tuple, List, Optional
-from dataclasses import dataclass
-from datetime import datetime
+from dataclasses import dataclass, field, asdict
+from datetime import datetime, timedelta
+from collections import deque
 
 logger = logging.getLogger("ARGUS.FraudEngine")
+
+# Import UPI-specific fraud detector
+try:
+    from .upi_fraud_patterns import UPIFraudDetector
+    UPI_DETECTOR_AVAILABLE = True
+except ImportError:
+    UPI_DETECTOR_AVAILABLE = False
+    logger.warning("UPI fraud detector not available")
 
 # ============ CONFIGURATION ============
 
@@ -46,15 +60,286 @@ class IndiaThresholds:
 
 THRESHOLDS = IndiaThresholds()
 
+# ============ DYNAMIC USER BEHAVIOR PROFILE ============
+
+@dataclass
+class UserBehaviorProfile:
+    """
+    Dynamic user profile for personalized anomaly detection.
+    Tracks historical transaction patterns to detect deviations.
+    """
+    user_id: str
+    
+    # Transaction history (rolling window)
+    transaction_amounts: deque = field(default_factory=lambda: deque(maxlen=100))
+    transaction_timestamps: deque = field(default_factory=lambda: deque(maxlen=100))
+    daily_totals: Dict[str, float] = field(default_factory=dict)  # date -> total
+    
+    # Computed statistics (updated dynamically)
+    avg_amount: float = 2500.0
+    std_amount: float = 1500.0
+    median_amount: float = 1500.0
+    max_amount: float = 5000.0
+    p75_amount: float = 3000.0
+    p95_amount: float = 10000.0
+    
+    # Daily behavior
+    avg_daily_total: float = 10000.0
+    max_daily_total: float = 20000.0
+    avg_daily_txn_count: float = 3.0
+    
+    # Velocity tracking
+    txn_count: int = 0
+    total_amount: float = 0.0
+    last_hour_txns: List[Tuple[float, float]] = field(default_factory=list)
+    amount_velocity: float = 0.1
+    txn_velocity: float = 0.1
+    
+    # Behavior maturity
+    profile_age_days: int = 0
+    is_mature: bool = False  # True after 10+ transactions
+    
+    def add_transaction(self, amount: float, timestamp: datetime = None) -> Dict[str, Any]:
+        """
+        Add a new transaction and update all statistics.
+        Returns anomaly indicators for this transaction.
+        """
+        timestamp = timestamp or datetime.now()
+        now = time.time()
+        
+        # Store transaction
+        self.transaction_amounts.append(amount)
+        self.transaction_timestamps.append(timestamp)
+        self.txn_count += 1
+        self.total_amount += amount
+        
+        # Update daily totals
+        date_key = timestamp.strftime('%Y-%m-%d')
+        self.daily_totals[date_key] = self.daily_totals.get(date_key, 0) + amount
+        
+        # Clean old daily totals (keep last 30 days)
+        cutoff_date = (timestamp - timedelta(days=30)).strftime('%Y-%m-%d')
+        self.daily_totals = {k: v for k, v in self.daily_totals.items() if k >= cutoff_date}
+        
+        # Update velocity tracking
+        self.last_hour_txns = [
+            (t, a) for t, a in self.last_hour_txns if now - t < 3600
+        ]
+        self.last_hour_txns.append((now, amount))
+        
+        hour_txns = len(self.last_hour_txns)
+        hour_amount = sum(a for _, a in self.last_hour_txns)
+        
+        self.txn_velocity = min(hour_txns / THRESHOLDS.MAX_TXN_PER_HOUR, 1.0)
+        self.amount_velocity = min(hour_amount / THRESHOLDS.MAX_AMOUNT_PER_HOUR, 1.0)
+        
+        # Calculate anomaly indicators BEFORE updating statistics
+        anomaly_info = self._calculate_anomaly_indicators(amount, date_key)
+        
+        # Now update statistics with new transaction
+        self._update_statistics()
+        
+        # Check if profile is mature enough for reliable detection
+        self.is_mature = self.txn_count >= 10
+        
+        return anomaly_info
+    
+    def _calculate_anomaly_indicators(self, amount: float, date_key: str) -> Dict[str, Any]:
+        """Calculate how anomalous this transaction is relative to user's history"""
+        indicators = {
+            'amount_zscore': 0.0,
+            'amount_deviation_ratio': 1.0,
+            'percentile_rank': 50.0,
+            'daily_total_deviation': 1.0,
+            'is_amount_anomaly': False,
+            'is_daily_anomaly': False,
+            'is_velocity_anomaly': False,
+            'anomaly_reasons': []
+        }
+        
+        if self.txn_count < 3:
+            # Not enough history - use default thresholds
+            return indicators
+        
+        # 1. Z-Score: How many standard deviations from mean?
+        if self.std_amount > 0:
+            indicators['amount_zscore'] = (amount - self.avg_amount) / self.std_amount
+        
+        # 2. Ratio to average amount
+        if self.avg_amount > 0:
+            indicators['amount_deviation_ratio'] = amount / self.avg_amount
+        
+        # 3. Percentile rank in user's history
+        amounts_list = list(self.transaction_amounts)
+        if amounts_list:
+            below_count = sum(1 for a in amounts_list if a < amount)
+            indicators['percentile_rank'] = (below_count / len(amounts_list)) * 100
+        
+        # 4. Daily total deviation
+        current_daily = self.daily_totals.get(date_key, 0)
+        if self.avg_daily_total > 0 and len(self.daily_totals) > 3:
+            indicators['daily_total_deviation'] = current_daily / self.avg_daily_total
+        
+        # 5. Determine if this is an anomaly
+        
+        # Amount anomaly: Z-score > 3 OR amount > 5x average OR > 99th percentile
+        if self.is_mature:
+            if indicators['amount_zscore'] > 3:
+                indicators['is_amount_anomaly'] = True
+                indicators['anomaly_reasons'].append(
+                    f"AMOUNT_ZSCORE: {indicators['amount_zscore']:.1f}σ above average (₹{self.avg_amount:,.0f})"
+                )
+            
+            if indicators['amount_deviation_ratio'] > 5:
+                indicators['is_amount_anomaly'] = True
+                indicators['anomaly_reasons'].append(
+                    f"AMOUNT_SPIKE: {indicators['amount_deviation_ratio']:.1f}x user's average (₹{self.avg_amount:,.0f})"
+                )
+            
+            if amount > self.p95_amount * 2 and amount > 10000:  # Significant outlier
+                indicators['is_amount_anomaly'] = True
+                indicators['anomaly_reasons'].append(
+                    f"UNUSUAL_HIGH: ₹{amount:,.0f} vs 95th percentile ₹{self.p95_amount:,.0f}"
+                )
+        
+            # Daily total anomaly: Today's total > 3x average daily total
+            if indicators['daily_total_deviation'] > 3 and len(self.daily_totals) > 5:
+                indicators['is_daily_anomaly'] = True
+                indicators['anomaly_reasons'].append(
+                    f"DAILY_SPIKE: Today ₹{current_daily:,.0f} vs avg ₹{self.avg_daily_total:,.0f}/day"
+                )
+            
+            # Velocity anomaly
+            if self.txn_velocity > 0.7 and self.avg_daily_txn_count > 0:
+                hour_txns = len(self.last_hour_txns)
+                if hour_txns > self.avg_daily_txn_count * 2:
+                    indicators['is_velocity_anomaly'] = True
+                    indicators['anomaly_reasons'].append(
+                        f"HIGH_FREQUENCY: {hour_txns} txns/hour vs {self.avg_daily_txn_count:.1f} avg/day"
+                    )
+        
+        return indicators
+    
+    def _update_statistics(self):
+        """Update running statistics from transaction history"""
+        amounts = list(self.transaction_amounts)
+        if not amounts:
+            return
+        
+        # Basic statistics
+        self.avg_amount = np.mean(amounts)
+        self.std_amount = np.std(amounts) if len(amounts) > 1 else self.avg_amount * 0.5
+        self.median_amount = np.median(amounts)
+        self.max_amount = max(amounts)
+        
+        # Percentiles
+        if len(amounts) >= 5:
+            self.p75_amount = np.percentile(amounts, 75)
+            self.p95_amount = np.percentile(amounts, 95)
+        
+        # Daily statistics
+        if len(self.daily_totals) > 1:
+            daily_values = list(self.daily_totals.values())
+            self.avg_daily_total = np.mean(daily_values)
+            self.max_daily_total = max(daily_values)
+            
+            # Calculate average transactions per day
+            days_with_data = len(self.daily_totals)
+            self.avg_daily_txn_count = self.txn_count / max(days_with_data, 1)
+        
+        # Profile age
+        if self.transaction_timestamps:
+            oldest = min(self.transaction_timestamps)
+            newest = max(self.transaction_timestamps)
+            self.profile_age_days = (newest - oldest).days + 1
+    
+    def get_dynamic_thresholds(self) -> Dict[str, float]:
+        """
+        Get personalized thresholds for this user.
+        Returns thresholds based on user's own behavior pattern.
+        """
+        if not self.is_mature:
+            # Use static thresholds for new users
+            return {
+                'high_value': THRESHOLDS.HIGH_VALUE,
+                'very_high_value': THRESHOLDS.VERY_HIGH_VALUE,
+                'suspicious_value': THRESHOLDS.SUSPICIOUS_VALUE
+            }
+        
+        # Dynamic thresholds based on user's history
+        return {
+            'high_value': max(self.p75_amount * 3, self.avg_amount * 5, 10000),
+            'very_high_value': max(self.p95_amount * 3, self.avg_amount * 10, 50000),
+            'suspicious_value': max(self.max_amount * 2, self.avg_amount * 20, 100000),
+            'daily_limit': max(self.max_daily_total * 2, self.avg_daily_total * 5, 50000)
+        }
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize profile to dictionary for persistence"""
+        return {
+            'user_id': self.user_id,
+            'transaction_amounts': list(self.transaction_amounts),
+            'transaction_timestamps': [t.isoformat() for t in self.transaction_timestamps],
+            'daily_totals': self.daily_totals,
+            'avg_amount': self.avg_amount,
+            'std_amount': self.std_amount,
+            'median_amount': self.median_amount,
+            'max_amount': self.max_amount,
+            'p75_amount': self.p75_amount,
+            'p95_amount': self.p95_amount,
+            'avg_daily_total': self.avg_daily_total,
+            'max_daily_total': self.max_daily_total,
+            'avg_daily_txn_count': self.avg_daily_txn_count,
+            'txn_count': self.txn_count,
+            'total_amount': self.total_amount,
+            'profile_age_days': self.profile_age_days,
+            'is_mature': self.is_mature
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'UserBehaviorProfile':
+        """Deserialize profile from dictionary"""
+        profile = cls(user_id=data['user_id'])
+        
+        # Restore transaction history
+        profile.transaction_amounts = deque(data.get('transaction_amounts', []), maxlen=100)
+        profile.transaction_timestamps = deque(
+            [datetime.fromisoformat(t) for t in data.get('transaction_timestamps', [])],
+            maxlen=100
+        )
+        profile.daily_totals = data.get('daily_totals', {})
+        
+        # Restore statistics
+        profile.avg_amount = data.get('avg_amount', 2500.0)
+        profile.std_amount = data.get('std_amount', 1500.0)
+        profile.median_amount = data.get('median_amount', 1500.0)
+        profile.max_amount = data.get('max_amount', 5000.0)
+        profile.p75_amount = data.get('p75_amount', 3000.0)
+        profile.p95_amount = data.get('p95_amount', 10000.0)
+        profile.avg_daily_total = data.get('avg_daily_total', 10000.0)
+        profile.max_daily_total = data.get('max_daily_total', 20000.0)
+        profile.avg_daily_txn_count = data.get('avg_daily_txn_count', 3.0)
+        profile.txn_count = data.get('txn_count', 0)
+        profile.total_amount = data.get('total_amount', 0.0)
+        profile.profile_age_days = data.get('profile_age_days', 0)
+        profile.is_mature = data.get('is_mature', False)
+        
+        return profile
+
 # ============ FRAUD DETECTION ENGINE ============
 
 class FraudDetectionEngine:
     """
     Production fraud detection engine for Indian payments.
     Uses ensemble of XGBoost, Isolation Forest, and rule engine.
+    Features DYNAMIC user behavior analysis for personalized anomaly detection.
+    
+    User profiles are PERSISTENT - they survive server restarts by:
+    1. Saving profiles to disk periodically
+    2. Loading historical transactions from database on startup
     """
     
-    VERSION = "3.0.0-india"
+    VERSION = "3.2.0-india"
     
     # Risk level thresholds (conservative for India's 0.1% fraud rate)
     RISK_THRESHOLDS = {
@@ -72,14 +357,27 @@ class FraudDetectionEngine:
         'location_distance_km', 'merchant_risk_score', 'user_avg_txn_ratio'
     ]
     
-    def __init__(self, models_dir: Optional[Path] = None):
+    def __init__(self, models_dir: Optional[Path] = None, db_path: Optional[Path] = None):
         self.models_dir = models_dir or Path(__file__).parent / "models"
+        self.db_path = db_path or Path(__file__).parent.parent / "argus_data.db"
+        self.profiles_path = self.models_dir / "user_profiles.json"
+        
         self.xgb_model = None
         self.isolation_forest = None
         self.scaler = None
         self.model_loaded = False
-        self.user_profiles: Dict[str, Dict] = {}
+        
+        # Initialize UPI fraud detector
+        self.upi_detector = UPIFraudDetector() if UPI_DETECTOR_AVAILABLE else None
+        
+        # Dynamic user behavior profiles (PERSISTENT)
+        self.user_profiles: Dict[str, UserBehaviorProfile] = {}
+        self._profiles_dirty = False  # Track if profiles need saving
+        self._last_save_time = time.time()
+        self._save_interval = 60  # Save profiles every 60 seconds
+        
         self._load_models()
+        self._load_user_profiles()  # Load persisted profiles on startup
     
     def _load_models(self) -> None:
         """Load pre-trained models or initialize new ones"""
@@ -102,6 +400,119 @@ class FraudDetectionEngine:
         except Exception as e:
             logger.warning(f"Model loading failed: {e}, initializing fresh")
             self._initialize_models()
+    
+    def _load_user_profiles(self) -> None:
+        """
+        Load user profiles from persisted file OR rebuild from database.
+        This ensures user behavior history survives server restarts.
+        """
+        profiles_loaded = 0
+        
+        # Method 1: Try loading from saved profiles file (fast)
+        if self.profiles_path.exists():
+            try:
+                with open(self.profiles_path, 'r') as f:
+                    profiles_data = json.load(f)
+                
+                for user_id, profile_dict in profiles_data.items():
+                    self.user_profiles[user_id] = UserBehaviorProfile.from_dict(profile_dict)
+                    profiles_loaded += 1
+                
+                logger.info(f"✅ Loaded {profiles_loaded} user profiles from cache")
+                return
+            except Exception as e:
+                logger.warning(f"Could not load profiles from cache: {e}")
+        
+        # Method 2: Rebuild from database (slower but complete)
+        if self.db_path.exists():
+            profiles_loaded = self._rebuild_profiles_from_db()
+            if profiles_loaded > 0:
+                logger.info(f"✅ Rebuilt {profiles_loaded} user profiles from transaction history")
+                self._save_user_profiles()  # Cache for next time
+    
+    def _rebuild_profiles_from_db(self) -> int:
+        """Rebuild user profiles by analyzing historical transactions in database"""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            # Get all historical transactions ordered by timestamp
+            cursor.execute("""
+                SELECT user_id, amount, timestamp 
+                FROM transactions 
+                ORDER BY timestamp ASC
+            """)
+            
+            rows = cursor.fetchall()
+            conn.close()
+            
+            if not rows:
+                return 0
+            
+            # Process each transaction to rebuild profiles
+            for row in rows:
+                user_id = row['user_id']
+                amount = row['amount']
+                timestamp_str = row['timestamp']
+                
+                try:
+                    timestamp = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
+                except:
+                    timestamp = datetime.now()
+                
+                # Create profile if doesn't exist
+                if user_id not in self.user_profiles:
+                    self.user_profiles[user_id] = UserBehaviorProfile(user_id=user_id)
+                
+                # Add transaction to profile (without triggering anomaly detection)
+                profile = self.user_profiles[user_id]
+                profile.transaction_amounts.append(amount)
+                profile.transaction_timestamps.append(timestamp)
+                profile.txn_count += 1
+                profile.total_amount += amount
+                
+                # Update daily totals
+                date_key = timestamp.strftime('%Y-%m-%d')
+                profile.daily_totals[date_key] = profile.daily_totals.get(date_key, 0) + amount
+            
+            # Finalize statistics for all profiles
+            for profile in self.user_profiles.values():
+                profile._update_statistics()
+                profile.is_mature = profile.txn_count >= 10
+                
+                # Clean old daily totals
+                cutoff = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+                profile.daily_totals = {k: v for k, v in profile.daily_totals.items() if k >= cutoff}
+            
+            return len(self.user_profiles)
+            
+        except Exception as e:
+            logger.error(f"Error rebuilding profiles from DB: {e}")
+            return 0
+    
+    def _save_user_profiles(self) -> None:
+        """Save user profiles to disk for persistence"""
+        try:
+            profiles_data = {
+                user_id: profile.to_dict() 
+                for user_id, profile in self.user_profiles.items()
+            }
+            
+            with open(self.profiles_path, 'w') as f:
+                json.dump(profiles_data, f)
+            
+            self._profiles_dirty = False
+            self._last_save_time = time.time()
+            logger.debug(f"Saved {len(profiles_data)} user profiles to disk")
+            
+        except Exception as e:
+            logger.error(f"Error saving user profiles: {e}")
+    
+    def _maybe_save_profiles(self) -> None:
+        """Save profiles if dirty and enough time has passed"""
+        if self._profiles_dirty and (time.time() - self._last_save_time) > self._save_interval:
+            self._save_user_profiles()
     
     def _initialize_models(self) -> None:
         """Initialize models with synthetic training data"""
@@ -247,24 +658,56 @@ class FraudDetectionEngine:
     def analyze_transaction(self, transaction: Dict[str, Any]) -> Dict[str, Any]:
         """
         Main entry point - analyze a transaction for fraud.
-        Returns comprehensive risk assessment.
+        Returns comprehensive risk assessment with dynamic anomaly detection.
         """
         start_time = time.perf_counter()
         
-        # Extract features
-        features = self._extract_features(transaction)
+        # Get user profile for dynamic analysis
+        user_id = transaction.get('user_id', 'unknown')
+        amount = transaction.get('amount', 0)
+        
+        # Parse timestamp
+        timestamp = transaction.get('timestamp', datetime.now())
+        if isinstance(timestamp, str):
+            timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+        
+        # Get or create user behavior profile
+        if user_id not in self.user_profiles:
+            self.user_profiles[user_id] = UserBehaviorProfile(user_id=user_id)
+        
+        user_profile = self.user_profiles[user_id]
+        
+        # Calculate dynamic anomaly indicators
+        anomaly_info = user_profile.add_transaction(amount, timestamp)
+        
+        # Extract features (now with user profile context)
+        features = self._extract_features(transaction, user_profile, anomaly_info)
         
         # Get model predictions
         xgb_score = self._get_xgb_score(features)
         anomaly_score = self._get_anomaly_score(features)
-        rule_score, triggered_rules = self._apply_rules(transaction)
+        rule_score, triggered_rules = self._apply_rules(transaction, user_profile, anomaly_info)
         
-        # Ensemble scoring with weights
+        # Add dynamic anomaly score component
+        dynamic_anomaly_score = self._calculate_dynamic_anomaly_score(anomaly_info)
+        
+        # Ensemble scoring with weights (must total 100%)
+        # XGBoost: 35%, Isolation Forest: 20%, Rules: 25%, Dynamic Behavior: 20%
         final_score = (
-            xgb_score * 0.45 +
-            anomaly_score * 0.25 +
-            rule_score * 0.30
+            xgb_score * 0.35 +
+            anomaly_score * 0.20 +
+            rule_score * 0.25 +
+            dynamic_anomaly_score * 0.20
         )
+        
+        # Run UPI-specific fraud detection
+        upi_fraud_result = None
+        if self.upi_detector and transaction.get('channel') in ['upi', 'UPI']:
+            upi_fraud_result = self.upi_detector.analyze_transaction(transaction)
+            if upi_fraud_result['is_upi_fraud']:
+                # Boost score if UPI-specific fraud detected
+                final_score = min(final_score + upi_fraud_result['upi_risk_score'] * 0.1, 1.0)
+                triggered_rules.extend(upi_fraud_result['fraud_types'])
         
         # Determine risk level
         risk_level = self._get_risk_level(final_score)
@@ -274,27 +717,99 @@ class FraudDetectionEngine:
         
         latency_ms = (time.perf_counter() - start_time) * 1000
         
-        return {
+        # Build response with dynamic analysis + UPI fraud info
+        response = {
             'risk_score': round(final_score, 4),
             'risk_level': risk_level,
             'recommendation': recommendation,
             'model_scores': {
                 'xgboost': round(xgb_score, 4),
                 'anomaly_detection': round(anomaly_score, 4),
-                'rule_engine': round(rule_score, 4)
+                'rule_engine': round(rule_score, 4),
+                'dynamic_behavior': round(dynamic_anomaly_score, 4)
             },
             'triggered_rules': triggered_rules,
             'latency_ms': round(latency_ms, 2),
-            'model_version': self.VERSION
+            'model_version': self.VERSION,
+            # Dynamic behavior analysis details
+            'behavior_analysis': {
+                'user_avg_amount': round(user_profile.avg_amount, 2),
+                'amount_zscore': round(anomaly_info['amount_zscore'], 2),
+                'amount_vs_avg_ratio': round(anomaly_info['amount_deviation_ratio'], 2),
+                'percentile_rank': round(anomaly_info['percentile_rank'], 1),
+                'is_behavioral_anomaly': any([
+                    anomaly_info['is_amount_anomaly'],
+                    anomaly_info['is_daily_anomaly'],
+                    anomaly_info['is_velocity_anomaly']
+                ]),
+                'profile_maturity': 'mature' if user_profile.is_mature else 'building',
+                'transactions_analyzed': user_profile.txn_count
+            }
         }
-    
-    def _extract_features(self, txn: Dict[str, Any]) -> np.ndarray:
-        """Extract ML features from transaction"""
-        amount = txn.get('amount', 0)
-        user_id = txn.get('user_id', 'unknown')
         
-        # Update user profile
-        profile = self._get_user_profile(user_id, amount)
+        # Add UPI fraud detection results if available
+        if upi_fraud_result:
+            response['upi_fraud_analysis'] = {
+                'detected': upi_fraud_result['is_upi_fraud'],
+                'fraud_types': upi_fraud_result['fraud_types'],
+                'rbi_category': upi_fraud_result['rbi_category'],
+                'reasons': upi_fraud_result['reasons']
+            }
+        
+        # Mark profiles as needing save and maybe save periodically
+        self._profiles_dirty = True
+        self._maybe_save_profiles()
+        
+        return response
+    
+    def _calculate_dynamic_anomaly_score(self, anomaly_info: Dict[str, Any]) -> float:
+        """Calculate anomaly score based on user's behavioral deviation"""
+        score = 0.0
+        
+        # Z-score contribution (heavily weighted for extreme deviations)
+        zscore = abs(anomaly_info.get('amount_zscore', 0))
+        if zscore > 5:
+            score += 0.5
+        elif zscore > 4:
+            score += 0.4
+        elif zscore > 3:
+            score += 0.3
+        elif zscore > 2:
+            score += 0.15
+        
+        # Amount ratio contribution
+        ratio = anomaly_info.get('amount_deviation_ratio', 1)
+        if ratio > 20:
+            score += 0.4
+        elif ratio > 10:
+            score += 0.3
+        elif ratio > 5:
+            score += 0.2
+        elif ratio > 3:
+            score += 0.1
+        
+        # Daily total deviation
+        daily_dev = anomaly_info.get('daily_total_deviation', 1)
+        if daily_dev > 5:
+            score += 0.3
+        elif daily_dev > 3:
+            score += 0.2
+        elif daily_dev > 2:
+            score += 0.1
+        
+        # Direct anomaly flags
+        if anomaly_info.get('is_amount_anomaly'):
+            score += 0.15
+        if anomaly_info.get('is_daily_anomaly'):
+            score += 0.15
+        if anomaly_info.get('is_velocity_anomaly'):
+            score += 0.1
+        
+        return min(score, 1.0)
+    
+    def _extract_features(self, txn: Dict[str, Any], user_profile: UserBehaviorProfile, anomaly_info: Dict[str, Any]) -> np.ndarray:
+        """Extract ML features from transaction with dynamic user profile"""
+        amount = txn.get('amount', 0)
         
         # Time features
         timestamp = txn.get('timestamp', datetime.now())
@@ -321,12 +836,12 @@ class FraudDetectionEngine:
         category = txn.get('merchant_category', 'retail').lower().replace(' ', '_')
         category_risk = category_risks.get(category, 0.15)
         
-        # Velocity features
-        velocity_score = self._calculate_velocity_score(profile)
+        # Velocity features from user profile
+        velocity_score = self._calculate_velocity_score(user_profile)
         
         features = [
             amount,
-            (amount - profile['avg_amount']) / max(profile['std_amount'], 1),
+            anomaly_info.get('amount_zscore', 0),  # Use dynamic zscore
             hour,
             is_night,
             is_weekend,
@@ -335,63 +850,19 @@ class FraudDetectionEngine:
             velocity_score,
             1 if txn.get('is_new_device', False) else 0,
             1 if txn.get('is_new_location', False) else 0,
-            profile['amount_velocity'],
-            profile['txn_velocity'],
+            user_profile.amount_velocity,
+            user_profile.txn_velocity,
             txn.get('device_age_hours', 1000),
             txn.get('location_distance_km', 0),
             txn.get('merchant_risk_score', 0.2),
-            amount / max(profile['avg_amount'], 1)
+            anomaly_info.get('amount_deviation_ratio', 1.0)  # Use dynamic ratio
         ]
         
         return np.array(features).reshape(1, -1)
     
-    def _get_user_profile(self, user_id: str, amount: float) -> Dict:
-        """Get or create user profile for behavioral analysis"""
-        if user_id not in self.user_profiles:
-            self.user_profiles[user_id] = {
-                'avg_amount': 2500,
-                'std_amount': 1500,
-                'txn_count': 0,
-                'total_amount': 0,
-                'last_hour_txns': [],
-                'amount_velocity': 0.1,
-                'txn_velocity': 0.1
-            }
-        
-        profile = self.user_profiles[user_id]
-        now = time.time()
-        
-        # Update velocity
-        profile['last_hour_txns'] = [
-            (t, a) for t, a in profile['last_hour_txns'] 
-            if now - t < 3600
-        ]
-        profile['last_hour_txns'].append((now, amount))
-        
-        hour_txns = len(profile['last_hour_txns'])
-        hour_amount = sum(a for _, a in profile['last_hour_txns'])
-        
-        profile['txn_velocity'] = min(hour_txns / THRESHOLDS.MAX_TXN_PER_HOUR, 1.0)
-        profile['amount_velocity'] = min(hour_amount / THRESHOLDS.MAX_AMOUNT_PER_HOUR, 1.0)
-        
-        # Update averages
-        profile['txn_count'] += 1
-        profile['total_amount'] += amount
-        new_avg = profile['total_amount'] / profile['txn_count']
-        
-        # Running std calculation
-        if profile['txn_count'] > 1:
-            delta = amount - profile['avg_amount']
-            profile['std_amount'] = np.sqrt(
-                (profile['std_amount']**2 * (profile['txn_count']-1) + delta**2) / profile['txn_count']
-            )
-        profile['avg_amount'] = new_avg
-        
-        return profile
-    
-    def _calculate_velocity_score(self, profile: Dict) -> float:
+    def _calculate_velocity_score(self, profile: UserBehaviorProfile) -> float:
         """Calculate overall velocity risk score"""
-        return (profile['txn_velocity'] * 0.4 + profile['amount_velocity'] * 0.6)
+        return (profile.txn_velocity * 0.4 + profile.amount_velocity * 0.6)
     
     def _get_xgb_score(self, features: np.ndarray) -> float:
         """Get XGBoost fraud probability"""
@@ -419,8 +890,8 @@ class FraudDetectionEngine:
             logger.error(f"Isolation Forest error: {e}")
             return 0.1
     
-    def _apply_rules(self, txn: Dict[str, Any]) -> Tuple[float, List[str]]:
-        """Apply India-specific fraud detection rules"""
+    def _apply_rules(self, txn: Dict[str, Any], user_profile: UserBehaviorProfile, anomaly_info: Dict[str, Any]) -> Tuple[float, List[str]]:
+        """Apply India-specific fraud detection rules with DYNAMIC thresholds"""
         rules_triggered = []
         score = 0.0
         
@@ -428,15 +899,35 @@ class FraudDetectionEngine:
         channel = txn.get('channel', 'upi').lower()
         category = txn.get('merchant_category', '').lower()
         
-        # R1: Very high value transaction
-        if amount >= THRESHOLDS.VERY_HIGH_VALUE:
-            rules_triggered.append(f"VERY_HIGH_VALUE: ₹{amount:,.0f} >= ₹{THRESHOLDS.VERY_HIGH_VALUE:,}")
-            score += 0.4
-        elif amount >= THRESHOLDS.HIGH_VALUE:
-            rules_triggered.append(f"HIGH_VALUE: ₹{amount:,.0f} >= ₹{THRESHOLDS.HIGH_VALUE:,}")
-            score += 0.2
+        # Get dynamic thresholds based on user behavior
+        dynamic_thresholds = user_profile.get_dynamic_thresholds()
         
-        # R2: Channel limit violations
+        # R1: Dynamic high value detection (based on user's history)
+        if user_profile.is_mature:
+            if amount >= dynamic_thresholds['suspicious_value']:
+                rules_triggered.append(f"USER_SUSPICIOUS_VALUE: ₹{amount:,.0f} >= ₹{dynamic_thresholds['suspicious_value']:,.0f} (personalized)")
+                score += 0.5
+            elif amount >= dynamic_thresholds['very_high_value']:
+                rules_triggered.append(f"USER_VERY_HIGH: ₹{amount:,.0f} >= ₹{dynamic_thresholds['very_high_value']:,.0f} (personalized)")
+                score += 0.35
+            elif amount >= dynamic_thresholds['high_value']:
+                rules_triggered.append(f"USER_HIGH_VALUE: ₹{amount:,.0f} >= ₹{dynamic_thresholds['high_value']:,.0f} (personalized)")
+                score += 0.2
+        else:
+            # Fall back to static thresholds for new users
+            if amount >= THRESHOLDS.VERY_HIGH_VALUE:
+                rules_triggered.append(f"VERY_HIGH_VALUE: ₹{amount:,.0f} >= ₹{THRESHOLDS.VERY_HIGH_VALUE:,}")
+                score += 0.4
+            elif amount >= THRESHOLDS.HIGH_VALUE:
+                rules_triggered.append(f"HIGH_VALUE: ₹{amount:,.0f} >= ₹{THRESHOLDS.HIGH_VALUE:,}")
+                score += 0.2
+        
+        # R2: DYNAMIC ANOMALY - Add anomaly reasons from behavioral analysis
+        for reason in anomaly_info.get('anomaly_reasons', []):
+            rules_triggered.append(reason)
+            score += 0.25  # Each behavioral anomaly adds to score
+        
+        # R3: Channel limit violations
         if channel == 'upi' and amount > THRESHOLDS.UPI_SINGLE_LIMIT:
             rules_triggered.append(f"UPI_LIMIT_EXCEEDED: ₹{amount:,.0f} > ₹{THRESHOLDS.UPI_SINGLE_LIMIT:,}")
             score += 0.5
@@ -449,47 +940,58 @@ class FraudDetectionEngine:
             rules_triggered.append(f"WALLET_LIMIT_EXCEEDED: ₹{amount:,.0f} > ₹{THRESHOLDS.WALLET_LIMIT:,}")
             score += 0.3
         
-        # R3: ATM must be cash withdrawal only
+        # R4: ATM must be cash withdrawal only
         if channel == 'atm' and category != 'cash_withdrawal':
             rules_triggered.append(f"INVALID_ATM_CATEGORY: {category}")
             score += 0.6
         
-        # R4: Night time transactions
+        # R5: Night time transactions
         timestamp = txn.get('timestamp', datetime.now())
         if isinstance(timestamp, str):
             timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
         hour = timestamp.hour
         
         if (hour >= THRESHOLDS.HIGH_RISK_START or hour < THRESHOLDS.HIGH_RISK_END):
-            if amount > 10000:  # Night + high value
-                rules_triggered.append(f"NIGHT_HIGH_VALUE: {hour}:00 IST, ₹{amount:,.0f}")
+            # Dynamic: use user's typical transaction amount to judge "high value at night"
+            night_threshold = user_profile.avg_amount * 5 if user_profile.is_mature else 10000
+            if amount > night_threshold:
+                rules_triggered.append(f"NIGHT_HIGH_VALUE: {hour}:00 IST, ₹{amount:,.0f} (>{night_threshold:,.0f})")
                 score += 0.25
         
-        # R5: New device + high value
-        if txn.get('is_new_device') and amount > 25000:
-            rules_triggered.append(f"NEW_DEVICE_HIGH_VALUE: ₹{amount:,.0f}")
+        # R6: New device + high value (relative to user)
+        high_value_for_user = user_profile.avg_amount * 3 if user_profile.is_mature else 25000
+        if txn.get('is_new_device') and amount > high_value_for_user:
+            rules_triggered.append(f"NEW_DEVICE_HIGH_VALUE: ₹{amount:,.0f} (>{high_value_for_user:,.0f} for this user)")
             score += 0.3
         
-        # R6: New location + new device (account takeover pattern)
+        # R7: New location + new device (account takeover pattern)
         if txn.get('is_new_device') and txn.get('is_new_location'):
             rules_triggered.append("NEW_DEVICE_AND_LOCATION")
             score += 0.35
         
-        # R7: High-risk categories
+        # R8: High-risk categories
         high_risk_categories = ['cryptocurrency', 'gambling', 'forex', 'jewellery']
         if any(cat in category for cat in high_risk_categories):
             rules_triggered.append(f"HIGH_RISK_CATEGORY: {category}")
             score += 0.2
         
-        # R8: Round amount (potential structuring)
-        if amount >= 10000 and amount % 10000 == 0:
+        # R9: Round amount (potential structuring) - but relative to user's typical amounts
+        structuring_threshold = max(user_profile.avg_amount * 5, 10000) if user_profile.is_mature else 10000
+        if amount >= structuring_threshold and amount % 10000 == 0:
             rules_triggered.append(f"ROUND_AMOUNT: ₹{amount:,.0f}")
             score += 0.1
         
-        # R9: Velocity check
-        if txn.get('txn_count_last_hour', 0) > THRESHOLDS.MAX_TXN_PER_HOUR:
-            rules_triggered.append(f"HIGH_VELOCITY: {txn.get('txn_count_last_hour')} txns/hour")
-            score += 0.4
+        # R10: DYNAMIC VELOCITY - User-specific velocity anomaly
+        if anomaly_info.get('is_velocity_anomaly'):
+            score += 0.2
+        
+        # R11: DYNAMIC DAILY LIMIT - Transaction exceeds user's typical daily total
+        if user_profile.is_mature and 'daily_limit' in dynamic_thresholds:
+            today_key = datetime.now().strftime('%Y-%m-%d')
+            today_total = user_profile.daily_totals.get(today_key, 0)
+            if today_total > dynamic_thresholds['daily_limit']:
+                rules_triggered.append(f"DAILY_LIMIT_EXCEEDED: Today ₹{today_total:,.0f} > ₹{dynamic_thresholds['daily_limit']:,.0f}")
+                score += 0.3
         
         return min(score, 1.0), rules_triggered
     
@@ -529,6 +1031,20 @@ class FraudDetectionEngine:
                 'very_high_value': THRESHOLDS.VERY_HIGH_VALUE,
                 'upi_limit': THRESHOLDS.UPI_SINGLE_LIMIT,
                 'atm_limit': THRESHOLDS.ATM_DAILY_LIMIT
+            },
+            'dynamic_detection': {
+                'enabled': True,
+                'persistent': True,  # Profiles survive restarts
+                'description': 'Personalized anomaly detection based on user behavior (PERSISTENT)',
+                'active_user_profiles': len(self.user_profiles),
+                'mature_profiles': sum(1 for p in self.user_profiles.values() if p.is_mature),
+                'profiles_path': str(self.profiles_path),
+                'detection_criteria': {
+                    'amount_zscore_threshold': 3.0,
+                    'amount_ratio_threshold': 5.0,
+                    'daily_deviation_threshold': 3.0,
+                    'min_transactions_for_maturity': 10
+                }
             }
         }
         
@@ -543,6 +1059,39 @@ class FraudDetectionEngine:
                 pass
         
         return stats
+    
+    def save_profiles(self) -> None:
+        """Force save all user profiles (call on shutdown)"""
+        if self.user_profiles:
+            self._save_user_profiles()
+            logger.info(f"💾 Saved {len(self.user_profiles)} user profiles on shutdown")
+    
+    def get_user_profile_summary(self, user_id: str) -> Optional[Dict[str, Any]]:
+        """Get summary of a user's behavioral profile for debugging/monitoring"""
+        if user_id not in self.user_profiles:
+            return None
+        
+        profile = self.user_profiles[user_id]
+        return {
+            'user_id': user_id,
+            'is_mature': profile.is_mature,
+            'transaction_count': profile.txn_count,
+            'profile_age_days': profile.profile_age_days,
+            'statistics': {
+                'avg_amount': round(profile.avg_amount, 2),
+                'std_amount': round(profile.std_amount, 2),
+                'median_amount': round(profile.median_amount, 2),
+                'max_amount': round(profile.max_amount, 2),
+                'p75_amount': round(profile.p75_amount, 2),
+                'p95_amount': round(profile.p95_amount, 2)
+            },
+            'daily_behavior': {
+                'avg_daily_total': round(profile.avg_daily_total, 2),
+                'max_daily_total': round(profile.max_daily_total, 2),
+                'avg_daily_txn_count': round(profile.avg_daily_txn_count, 2)
+            },
+            'dynamic_thresholds': profile.get_dynamic_thresholds()
+        }
 
 
 # Singleton instance

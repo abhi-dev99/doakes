@@ -325,6 +325,7 @@ class TransactionGenerator:
         return {
             'transaction_id': str(uuid.uuid4()),
             'user_id': user['user_id'],
+            'merchant_id': f"MER{random.randint(100000, 999999)}",
             'amount': amount,
             'channel': channel,
             'merchant_category': category,
@@ -372,6 +373,7 @@ class TransactionGenerator:
             return {
                 'transaction_id': str(uuid.uuid4()),
                 'user_id': user['user_id'],
+                'merchant_id': f"MER{random.randint(100000, 999999)}",
                 'amount': amount,
                 'channel': channel,
                 'merchant_category': category,
@@ -404,6 +406,7 @@ class TransactionGenerator:
             return {
                 'transaction_id': str(uuid.uuid4()),
                 'user_id': user['user_id'],
+                'merchant_id': f"MER{random.randint(100000, 999999)}",
                 'amount': amount,
                 'channel': channel,
                 'merchant_category': category,
@@ -442,6 +445,7 @@ class TransactionGenerator:
             return {
                 'transaction_id': str(uuid.uuid4()),
                 'user_id': user['user_id'],
+                'merchant_id': f"MER{random.randint(100000, 999999)}",
                 'amount': amount,
                 'channel': channel,
                 'merchant_category': category,
@@ -472,6 +476,7 @@ class TransactionGenerator:
             return {
                 'transaction_id': str(uuid.uuid4()),
                 'user_id': user['user_id'],
+                'merchant_id': f"MER{random.randint(100000, 999999)}",
                 'amount': amount,
                 'channel': channel,
                 'merchant_category': category,
