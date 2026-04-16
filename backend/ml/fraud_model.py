@@ -691,12 +691,13 @@ class FraudDetectionEngine:
         # Add dynamic anomaly score component
         dynamic_anomaly_score = self._calculate_dynamic_anomaly_score(anomaly_info)
         
-        # Ensemble scoring with weights (adjusted for dynamic analysis + UPI detection)
+        # Ensemble scoring with weights (must total 100%)
+        # XGBoost: 35%, Isolation Forest: 20%, Rules: 25%, Dynamic Behavior: 20%
         final_score = (
-            xgb_score * 0.3 +
-            anomaly_score * 0.15 +
+            xgb_score * 0.35 +
+            anomaly_score * 0.20 +
             rule_score * 0.25 +
-            dynamic_anomaly_score * 0.2
+            dynamic_anomaly_score * 0.20
         )
         
         # Run UPI-specific fraud detection

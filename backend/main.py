@@ -6,19 +6,21 @@ and real-time fraud detection for Indian payments.
 """
 
 import asyncio
+import csv
+import io
 import json
 import logging
 import sqlite3
 import time
 import uuid
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, HTMLResponse
 from pydantic import BaseModel
 
 from ml.fraud_model import get_engine
@@ -106,7 +108,50 @@ def init_db():
     cursor.execute('''
         CREATE INDEX IF NOT EXISTS idx_txn_risk ON transactions(risk_level)
     ''')
-    
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS survey_responses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            email TEXT,
+            organisation TEXT,
+            role TEXT,
+            org_type TEXT,
+            current_approach TEXT,
+            txn_volume TEXT,
+            pre_auth_importance INTEGER,
+            latency_tolerance TEXT,
+            accuracy_speed_tradeoff TEXT,
+            explainability_importance INTEGER,
+            india_specific_importance INTEGER,
+            fr_decision_engine INTEGER,
+            fr_velocity INTEGER,
+            fr_challenge INTEGER,
+            fr_device INTEGER,
+            fr_graph INTEGER,
+            fr_xai INTEGER,
+            fr_alerts INTEGER,
+            fr_case_mgmt INTEGER,
+            fr_compliance INTEGER,
+            fr_merchant INTEGER,
+            fr_dashboard INTEGER,
+            nfr_uptime TEXT,
+            nfr_tps TEXT,
+            nfr_data_residency TEXT,
+            nfr_log_retention TEXT,
+            nfr_rto TEXT,
+            fraud_types TEXT,
+            multilang_importance INTEGER,
+            integration TEXT,
+            deployment_model TEXT,
+            scaling_requirement TEXT,
+            pain_point TEXT,
+            additional_requirements TEXT,
+            comments TEXT,
+            submitted_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
     conn.commit()
     conn.close()
     logger.info(f"Database initialized at {DB_PATH}")
@@ -675,6 +720,146 @@ async def clear_data():
     simulation.total_generated = 0
     
     return {"status": "cleared"}
+
+# ============ SURVEY ============
+
+SURVEY_HTML = Path(__file__).parent / "survey_form.html"
+
+@app.get("/survey", response_class=HTMLResponse)
+async def serve_survey():
+    """Serve the requirements elicitation survey form"""
+    if not SURVEY_HTML.exists():
+        raise HTTPException(status_code=404, detail="Survey form not found")
+    return SURVEY_HTML.read_text(encoding="utf-8")
+
+class SurveySubmission(BaseModel):
+    name: str
+    email: str
+    organisation: str
+    role: str
+    org_type: str
+    current_approach: Optional[str] = None
+    txn_volume: Optional[str] = None
+    pre_auth_importance: Optional[int] = None
+    latency_tolerance: Optional[str] = None
+    accuracy_speed_tradeoff: Optional[str] = None
+    explainability_importance: Optional[int] = None
+    india_specific_importance: Optional[int] = None
+    fr_decision_engine: Optional[int] = None
+    fr_velocity: Optional[int] = None
+    fr_challenge: Optional[int] = None
+    fr_device: Optional[int] = None
+    fr_graph: Optional[int] = None
+    fr_xai: Optional[int] = None
+    fr_alerts: Optional[int] = None
+    fr_case_mgmt: Optional[int] = None
+    fr_compliance: Optional[int] = None
+    fr_merchant: Optional[int] = None
+    fr_dashboard: Optional[int] = None
+    nfr_uptime: Optional[str] = None
+    nfr_tps: Optional[str] = None
+    nfr_data_residency: Optional[str] = None
+    nfr_log_retention: Optional[str] = None
+    nfr_rto: Optional[str] = None
+    fraud_types: Optional[List[str]] = []
+    multilang_importance: Optional[int] = None
+    integration: Optional[List[str]] = []
+    deployment_model: Optional[str] = None
+    scaling_requirement: Optional[str] = None
+    pain_point: Optional[str] = None
+    additional_requirements: Optional[str] = None
+    comments: Optional[str] = None
+
+@app.post("/api/survey/submit")
+async def submit_survey(submission: SurveySubmission):
+    """Save a survey response to the database"""
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            INSERT INTO survey_responses (
+                name, email, organisation, role, org_type,
+                current_approach, txn_volume,
+                pre_auth_importance, latency_tolerance, accuracy_speed_tradeoff,
+                explainability_importance, india_specific_importance,
+                fr_decision_engine, fr_velocity, fr_challenge, fr_device,
+                fr_graph, fr_xai, fr_alerts, fr_case_mgmt, fr_compliance,
+                fr_merchant, fr_dashboard,
+                nfr_uptime, nfr_tps, nfr_data_residency, nfr_log_retention, nfr_rto,
+                fraud_types, multilang_importance, integration,
+                deployment_model, scaling_requirement,
+                pain_point, additional_requirements, comments
+            ) VALUES (
+                ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
+            )
+        """, (
+            submission.name, submission.email, submission.organisation,
+            submission.role, submission.org_type,
+            submission.current_approach, submission.txn_volume,
+            submission.pre_auth_importance, submission.latency_tolerance,
+            submission.accuracy_speed_tradeoff,
+            submission.explainability_importance, submission.india_specific_importance,
+            submission.fr_decision_engine, submission.fr_velocity, submission.fr_challenge,
+            submission.fr_device, submission.fr_graph, submission.fr_xai,
+            submission.fr_alerts, submission.fr_case_mgmt, submission.fr_compliance,
+            submission.fr_merchant, submission.fr_dashboard,
+            submission.nfr_uptime, submission.nfr_tps, submission.nfr_data_residency,
+            submission.nfr_log_retention, submission.nfr_rto,
+            json.dumps(submission.fraud_types),
+            submission.multilang_importance,
+            json.dumps(submission.integration),
+            submission.deployment_model, submission.scaling_requirement,
+            submission.pain_point, submission.additional_requirements, submission.comments
+        ))
+        conn.commit()
+        logger.info(f"Survey response saved from {submission.name} ({submission.organisation})")
+        return {"status": "submitted", "respondent": submission.name}
+    except Exception as e:
+        logger.error(f"Survey save error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        conn.close()
+
+@app.get("/api/survey/responses")
+async def get_survey_responses():
+    """Return all survey responses as JSON"""
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM survey_responses ORDER BY submitted_at DESC")
+    rows = cursor.fetchall()
+    conn.close()
+    results = []
+    for row in rows:
+        r = dict(row)
+        r['fraud_types'] = json.loads(r.get('fraud_types') or '[]')
+        r['integration'] = json.loads(r.get('integration') or '[]')
+        results.append(r)
+    return {"responses": results, "count": len(results)}
+
+@app.get("/api/survey/export")
+async def export_survey_responses():
+    """Export survey responses as CSV"""
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM survey_responses ORDER BY submitted_at DESC")
+    rows = cursor.fetchall()
+    conn.close()
+
+    if not rows:
+        raise HTTPException(status_code=404, detail="No survey responses found")
+
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=rows[0].keys())
+    writer.writeheader()
+    for row in rows:
+        writer.writerow(dict(row))
+    output.seek(0)
+
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=argus_survey_responses.csv"}
+    )
 
 # ============ WEBSOCKET ============
 

@@ -162,8 +162,8 @@ class UPIFraudDetector:
                 avg_credit = sum(t.get('amount', 0) for t in credits) / len(credits)
                 avg_debit = sum(t.get('amount', 0) for t in debits) / len(debits)
                 
-                # Similar amounts in/out
-                if 0.8 <= avg_debit / avg_credit <= 1.2:
+                # Similar amounts in/out (with safe division)
+                if avg_credit > 0 and 0.8 <= avg_debit / avg_credit <= 1.2:
                     risk_score += 0.35
                     reasons.append("Money-in-money-out pattern detected")
             
