@@ -1,0 +1,1110 @@
+Requirements Engineering
+Unit II
+
+Requirements engineering
+• Requirements engineering (RE) refers to the
+process of Formulating, Documenting and
+Maintaining software requirements
+
+Requirements Engineering
+• Inception—ask a set of questions that establish …
+– basic understanding of the problem
+– the people who want a solution
+– the nature of the solution that is desired, and
+– the effectiveness of preliminary communication and
+collaboration between the customer and the developer
+
+• Elicitation—elicit requirements from all stakeholders
+• Elaboration—create an analysis model that identifies
+data, function and behavioral requirements
+• Negotiation—agree on a deliverable system that is
+realistic for developers and customers
+4
+
+Requirements Engineering
+• Specification—can be any one (or more) of the following:
+– A written document
+– A set of models
+– A formal mathematical
+– A collection of user scenarios (use-cases)
+– A prototype
+
+• Validation—a review mechanism that looks for
+
+– errors in content or interpretation
+– areas where clarification may be required
+– missing information
+– inconsistencies (a major problem when large products or systems are
+engineered)
+– conflicting or unrealistic (unachievable) requirements.
+
+• Requirements management
+
+5
+
+Functional vs Non-functional requirements
+• Functional requirements define what a
+system does (features, actions, data), while
+non-functional requirements define how well
+the system does it (performance, security,
+usability, reliability), acting as quality
+constraints for those functions.
+• Functional requirements are about core
+functions (like login, payment), easily
+tested,
+and
+user-driven;
+non-functional
+requirements (like load time, security
+standards) dictate quality and are tested via
+performance or security checks, influencing
+architecture
+
+Functional vs Non-functional requirements
+• Functional Requirements
+• Functional requirements specify what the system
+should do (e.g., "User can upload a photo") the
+services, features, and behaviors of the system.
+• It:
+• Describe system functions and operations
+• Directly related to business logic
+• Usually derived from user needs
+• Can be tested using input/output validation
+• Examples
+• User shall be able to log in using username and
+password
+• System shall generate monthly reports
+• User shall transfer money between accounts
+• System shall store student details
+
+Functional vs Non-functional requirements
+• Non-Functional Requirements
+• Non-functional requirements specify how the system
+should perform (e.g., "Page loads in under 3
+seconds")quality
+attributes,
+constraints,
+and
+performance standards.
+• It:
+• Focus on system quality and performance
+• Often measurable
+• Types of Non-Functional Requirements
+• Performance (response time, throughput)
+• Security (authentication, encryption)
+• Reliability (availability, fault tolerance)
+• Scalability
+• Maintainability
+• Examples
+• System should respond within 2 seconds
+• System should have 99.9% uptime
+• Application should support 10,000 concurrent users
+
+Eliciting Requirements
+• meetings are conducted and attended by both software
+engineers and customers
+• rules for preparation and participation are established
+• an agenda is suggested
+• a "facilitator" (can be a customer, a developer, or an
+outsider) controls the meeting
+• a "definition mechanism" (can be work sheets, flip
+charts, or wall stickers or an electronic bulletin board,
+chat room or virtual forum) is used
+• the goal is
+– to identify the problem
+– propose elements of the solution
+– negotiate different approaches, and
+– specify a preliminary set of solution requirements
+9
+
+Requirements Elicitation Process
+domain
+knowledge
+
+discover
+the
+require
+ments
+
+organizing of
+the
+requirements
+gathered from
+different sources
+
+checking the
+stake
+holder’s
+expectations
+
+most
+priority
+order
+
+Different
+stakeholders
+
+Requirements Elicitation Process
+
+Classic Requirements Elicitation Techniques
+
+Requirements Elicitation Techniques
+• Interviews
+• An interview is an organized approach to elicit information from
+one or more stakeholders. It is by interacting with them, asking
+pertinent questions, and documenting the responses.
+• 1.Closed Interview: In this interview the requirements
+engineer prepare some predefined questions and he tries to
+get the answers for these questions from the stake holders.
+•
+2.Open interview: In this interview the requirements
+engineer does not prepare any predefined questions, and he
+tries to get the information from the stakeholders in open
+discussions.
+
+Classic Requirements Elicitation Techniques
+
+Steps in arranging a questionnaire
+• The questions should be arranged well, so that
+general questions are followed by
+particular questions.
+• Arrange the questions such that, easy questions
+comes first.
+• Arrange the questions in a order of known to
+unknown
+• The questions relevant to the main subject should
+be given high priority and stated at the start of the
+questionnaire.
+•
+Avoid personal and intimate questions at the
+beginning
+
+Requirements Elicitation
+Techniques
+
+• Observation
+• Observation is a requirement elicitation technique in
+which the analyst watches users while they perform
+their real-world tasks to understand how the system is
+actually used. It helps business analysts in
+situations where users are unable to explain
+requirements clearly.
+• Active Observation - In this type, the business
+analyst interacts with the end-users by asking
+questions, clarifying doubts, and placing suggestions.
+This type of observation is particularly for eliciting
+requirements in critical projects where clients'
+requirements are critical.
+
+Requirements Elicitation
+Techniques
+
+• Passive Observation - In this type, there is no
+engagement similar to the active observation
+technique. Here, the observer, i.e the business analyst
+will examine the activities of end-users in their work
+environment and record the observations through
+notes, videos, audio, and so on. These observations
+are carried out from a distance without interrupting
+the usual operations. This technique can be used
+when you'll need to keenly closely observe the natural
+behaviors of stakeholders to avoid the hassles.
+
+Requirements Elicitation Techniques
+• Workshop:
+• Workshops by a business
+analyst to elicit information in a
+collaborative and facilitated
+set-up where stakeholders.
+• A workshop includes a neutral
+third-party facilitator who
+establishes
+the
+purpose,
+desired outcomes, session
+agenda and put the ground
+rules in force; a scribe who
+documents the decisions and
+track
+deferred
+items;
+participants who discuss the
+agenda items and share
+views. A business analyst may
+perform
+the
+role
+of
+a
+facilitator,
+scribe,
+or
+participant in the workshops.
+
+Requirements
+Elicitation Techniques
+• Document Analysis:Document Analysis is an elicitation
+technique to extract information by examining existing
+documentation. however It is beneficial in a scenario where the
+Subject Matter Experts are not available to participate in
+elicitation activities.
+• 1.Conduct a detailed review of documents– Involves examining
+documents and noting relevant information, developing follow up
+questions, and determining information that should be recorded
+in work products.
+• 2. Analyze information - Involves identifying existing processes,
+stakeholders, business needs, business constraints, impacted
+systems, patterns, as well as determining areas that require
+further research or have conflicting information.
+• Record Findings - When information discovered during the
+document analysis is important enough to be communicated to
+other stakeholders, the BA or researcher will record the
+information and transfer it to the applicable work products.
+
+Requirement Analysis – MoSCoW Technique
+• The MoSCoW method is one of the most popular
+
+prioritization techniques to establish what is most
+important to clients and stakeholders.
+• By using this method, stakeholders can better
+
+understand the importance of different features in
+a release.
+• It is extremely quick and simple to apply as a
+
+prioritization solution, classifying features in four
+different priority buckets: Must Have, Should Have,
+Could Have, and Won’t have.
+
+Requirement Analysis – MoSCoW Technique
+•
+•
+•
+•
+•
+•
+
+MoSCoW stands for:
+M – Must have
+S – Should have
+C – Could have
+W – Won’t have (this time)
+
+It helps teams focus on delivering the most critical requirements first.
+
+Requirement Analysis – MoSCoW Technique
+• Must Have:
+• The team identifies the core functionalities that
+are absolutely essential for the CRM system to be
+considered viable. These may include features like
+user registration, contact management, and basic
+reporting. Without these features, the CRM system
+would be incomplete and unusable.
+• Example: The ability to create and manage
+customer profiles is a "Must Have" feature. Without
+this capability, the CRM system cannot effectively
+store and retrieve customer information, which is
+critical for its primary purpose.
+
+Requirement Analysis – MoSCoW Technique
+• Should Have:
+• Next, the team considers features that are
+important but not crucial for the initial release.
+These features enhance the system's usability,
+improve efficiency, or provide additional value to
+users. They can be prioritized after the Must Have
+features are addressed.
+• Example: Advanced reporting and analytics, while
+not essential for the core functionality, would be
+considered "Should Have" features. They provide
+valuable insights and data visualization to help users
+analyze customer trends and make informed
+decisions, but the CRM system can still function
+without them.
+
+Requirement Analysis – MoSCoW Technique
+• Could Have:
+• The team identifies desirable features that are not
+critical to the core functionality or immediate
+success of the CRM system. These features may be
+nice to have, but their absence would not significantly
+impact the system's usefulness or viability.
+• Example: Integration with social media platforms
+such as Twitter and LinkedIn could be categorized
+as "Could Have" features. While they may provide
+additional channels for customer engagement, their
+absence would not hinder the basic functionality of
+the CRM system.
+
+Requirement Analysis – MoSCoW Technique
+• Won't Have:
+• Finally, there may be certain features or
+requirements that fall outside the project's scope
+or do not align with its objectives. These features
+are explicitly excluded from the current release, but
+they may be considered for future iterations or
+updates.
+• Example: Integration with a legacy email system
+that is not widely used by the target users may be
+classified as a "Won't Have" feature. Although it
+could potentially benefit a small subset of users, it is
+deemed lower priority and not within the immediate
+scope of the project.
+
+Building The Requirements Model
+• Elements of the analysis model
+– Scenario-based elements
+
+• Functional—processing narratives for software
+functions
+• Use-case—descriptions of the interaction between
+an “actor” and the system
+
+– Class-based elements
+• Implied by scenarios
+
+– Behavioral elements
+• State diagram
+
+– Flow-oriented elements
+• Data flow diagram
+
+25
+
+Negotiating Requirements
+• Identify the key stakeholders
+
+– These are the people who will be involved in the
+negotiation
+
+• Determine each of the stakeholders “win
+conditions”
+– Win conditions are not always obvious
+
+• Negotiate
+
+– Work toward a set of requirements that lead to
+“win-win”
+26
+
+Validating Requirements
+
+• Is each requirement consistent with the overall
+objective for the system/product?
+• Have all requirements been specified at the
+proper level of abstraction?
+• Is the requirement really necessary or does it
+represent an add-on feature that may not be
+essential to the objective of the system?
+• Is each requirement unambiguous?
+• Do any requirements conflict with other
+requirements?
+• Is
+each
+requirement
+testable,
+once
+implemented?
+27
+
+User requirements
+• User requirements, often referred to as user
+needs, describe what the user does with the
+system, such as what activities that users must
+be able to perform.
+• Example of a "user requirement" is more like a
+wish or "feature." "I wish that the system had
+some reports for the managers.“
+
+System requirements
+• System requirements are classified as either
+functional or supplemental requirements.
+• For example, a system may be required to enter and
+print cost estimates; this is a functional
+requirement.
+• Supplemental requirements are sometimes called
+quality of service requirements.
+• Accuracy,control,reporting,Availability,Backup and
+• restore,Compatibility,Disaster recovery,
+• Privacy,Portability,
+Response
+time,Scalability
+(horizontal, vertical),Security,Usability
+
+Business requirements
+• Business requirements describe why the organization is
+undertaking the project. They state some benefits that the
+developing organization or its customers expect to receive
+from the product.
+•
+•
+•
+•
+•
+•
+•
+
+Problem Statement
+Project Vision
+Project Constraints (Budget, Schedule, and Resources)
+Project Objectives
+Project Scope Statements
+Business Process Analysis
+Stakeholder Analysis
+
+Requirements Analysis
+• Requirements analysis
+
+– specifies software’s operational characteristics
+– indicates software's interface with other system elements
+– establishes constraints that software must meet
+
+• Requirements analysis allows the software engineer
+(called an analyst or modeler in this role) to:
+
+– elaborate on basic requirements established during earlier
+requirement engineering tasks
+– build models that depict user scenarios, functional
+activities, problem classes and their relationships, system
+and class behavior, and the flow of data as it is
+transformed.
+31
+
+Elements Of The Analysis Model
+
+Use-Cases
+
+33
+
+Use-Cases Notations
+• Actor - Represents a user, organization, or external system that
+interacts with your application or system.
+• Use Case - Represents the actions performed by one or more
+actors in the pursuit of a particular goal.
+• Association - Indicates that an actor takes part in a use case.
+• Include - In UML modeling, an include relationship is a relationship
+in which one use case (the base use case) includes the
+functionality of another use case (the inclusion use case).
+
+Use-Cases Notations
+• Extend - In UML modeling, you can use an extend relationship to
+specify that one use case (extension) extends the behavior of
+another use case (base).
+
+• Inheritance - Relates a specialized and a generalized element.
+• Dependency - Indicates that the design of the source depends on
+the design of the target.
+• Comment - Used to add general notes to the diagram.
+• Artifact - An artifact provides a link to another diagram or
+document.
+
+Search for product
+
+View shopping cart
+
+Add item to shopping cart
+
+Create new user
+Administrator
+Online Customer
+Select credit card
+
+Purchase item
+
+Change item information
+
+Block users
+
+Review order confirmation
+Choose shipping type
+Shopping Cart system
+
+Login as registered user
+Inform the deal to seller
+
+Register Item
+
+Online seller
+
+Insulin Pump Case Study
+
+Insulin Pump Case Study
+
+Class-Based Modeling
+• Identify analysis classes by examining
+the problem statement
+• Use a “grammatical parse” to isolate
+potential classes
+• Identify the attributes of each class
+• Identify operations that manipulate the
+attributes
+
+39
+
+Analysis Classes
+• External entities (e.g., other systems, devices, people) that produce or
+consume information to be used by a computer-based system.
+• Things (e.g, reports, displays, letters, signals) that are part of the
+information domain for the problem.
+• Occurrences or events (e.g., a property transfer or the completion of a
+series of robot movements) that occur within the context of system
+operation.
+• Roles (e.g., manager, engineer, salesperson) played by people who
+interact with the system.
+• Organizational units (e.g., division, group, team) that are relevant to an
+application.
+• Places (e.g., manufacturing floor or loading dock) that establish the
+context of the problem and the overall function of the system.
+• Structures (e.g., sensors, four-wheeled vehicles, or computers) that
+define a class of objects or related classes of objects.
+
+40
+
+Flow-Oriented Modeling
+Represents how data objects are transformed at
+they move through the system
+A data flow diagram (DFD)Considered by many
+to be an ‘old school’ approach, flow-oriented
+modeling continues to provide a view of the
+system that is unique—it should be used to
+supplement other analysis model elements
+
+42
+
+The Flow Model
+Every computer-based system is an
+information transform ....
+
+input
+
+computer
+based
+system
+
+output
+
+43
+
+Flow Modeling Notation
+
+external entity
+
+process
+
+data flow
+data store
+
+44
+
+4Main Elements
+• external entity - people or organisations that send
+data into the system or receive data from the system
+• process - models what happens to the data i.e.
+transforms incoming data into outgoing data
+• data store - represents permanent data that is used
+by the system
+• data flow - models the actual flow of the data
+between the other elements
+
+Level 0 - Context Diagram
+• models system as one process box which
+represents scope of the system
+• identifies external entities and related inputs
+and outputs
+• Additional notation - system box
+
+External
+entity
+
+Data flow out
+Data flow in
+
+System box
+
+Level 1 - overview diagram
+• gives overview of full system
+• identifies major processes and data flows
+between them
+• identifies data stores that are used by the
+major processes
+
+Level 2 - detailed diagram
+• level 1 process is expanded into more detail
+• each process in level 1 is decomposed to show
+its constituent processes
+
+Joe’s Yard
+Joe’s builders’ suppliers has a shop and a yard. His system is entirely
+manual. He has a stock list on the wall of his shop, complete with
+prices. When a builder wants to buy supplies, he goes into the shop and
+picks the stock items from the list. He writes his order on a duplicate
+docket and pays Joe, who stamps the docket as paid. The builder takes
+the duplicate docket and he goes to the yard and hands it to the yard
+foreman. The yard foreman gets the ordered items from the yard and
+gives them to the builder. The builder signs the duplicate docket and
+leaves one copy with the foreman and takes one copy as a receipt.
+Every week, Joe looks around the yard to see if any of his stock is
+running low. He rings up the relevant suppliers and reorders stock. He
+records the order in his order book, which is kept in the yard. The yard
+foreman takes delivery of the new stock and checks it against what has
+been ordered. He pays for it on delivery and staples the receipt into the
+order book. At the end of every month, Joe goes through all the
+dockets and the order book and produces a financial report for the
+shareholders.
+Draw a context level DFD and a level-1 DFD for this system.
+
+Context Diagram
+• Find the people who send data into the system
+– Often data is part of a PHYSICAL transaction
+– When handing a bar of chocolate to a shopkeeper, you are
+handing him/her a barcode.
+
+• Find the people who get data out of the system.
+– The only data you need is data that is transformed or sent
+completely out of the system – not data that is handled by
+an operator within the system.
+
+Joe’s Yard
+Joe’s builders’ suppliers has a shop and a yard. His system is entirely
+manual. He has a stock list on the wall of his shop, complete with
+prices. When a builder wants to buy supplies, he goes into the shop and
+picks the stock items from the list. He writes his order on a duplicate
+docket and pays Joe, who stamps the docket as paid. The builder takes
+the duplicate docket and he goes to the yard and hands it to the yard
+foreman. The yard foreman gets the ordered items from the yard and
+gives them to the builder. The builder signs the duplicate docket and
+leaves one copy with the foreman and takes one copy as a receipt.
+Every week, Joe looks around the yard to see if any of his stock is
+running low. He rings up the relevant suppliers and reorders stock. He
+records the order in his order book, which is kept in the yard. The yard
+foreman takes delivery of the new stock and checks it against what has
+been ordered. He pays for it on delivery and staples the receipt into the
+order book. At the end of every month, Joe goes through all the
+dockets and the order book and produces a financial report for the
+shareholders.
+Draw a context level DFD and a level-1 DFD for this system.
+
+Context diagram
+Shareholders
+
+financial
+report
+
+Joe
+
+Docket &
+Payment
+
+Joe's
+Yard
+
+Supply needs
+
+Customer
+Signed docket
+
+Supply order
+& payment
+
+Supply invoice
+
+Supplier
+
+Level-1 DFD processes
+
+Joe’s builders’ suppliers has a shop and a yard. His system is entirely
+manual. He has a stock list on the wall of his shop, complete with
+prices. When a builder wants to buy supplies, he goes into the shop
+and picks the stock items from the list. He writes his order on a
+duplicate docket and pays Joe, who stamps the docket as paid. The
+builder takes the duplicate docket and he goes to the yard and
+hands it to the yard foreman. The yard foreman gets the ordered
+items from the yard and gives them to the builder. The builder
+signs the duplicate docket and leaves one copy with the foreman
+and takes one copy as a receipt. Every week, Joe looks around the
+yard to see if any of his stock is running low. He rings up the
+relevant suppliers and reorders stock. He records the order in his
+order book, which is kept in the yard. The yard foreman takes
+delivery of the new stock and checks it against what has been
+ordered. He pays for it on delivery and staples the receipt into the
+order book. At the end of every month, Joe goes through all the
+dockets and the order book and produces a financial report for the
+shareholders.
+
+Verbs from script
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+
+Builder
+Has
+(passive)
+signs docket
+Takesupplies
+Buy
+copy as receipt
+Looksstock
+Picks
+around
+items
+yard and reorders
+Recordsorder
+Writes
+order in order book
+Foreman
+Pays
+joe takes delivery – checks
+Foremandocket
+Stamps
+pays supplier
+Staplesdocket
+Takes
+receipt
+toto
+yard
+order book
+Produces
+Hands
+it tofinancial
+foremanreport
+Gets items
+Gives them to builder
+
+Level 1 current physical
+20
+Buy
+supplies
+
+Money
+
+Payment
+
+Supplier
+receipt
+
+22
+Payment
+
+Docket &
+Payment
+Customer
+
+Docket
+
+completed
+docket copy
+
+Signed docket
+
+Take
+to
+yard
+
+*
+
+supplies
+Supply order
+
+Docket
+
+get
+items
+
+Order
+book
+
+M3
+stock
+
+12
+
+builder
+signature
+
+Supply order
+
+required stock
+completed
+docket copy
+
+Supplier
+receipt
+
+5
+
+Foreman
+
+Joe
+Supply needs
+
+21
+Reorder
+supplies
+
+Signed docket
+
+Signed docket
+
+supplies
+Supplier
+
+completed
+docket copy
+
+required stock
+
+11
+
+M1
+
+Payment
+
+Restock
+
+Joe's Office
+Produce
+financial
+report
+
+financial
+report
+*
+
+Shareholders
+
+Context Level / Level 0
+
+places order
+
+Customer
+
+Gives the
+shopping cart to
+place the items
+
+Admin detail
+
+Administrator
+
+Online
+Shopping
+System
+
+Gives the
+services
+
+LEVEL 1
+
+Product Listing
+
+Customer
+
+Login Info
+
+Login
+1.1
+
+Request
+for
+products
+
+Product Product Product
+Id
+item
+Id
+listing
+1.3
+1.2
+
+Purchase
+Process
+
+Product
+Purchased
+1.4
+
+Pay
+Process
+Pay
+1.5
+
+Request for
+Registeration
+User
+Verification
+
+User Login
+
+Registration
+1.6
+Registration
+
+User
+registration
+
+Product LIst
+
+Master
+
+Product Detail
+
+Shipping Info
+
+Pending
+Product
+Data
+
+Pending
+Product Data
+
+Product
+
+Shipping
+1.7
+Shipping
+Data
+
+Shipping
+Charges
+
+LEVEL 2
+
+Administrator
+
+Login/
+Password
+
+Login
+2.1
+
+Admin
+Verification
+
+Home
+
+Shipping
+Pending
+Data
+
+Shipping
+Pending
+
+Add
+Category
+2.5
+Add
+Product
+
+Master
+Product
+
+Home
+2.2
+
+Shipping
+Pending
+Order
+2.3
+
+Update
+Category
+2.6
+
+Delete
+Category
+2.7
+Delete
+Product
+
+Edit
+Product
+
+Master
+Product
+
+Order
+Details
+
+Master
+Product
+
+Order
+Detail
+2.4
+
+Add
+Shipping
+Charges
+2.8
+Add
+Shipping
+
+Order
+Detail
+
+Add
+Tax
+2.9
+Add
+
+Shipping
+Charges
+
+Add
+Item
+2.10
+
+Pending
+Order
+2.11
+Pending
+Data
+
+Edit
+
+Pending
+Order
+
+Tax
+
+Add New H/W
+
+Manage
+Software
+Team
+2.12
+Add
+
+Add S/W
+
+Add New
+S/W
+
+Manage
+Hardware
+Team
+2.13
+Add
+
+Add H/W
+
+Add
+new
+services
+
+Manage
+Service
+Team
+2.14
+Add
+Add
+Service
+
+

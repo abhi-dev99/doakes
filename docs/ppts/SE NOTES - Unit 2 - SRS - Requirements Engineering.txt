@@ -1,0 +1,550 @@
+Software Requirements
+Specification Document
+
+Software Requirements Specification?
+ A software requirements specification (SRS) is a
+document that captures complete description about how
+the system is expected to perform. It is usually signed
+off at the end of requirements engineering phase.
+IEEE defines software requirements specification as, 'a
+document that clearly and precisely describes each of the
+essential requirements (functions, performance, design
+constraints and quality attributes) of the software and
+the external interfaces.
+The SRS is developed based the agreement between
+customer and contractors.
+
+Software Requirements Specification
+Table of Contents
+I.
+
+Introduction
+
+II. General Description
+III. External Interface Requirements
+IV. System Features
+V. Other Nonfunctional Requirements
+VI. Other Requirements & Appendices
+
+Software Requirements Specification
+I. Introduction
+A Purpose
+B Document Conventions
+C Scope
+D Definition, Acronyms, or Abbreviations
+E References
+F Overview
+
+Software Requirements Specification
+I.
+
+Introduction
+
+Borrowing books, returning books or viewing the available books at the Library of the local
+University is currently done manually where in the student has to go to the Library and
+check the available books at the Library. Students check the list of books available and
+borrow the books if the book is a borrow book otherwise it is of waste for the student to
+come to the library to come to check for the books if the student doesn’t get the book. Then
+the librarian checks the student id and allows the member to check out the book and the
+librarian then updates the member database and also the books database. This takes at least
+one to two hours if the member is available at the near by place otherwise it may take more
+time.
+We have decided to investigate the use of an Online Library Management System. This
+system would be used by members who may be students or professors of that University to
+check the availability of the books and borrow the books, and by the librarian to update the
+databases. The purpose of this document is to analyze and elaborate on the high-level needs
+and features of the Online Library System. It focuses on the capabilities and facilities
+provided by a Library. The details of what all are the needs of the Online Library System
+and if it fulfils these needs are detailed in the use-case and supplementary specifications.
+
+Systems Requirements Specification
+I.
+
+Introduction
+A Purpose
+
+<Identify the product whose software requirements are specified in
+this document, including the revision or release number. Describe
+the scope of the product that is covered by this SRS, particularly if
+this SRS describes only part of the system or a single subsystem.>
+
+Software Requirements Specification
+I.
+
+Introduction
+A Purpose
+
+The purpose of Software Requirements Specification (SRS)
+document is to describe the external behavior of the Online Library
+System. Requirements Specification defines and describes the
+operations, interfaces, performance, and quality assurance
+requirements of the Online Library System. The document also
+describes the nonfunctional requirements such as the user interfaces. It
+also describes the design constraints that are to be considered when the
+system is to be designed, and other factors necessary to provide a
+complete and comprehensive description of the requirements for the
+software.
+
+Software Requirements Specification
+I.
+
+Introduction
+B. Document Conventions
+
+Describe any standards or typographical conventions that
+were followed when writing this SRS, such as fonts or
+highlighting that have special significance.
+For example, state whether priorities for higher-level
+requirements are assumed to be inherited by detailed
+requirements, or whether every requirement statement is to
+have its own priority
+
+Software Requirements Specification
+I.
+
+Introduction
+
+B. Document Conventions
+Entire document should be justified.
+ Convention for Main title
+Font face: Times New Roman
+Font style: Bold
+Font Size: 14
+Convention for Sub title
+Font face: Times New Roman
+Font style: Bold
+Font Size: 12
+ Convention for body
+Font face: Times New Roman
+Font Size: 12
+
+Software Requirements Specification
+I.
+
+Introduction
+C. Scope
+
+<Provide a short description of the software being
+specified and its purpose, including relevant benefits,
+objectives, and goals. Relate the software to corporate
+goals or business strategies. If a separate vision and scope
+document is available, refer to it rather than duplicating its
+contents here.>
+
+Software Requirements Specification
+I.
+
+Introduction
+C. Scope
+
+The Software Requirements Specification captures all the requirements in a single
+document. The Online Library System that is to be developed provides the
+members of the Library and employees of the library with books information,
+online blocking of books and many other facilities. The Online Library System is
+supposed to have the following features.
+•The product provides the members with online blocking of books capabilities and
+the Online Library System is up and running all day.
+•The system provides logon facility to the users.
+•The system provides the members with the option to check their account and/or
+change their options like password of the account whenever needed all through the
+day during the library hours.
+•The system allows the members to block the books 24 hours a day and all the
+through the semester.
+
+Software Requirements Specification
+I.
+
+Introduction
+
+C. Scope
+•The system lets the library staff to check which all members have
+blocked the books and whether they can borrow any more books or
+not.
+•The system allows the Librarian to create the books catalog,
+add/delete books and maintain the books catalog.
+•The system updates the billing system as and when the member
+borrows or returns a book.
+•The book catalog is automated and the decision of offering the book
+based on the category of the book is automatically decided.
+•We also have an order department, which manages to add or remove
+a book from the Library.
+
+Software Requirements Specification
+I.
+
+Introduction
+
+D. Definitions, Acronyms..
+As you begin to define a system, you will encounter words
+which need definition and general usage acronyms. These
+should be documented for new personnel and for clarity of
+all concerned parties.
+
+Software Requirements Specification
+I.Introduction
+D Definitions, Acronyms..
+
+SPPU-Savitribai Phule Pune University
+Acc.No.-Accession number
+ISBN-International Standard Book Number
+
+Software Requirements Specification
+I. Introduction
+E. References
+<List any other documents or Web addresses to which this SRS
+refers. These may include user interface style guides, contracts,
+standards, system requirements specifications, use case documents,
+or a vision and scope document. Provide enough information so that
+the reader could access a copy of each reference, including title,
+author, version number, date, and source or location.>
+
+Software Requirements Specification
+I. Introduction E References
+ Books
+1. Software Requirements and Specifications: A Lexicon of Practice,
+Principles and
+2.Prejudices (ACM Press) by Michael Jackson
+3. Software Requirements (Microsoft) Second EditionBy Karl E. Wiegers
+4. Software Engineering: A Practitioner’s Approach Fifth Edition By Roger S.
+Pressman
+Websites
+1. http://www.slideshare.net/
+2. http://ebookily.net/doc/srs-library-management-system
+
+Software Requirements Specification
+I. Introduction
+F. Overview
+This section defines the organization of the entire
+document. It will lay the framework for reading
+the document.
+
+Software Requirements Specification
+I. Introduction F Overview
+The SRS will provide a detailed description of the Online Library System. This
+document will provide the outline of the requirements, overview of the
+characteristics and constraints of the system.
+1.5.1 Section 2: This section of the SRS will provide the general factors that affect
+the product and its requirements. It provides the background for those requirements.
+The items such as product perspective, product function, user characteristics,
+constraints, assumptions and dependencies and requirements subsets are described
+in this section.
+1.5.2 Section 3: This section of SRS contains all the software requirements
+mentioned in section 2 in detail sufficient enough to enable designers to design the
+system to satisfy the requirements and testers to test if the system satisfies those
+requirements.
+
+Software Requirements Specification
+II. General Description
+A Product Perspective
+B Product Functions
+C User Characteristics
+D General Constraints
+E Assumptions
+F Operating Environment
+
+Software Requirements Specification
+II General Description
+A Product Perspective
+•<Describe the context and origin of the product being specified in
+this SRS.
+•For example, state whether this product is a follow-on member of a
+product family, a replacement for certain existing systems, or a new,
+self-contained product.
+•A simple diagram that shows the major components of the overall
+system, subsystem interconnections, and external interfaces can be
+helpful.>
+
+Software Requirements Specification
+II General Description
+A Product Perspective
+The Online Library System is a package to be used by Libraries
+to improve the efficiency of Librarians, Library employees and
+Users. The Online Library System to be developed benefits
+greatly the members and the Librarian of SPPU. The system
+provides books catalog and information to members and helps
+them decide on the books to borrow from the library. The
+Librarian can keep the books catalog updated all the time so that
+the members (students and the professors) get the updated
+information all the time.
+
+Software Requirements Specification
+II General Description A Product Perspective
+
+Software Requirements Specification
+II. General Description B Product Functions
+<Summarize the major functions the product must perform or must
+let the user perform. Details will be provided in Section 3, so only a
+high level summary (such as a bullet list) is needed here. Organize
+the functions to make them understandable to any reader of the
+SRS. A picture of the major groups of related requirements and
+how they relate, such as a top level data flow diagram or object
+class diagram, is often effective.>
+
+Software Requirements Specification
+II. General Description – B Product Functions
+Provisions for the members to borrow the books they want.
+The members are provided with the books available roster and allowed to choose
+the books, which they want to use in the coming up days.
+The librarian can get the information about the members who have borrowed or
+returned the books.
+The librarian is provided with interfaces to add/delete the books available in the
+book catalog.
+The members when complete the book borrowing or returning process, the due
+to be paid by the member must be calculated and the information about the
+member and the due amount is sent to the university billing system.
+The system uses the University information security requirements to provide the
+login facility to the users.
+
+Software Requirements Specification
+II. General Description – C User Characteristics
+Identify the various user classes that you anticipate will
+use this product.
+User classes may be differentiated based on frequency of
+use, subset of product functions used, technical expertise,
+security or privilege levels, educational level, or
+experience.
+Describe the characteristics of each user class.
+
+Software Requirements Specification
+II. General Description – C User Characteristics
+The users of the system are members, librarian of the university
+and the administrators who maintain the system.
+The members and the librarian are assumed to have basic
+knowledge of the computers and Internet browsing.
+The administrators of the system to have more knowledge of the
+internals of the system and is able to rectify the small problems that
+may arise due to disk crashes, power failures and other catastrophes
+to maintain the system.
+
+Software Requirements Specification
+II. General Description – D General Constraints
+
+In this section, the constraints of the system
+are listed. They include hardware, network,
+system software, and software constraints.
+It also includes user constraints, processing
+constraints, timing constraints, and control
+limits.
+
+Software Requirements Specification
+II. General Description – D General Constraints
+ The information of all the users must be stored in a database that is accessible
+by the Online Library System.
+ The university information security system must be compatible with the
+Internet applications.
+ The Online Library System is connected to the university computer and is
+running all 24 hours a day.
+ The users access the Online Library System from any computer that has
+Internet browsing capabilities and an Internet connection.
+ The billing system is connected to the Online Library System and the database
+used by the billing system must be compatible with the interface of the Online
+Library System.
+ The users must have their correct usernames and passwords to enter into the
+Online Library System.
+
+Software Requirements Specification
+II General Description – E Assumptions and Dependencies
+List any assumed factors (as opposed to known facts) that could
+affect the requirements stated in the SRS. These could include
+third-party or commercial components that you plan to use, issues
+around the development or operating environment, or constraints.
+The project could be affected if these assumptions are incorrect,
+are not shared, or change.
+Also identify any dependencies the project has on external factors,
+such as software components that you intend to reuse from another
+project, unless they are already documented elsewhere (for
+example, in the vision and scope document or the project plan).
+
+Software Requirements Specification
+II General Description – E Assumptions and Dependencies
+ The users have sufficient knowledge of computers.
+ The University computer should have Internet connection and
+Internet server capabilities.
+ The users know the English language, as the user interface will
+be provided in English
+ The product can access the university student database
+
+Software Requirements Specification
+II General Description – F Operating Environment
+Describe the environment in which the software will operate,
+including the hardware platform, operating system and versions,
+and any other software components or applications with which it
+must peacefully coexist
+The product will be operating in windows environment. The
+Library Management System is a website and shall operate in all
+famous browsers, for a model we are taking Microsoft Internet
+Explorer,Google Chrome,and Mozilla Firefox.Also it will be
+compatible with the IE 6.0.
+The hardware configuration include Hard Disk: 40 GB,
+Monitor: 15” Color monitor, Keyboard: 122 keys. The basic
+input devices required are keyboard, mouse and output devices
+are monitor, printer etc.
+
+Section II of SRS
+II.A Product Perspective
+
+Paragraph form
+
+II.B Product Functions
+
+Paragraph form
+
+II.C User Characteristics
+
+Paragraph form
+
+II.D General Constraints
+
+Paragraph form
+
+II.E Assumptions and
+Dependencies
+
+Paragraph form
+
+3.Specific Requirements 3.1Functional Requirements
+Functional requirements are those business functions which are included in this
+software under development. It describes the features of the product and the needed
+behavior. Each requirement is something that the system SHALL do. Thus, it has a
+common name of a shall list.
+These include
+a) Validity checks on the inputs
+b) Exact sequence of operations
+c) Responses to abnormal situations, including
+1) Overflow
+2) Communication facilities
+3) Error handling and recovery
+d) Effect of parameters
+e) Relationship of outputs to inputs, including
+1) Input/output sequences
+2) Formulas for input to output conversion
+
+Functional Requirements
+• Provide Search facility.
+ The system shall enable user to enter the search text on the screen.
+ The system shall enable user to select multiple options on the screen
+to search.
+ The system shall display all the matching products based on the
+search
+ The system shall display only 10 matching result on the current
+screen.
+ The system shall enable user to navigate between the search results.
+ The system shall notify the user when no matching product is found
+on the search.
+
+3.2 External Interface Requirements
+3.2.1 User Interface
+ The user interface for the software shall be compatible to any browser such as Internet
+Explorer, Mozilla or Netscape Navigator by which user can access to the system.
+ The user interface shall be implemented using any tool or software package like Java
+Applet, MS Front Page, EJB etc.
+3.2.2 Hardware Interfaces
+Since the application must run over the internet, all the hardware shall require to connect
+internet will be hardware interface for the system. As for e.g. Modem, WAN – LAN,
+Ethernet Cross-Cable.
+3.2.3 Software Interfaces
+Libra will directly interface with the modified Sun Grid Engine cluster management
+system, version 5.3. SGE in turn will be interfacing with the operating system and any
+other software components it requires
+3.2.4 Communication Interfaces
+The e-store system shall use the HTTP protocol for communication over the internet and
+for the intranet communication will be through TCP/IP protocol suite.
+
+3.3 Performance Requirements
+• This subsection should specify both the static and the dynamic numerical requirements
+placed on the software or on human interaction with the software as a whole. Static
+numerical requirements may include the following:
+a) The number of terminals to be supported;
+b) The number of simultaneous users to be supported;
+c) Amount and type of information to be handled.
+• Dynamic numerical requirements may include, for example, the numbers of transactions
+and tasks and the amount of data to be processed within certain time periods for both
+normal and peak workload conditions.
+• 3.4 Design Constraints
+• The system shall be built using a standard web page development tool that conforms to
+either IBM’s CUA standards or Microsoft’s GUI standards.
+• Standards compliance
+This subsection should specify the requirements derived from existing standards or
+regulations. They may include the following:
+a) Report format;
+b) Data naming;
+c) Accounting procedures;
+d) Audit tracing.
+
+•
+•
+
+3.5 Attributes
+
+There are a number of attributes of software that can serve as requirements
+Reliability
+This should specify the factors required to establish the required reliability of the software
+system at time of delivery.
+• Availability
+This should specify the factors required to guarantee a defined availability level for the
+entire system such as checkpoint, recovery, and restart.
+• Security
+This should specify the factors that protect the software from accidental or malicious access,
+use, modification, destruction, or disclosure. Specific requirements in this area could
+include the need to
+a) Utilize certain cryptographical techniques;
+b) Keep specific log or history data sets;
+d) Restrict communications between some areas of the program;
+e) Check data integrity for critical variables.
+• Maintainability
+This should specify attributes of software that relate to the ease of maintenance of the
+software itself
+
+3.6 Logical database requirements
+• This should specify the logical requirements for any
+information that is to be placed into a database. This may
+include the following:
+a) Types of information used by various functions;
+b) Frequency of use;
+c) Accessing capabilities;
+d) Data entities and their relationships;
+e) Integrity constraints;
+f) Data retention requirements.
+
+Systems Requirements Specification
+IV Non Functional Requirements
+Non functional requirements are properties that the system
+must have such as performance, reusability, usability, user
+friendliness, etc.
+The same format as the functional requirements is to be
+used for the non-functional requirements. You may provide
+a brief design rationale for any requirement which you feel
+requires explanation for how and/or why the requirement
+was derived.
+
+Systems Requirements Specification
+V System Architecture
+This section presents a high-level overview of the
+anticipated system architecture using a class
+diagram. It shows the fundamental objects/classes
+that must be modeled with the system to satisfy its
+requirements. Each class on the diagram must
+include the attributes related to the class. All the
+relationships between classes and their multiplicity
+must be shown on the class diagram. The classes
+specified in this document only are those directly
+derived from the application domain.
+
+Systems Requirements Specification
+VI System Models
+This section presents the use case diagram for the
+system under development. The use case diagram
+should be a complete version containing all the use
+cases needed to describe the functionality to be
+developed.
+
+Systems Requirements Specification
+VII Appendixes
+Appendix A. Data dictionary
+Appendix B. Raw use case point analysis
+Appendix C. Screens and reports with navigation matrix.
+Appendix D. Scenario analysis tables
+Appendix E. Screens/reports list
+Appendix F and following. Other items needed
+
+

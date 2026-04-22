@@ -1,0 +1,1725 @@
+Introduction to UML
+
+Overview
+• What is Modeling?
+• What is UML?
+• Understanding the basics of UML
+• UML diagrams
+
+Modeling
+• Describing a system at a high level of
+abstraction
+– A model of the system
+– Used for requirements and specifications
+
+• Is it necessary to model software systems?
+
+UML Diagram What is UML?
+• UML stands for “Unified Modeling Language”
+• It is a industry-standard graphical language for specifying,
+visualizing, constructing, and documenting the artifacts of
+software systems
+• The UML uses mostly graphical notations to express the OO analysis
+and design of software projects.
+• Simplifies the complex process of software design
+
+Specifying
+
+Visualizing
+
+Business Modeling
+
+Constructing
+
+Documenting
+
+Communications
+
+Why UML for Modeling
+• Use graphical notation to communicate more clearly
+than natural language (imprecise) and code(too
+detailed).
+• Help acquire an overall view of a system.
+• UML is not dependent on any one language or
+technology.
+
+Overview of UML Diagrams
+Structural
+
+: element of spec. irrespective of time
+
+•
+•
+•
+•
+•
+•
+
+Class
+Component
+Deployment
+Object
+Composite structure
+Package
+
+Behavioral
+
+: behavioral features of a system / business
+process
+
+•
+•
+•
+•
+
+Activity
+State machine
+Use case
+Interaction
+
+Interaction
+
+: emphasize object interaction
+
+• Communication(collaber
+ation)
+• Sequence
+• Interaction overview
+• Timing
+
+Use Case Diagram
+• A case of a use of the system/product
+• Describes the system's actions from a the
+point of user view
+• Used for describing a set of user scenarios
+• Mainly used for capturing user requirements
+• Work like a contract between end user and
+software developers
+
+Use Case Notation
+
+What is
+an Actor?
+• An actor represents a set of roles that users of use case play when
+interacting with these use cases.
+• Actors can be human or automated systems
+•
+
+•
+
+•
+
+Primary Actor: The Actor(s) using the system to achieve a goal. The Use Case
+documents the interactions between the system and the actors to achieve the goal of
+the primary actor.
+Secondary Actors: Actors that the system needs assistance from to achieve the
+primary actor’s goal. Secondary actors may or may not have goals that they expect to
+be satisfied by the use case, the primary actor always has a goal, and the use case
+exists to satisfy the primary actor.
+
+A Procurement Manager wants to place a “bid” for some goods using an
+On-Line Trading Community (B2B version of eBay)
+– Use Case Name: Create Bid
+– Primary Actor: Procurement Manager
+– Secondary Actors: On-Line Trading Community
+
+Use Cases
+• A use case is a summary of scenarios for a
+single task or goal.
+“A patient calls the clinic to make an appointment for a
+yearly checkup. The receptionist finds the nearest
+empty time slot in the appointment book and schedules
+the appointment for that time slot. "
+
+• So as we read our scenario, what or who is
+the actor???? So What is the Use Case????
+
+Patient
+
+• The Use Case is Make
+Appointment.
+• It is a use case for the
+medical clinic.
+
+Use Cases
+• The picture below is a Make Appointment use case for the medical clinic.
+• The actor is a Patient. The connection between actor and use case is a
+communication association (or communication for short).
+
+Actors are stick figures. Use cases are ovals. Communications are lines that link
+actors to use cases.
+Actors are stick figures. Use cases are ovals. Communications are lines
+that link actors to use cases.
+
+Other Elements of use case diagram
+Connection between Actor and Use Case
+
+• Boundary
+– A boundary rectangle is placed around the perimeter of
+the system to show how the actors communicate with
+the system.
+
+Make
+Make
+Appointment
+Appointment
+
+Use Case Diagrams - Relationships
+• Include: a dotted line labeled <<include>> beginning at
+base use case and ending with an arrows pointing to the
+include use case.
+• Include relationship between Use Cases (one UC must call
+another; e.g., Login UC includes User Authentication UC)
+base
+
+<<include>>
+
+included
+updating
+grades
+
+<<include>>
+verifying
+student id
+
+output
+generating
+
+<<include>>
+
+Use Case Diagrams - Relationships
+• Extend: a dotted line labeled <<extend>> with an arrow
+toward the base case.
+• Extend relationship between Use Cases (one UC calls
+• Another under certain condition; think of if-then decision
+points)
+base
+
+<<extend>>
+
+extending
+
+Use Case Diagrams - Relationships
+• Generalization - The child
+
+use case inherits the behavior
+and meaning of the parent use
+case. Represented by a line
+with a triangular arrow head
+toward the parent use case.
+
+• Association-Actors
+
+may be connected to
+use
+cases
+by
+associations, indicating
+that the actor and the
+use case communicate
+with one another using
+messages. Represented
+by a solid line.
+
+Example of Relationships
+
+Use Case Diagrams
+
+Class diagram
+• Used for describing structure and behavior in
+the use cases.
+– The purpose of class modeling is to describe objects.
+– An object is a concept, abstraction or thing that has
+meaning for a domain/application.
+
+• Provide a conceptual model of the system in
+terms of entities and their relationships
+• Detailed class diagrams are used for
+developers
+
+Class representation
+• Each class is represented by a rectangle subdivided into three
+compartments
+– Name
+– Attributes
+– Operations
+
+• Modifiers are used to indicate visibility of attributes and operations.
+– ‘+’ is used to denote Public visibility (everyone)
+– ‘#’ is used to denote Protected visibility (friends and derived)
+– ‘-’ is used to denote Private visibility (no one)
+• By default, attributes are hidden and operations are visible.
+
+Account_Name
+- Customer_Name
+- Balance
++addFunds( )
++withDraw( )
++transfer( )
+
+Name
+Attributes
+Operations
+
+An example of Class
+
+OO Relationships
+• There are two kinds of Relationships
+– Generalization (parent-child relationship)
+– Association (student enrolls in course)
+
+• Associations can be further classified as
+– Aggregation
+– Composition
+
+How to Identify Relationship?
+
+• Association
+• A delegates to B
+•
+
+A needs help from B
+
+• Aggregation
+• B is part of A
+
+• A contains B
+• A is a collection of B’s
+
+• Composition
+• B is permanent part of A
+
+• A is made up of Bs
+• A is a permanent collection of Bs
+
+OO Relationships: Generalization
+Supertype
+
+Example:
+
+Customer
+
+Regular
+Customer
+
+Subtype1
+
+Loyalty
+Customer
+
+Subtype2
+or:
+
+Customer
+
+- Generalization expresses a
+parent/child relationship among related
+classes.
+- Used for abstracting details in several
+layers
+
+Regular
+Customer
+
+Loyalty
+Customer
+
+OO Relationships: Association
+
+• Represent relationship between instances of
+classes
+– Student enrolls in a course
+– Courses have students
+– Courses have exams
+– Etc.
+
+• Association has two ends
+– Role names (e.g. enrolls)
+– Multiplicity (e.g. One course can have many students)
+– Navigability (unidirectional, bidirectional)
+
+Association: Multiplicity and Roles
+student
+1
+
+*
+
+University
+
+Person
+0..1
+employer
+
+Multiplicity
+Symbol
+
+Meaning
+
+1
+
+One and only one
+
+0..1
+
+Zero or one
+
+M..N
+
+From M to N (natural
+language)
+
+*
+
+From zero to any positive
+integer
+
+0..*
+
+From zero to any positive
+integer
+
+1..*
+
+From one to any positive
+
+*
+teacher
+Role
+Role
+“A given university groups many people;
+some act as students, others as teachers.
+A given student belongs to a single
+university; a given teacher may or may not
+be working for the university at a particular
+time.”
+
+Class Diagram
+Name
+
+Order
+
+Attributes
+
+Operations
+
+-dateReceived
+-isPrepaid
+-number :String
+-price : Money
+
+*
+Association
+
+-name
+-address
++creditRating() : String()
+
+{if Order.customer.creditRating is
+"poor", then Order.isPrepaid must
+be true }
+
+(inside braces{}}
+
+Many value
+
+Generalization
+
+Corporate Customer
+
+Personal Customer
+
+-contactName
+-creditRating
+-creditLimit
+
+-creditCard#
+
+Constraint
+Multiplicity:
+
+Customer
+
+1
+
++dispatch()
++close()
+
+1
+
+class
+
+Multiplicity: mandatory
+
++remind()
++billForMonth(Integer)
+
+0..1
+
+Multiplicity:
+optional
+
+*
+Employee
+
+*
+OrderLine
+-quantity: Integer
+-price: Money
+-isSatisfied: Boolean
+
+*
+
+1
+
+Product
+
+[from UML Distilled Third Edition]
+
+OO Relationships: Composition
+Composition: expresses a relationship among instances
+of related classes. It is a specific kind of Whole-Part
+relationship.
+
+Whole Class
+Class W
+
+It expresses a relationship where an instance of the
+Whole-class has the responsibility to create and initialize
+instances of each Part-class.
+Class P1
+
+Class P2
+
+Part Classes
+
+Composition should also be used to express relationship where
+instances of the Whole-class have exclusive access to and
+control of instances of the Part-classes.
+
+Example
+Automobile
+
+Engine
+
+It may also be used to express a relationship where instances
+of the Part-classes have privileged access or visibility to
+certain attributes and/or behaviors defined by the
+Whole-class.
+
+Composition should be used to express a relationship where
+the behavior of Part instances is undefined without being
+related to an instance of the Whole. And, conversely, the
+behavior of the Whole is ill-defined or incomplete if one or
+more of the Part instances are undefined.
+
+Transmission
+
+[From Dr.David A. Workman]
+
+OO Relationships: Aggregation
+Container Class
+Aggregation: expresses a relationship among instances
+of related classes. It is a specific kind of ContainerContainee
+relationship.
+
+Class C
+AGGREGATION
+
+Class E2
+
+Class E1
+
+Containee Classes
+
+Example
+
+Apples
+
+Bag
+
+It expresses a relationship where an instance of the
+Container-class has the responsibility to hold and maintain
+instances of each Containee-class that have been created
+outside the auspices of the Container-class.
+Aggregation should be used to express a more informal
+relationship than composition expresses. That is, it is an
+appropriate relationship where the Container and its
+Containees can be manipulated independently.
+Aggregation is appropriate when Container and
+Containees have no special access privileges to each other.
+
+Milk
+
+[From Dr.David A. Workman]
+
+Aggregation vs. Composition
+•Composition is really a strong form of aggregation
+•components have only one owner
+•components cannot exist independent of their owner
+•components live or die with their owner
+e.g. Each car has an engine that can not be shared with
+other cars.
+•Aggregations may form "part of" the aggregate, but may not
+be essential to it. They may also exist independent of the
+aggregate.
+e.g. Apples may exist independent of the bag.
+
+Example 1
+
+Example 2
+
+Object Diagrams
+•
+•
+•
+•
+
+A snapshot of the objects in a system at a point in time.
+Also called instance diagrams.
+Useful of showing object connections (not interactions)
+Can be thought of as collaboration/communication
+diagram without messages.
+• Naming convention (did not change as sequence diagram
+did):
+
+© Wolfgang Pelz 2000-04
+
+UML
+
+Object diagram
+
+Object Diagram - Example
+c1: Company
+
+c1: Company
+name=“UniMelb”
+
+d1: Department
+
+d2: Department
+
+name=“Sales”
+
+name=”CSSE”
+manager
+
+35
+
+employee
+
+p1: Persont
+
+p2: Person
+
+name=“Rao”
+
+name=“Raj”
+
+Sequence Diagram - Objects
+• A life line illustrates what is happening to an
+object in a chronological fashion.
+:Name
+
+Object
+Life line
+
+Activation
+
+36
+
+Types of Messages
+• Synchronous (flow interrupt until the message has
+completed.
+• Asynchronous (don’t wait for response)
+• Flat – no distinction between sysn/async
+• Return – control flow has returned to the caller.
+37
+
+Sequence Diagram(make a phone call)
+Caller
+
+Phone
+
+Recipient
+
+Picks up
+Dial tone
+Dial
+Ring notification
+
+Ring
+Picks up
+Hello
+
+Sequence Diagram:Object interaction
+A
+
+Self-Call: A message that an
+Object sends to itself.
+Condition: indicates when a
+message is sent. The message is
+sent only if the condition is true.
+
+B
+Synchronous
+
+Asynchronous
+Transmission
+delayed
+[condition] remove()
+
+Condition
+*[for each] remove()
+
+Iteration
+Self-Call
+
+Sequence Diagrams – Object Life Spans
+• Creation
+A
+– Create message
+– Object life starts at that point
+Create
+• Activation
+– Symbolized by rectangular stripes
+– Place on the lifeline where object is
+activated.
+– Rectangle also denotes when object
+is deactivated.
+Activation bar
+• Deletion
+Return
+– Placing an ‘X’ on lifeline
+Lifeline
+– Object’s life ends at that point
+
+B
+
+X
+Deletion
+
+Collaboration Diagrams
+• Class diagrams indicates what classes are part of our
+system, what they offer, how they relate, but they don’t
+tell us how they communicate.
+• Collaboration diagrams show (used to model) how
+objects interact and their roles.
+• They are very similar to sequence diagrams. Actually
+they are considered as a cross between class and
+sequence diagram.
+• Sequence Diagrams are arranged according to Time.
+• Collaboration Diagrams represent the structural
+organization of object.
+• [Both sequence and collaboration diagrams are called
+interaction diagrams]
+45
+
+Interaction Diagrams: Collaboration diagrams
+start
+6: remove reservation
+3 : [not available] reserve title
+User
+
+Reservations
+5: title available
+
+6 : borrow title
+2: title data
+
+1: look up
+
+4 : title returned
+Catalog
+5 : hold title
+• Shows the relationship between objects and the order of messages passed between them.
+between them.
+• The objects are listed as rectangles and arrows indicate the messages being passed
+• The numbers next to the messages are called sequence numbers. They show the sequence
+of the messages as they are passed between the objects.
+• convey the same information as sequence diagrams, but focus on object roles instead of the
+time sequence.
+
+State Diagrams
+(Billing Example)
+State Diagrams show the sequences of states an object
+goes through during its life cycle in response to stimuli,
+together with its responses and actions; an abstraction
+of all possible behaviors.
+End
+
+Start
+Unpaid
+Invoice created
+
+Paid
+paying
+
+Invoice destroying
+
+State Diagrams
+• Green
+(Traffic light example)
+Light - a
+signal to
+proceed
+Traffic Light
+• Red Light State
+the signal
+Red
+Transition
+to stop
+• Yellow
+Yellow
+Light - the
+signal to
+proceed
+Green
+with
+caution
+Event
+
+Start
+
+State Machine Diagrams
+•
+
+A state machine diagram models the
+behavior of a single object, specifying the
+sequence of events that an object goes
+through during its lifetime in response to
+events. As an example, the following
+state machine diagram shows the states
+that a door goes through during its
+lifetime.
+
+•
+
+•
+
+The door can be in one of three states:
+"Opened", "Closed" or "Locked". It can
+respond to the events Open, Close, Lock
+and Unlock. Notice that not all events are
+valid in all states; for example, if a door is
+opened, you cannot lock it until you close
+it. Also notice that a state transition can
+have a guard condition attached: if the
+door is Opened, it can only respond to the
+Close event if the condition
+doorWay->isEmpty is fulfilled. The syntax
+and conventions used in state machine
+diagrams will be discussed in full in the
+following sections.
+
+State Machine Diagrams
+• States - A state is denoted by a round-cornered rectangle with the name
+of the state written inside it.
+
+•
+
+Initial and Final States - The initial state is denoted by a filled black circle and
+may be labeled with a name. The final state is denoted by a circle with a dot
+inside and may also be labeled with a name.
+
+State Machine Diagrams
+•
+•
+
+•
+
+Transitions - Transitions from one state to the next are denoted by lines with
+arrowheads. A transition may have a trigger, a guard and an effect, as below.
+Self-Transitions - A state can have a transition that returns to itself, as in the
+following diagram. This is most useful when an effect is associated with the
+transition.
+
+"Trigger" is the cause of the transition, which could be a signal, an event, a
+change in some condition, or the passage of time. "Guard" is a condition
+which must be true in order for the trigger to cause the transition. "Effect" is
+an action which will be invoked directly on the object that owns the state
+machine as a result of the transition.
+
+State Machine Diagrams
+• State Actions - In the transition example above, an effect was associated
+with the transition. If the target state had many transitions arriving at it,
+and each transition had the same effect associated with it, it would be
+better to associate the effect with the target state rather than the
+transitions. This can be done by defining an entry action for the state. The
+diagram below shows a state with an entry action and an exit action.
+
+•
+
+It is also possible to define actions that occur on events, or actions that always
+occur. It is possible to define any number of actions of each type.
+
+State Machine Diagrams
+• Compound States - A state machine diagram may include sub-machine
+diagrams, as in the example below.
+
+Alternative way to
+show the same
+information
+•The ∞ symbol indicates that details of the Check PIN
+sub-machine are shown in a separate diagram.
+
+State Machine Diagrams
+• Entry Point - Sometimes you won’t want to enter a sub-machine at the
+normal initial state. For example, in the following sub-machine it would be
+normal to begin in the "Initializing" state, but if for some reason it wasn’t
+necessary to perform the initialization, it would be possible to begin in the
+"Ready" state by transitioning to the named entry point.
+
+• Exit Point - In a similar manner to entry points, it is possible to have
+named alternative exit points. The following diagram gives an example
+where the state executed after the main processing state depends on
+which route is used to transition out of the state.
+
+State Machine Diagrams
+• Choice Pseudo-State - A choice pseudo-state is shown as a diamond with
+one transition arriving and two or more transitions leaving. The following
+diagram shows that whichever state is arrived at, after the choice pseudostate, is dependent on the message format selected during execution of
+the previous state.
+
+State Machine Diagrams
+•
+
+Junction Pseudo-State - Junction pseudo-states are used to chain together
+multiple transitions. A single junction can have one or more incoming, and one
+or more outgoing, transitions; a guard can be applied to each transition.
+Junctions are semantic-free. A junction which splits an incoming transition into
+multiple outgoing transitions realizes a static conditional branch, as opposed
+to a choice pseudo-state which realizes a dynamic conditional branch.
+
+State Machine Diagrams
+• Terminate Pseudo-State - Entering a terminate pseudo-state indicates
+that the lifeline of the state machine has ended. A terminate pseudo-state
+is notated as a cross.
+
+•
+
+History States - A history state is used to remember the previous state of a state
+machine when it was interrupted. The following diagram illustrates the use of history
+states. The example is a state machine belonging to a washing machine.
+
+State Machine Diagrams
+•
+
+Concurrent Regions - A state may be divided into regions containing substates that exist and execute concurrently. The example below shows that
+within the state "Applying Brakes", the front and rear brakes will be operating
+simultaneously and independently. Notice the use of fork and join pseudostates, rather than choice and merge pseudo-states. These symbols are used
+to synchronize the concurrent threads.
+
+Orthogonality
+• Multiple simultaneous perspectives on the same entity
+age
+
+financialStatus
+
+Child
+Poor
+Adult
+
+Retiree
+
+Rich
+
+Orthogonal Regions
+age
+
+• Combine multiple simultaneous descriptions
+
+financialStatus
+
+Child
+Poor
+Adult
+
+Retiree
+
+age
+
+financialStatus
+
+Rich
+
+Child
+Poor
+Adult
+
+Retiree
+
+Rich
+
+Transition Forks and Joins
+• For transitions into/out of orthogonal regions:
+age
+Child
+Child
+
+Staff
+Staff
+Member
+Member
+
+Adult
+Adult
+
+Retiree
+Retiree
+
+Manager
+Manager
+
+employee
+
+What is an Activity?
+• Two definitions
+– In a conceptual diagram, an activity is some task that needs to be
+done, whether by a human or a computer
+– In a specification-perspective diagram or an implementationperspective diagram, an activity is a method on a class
+• Activity arrangement
+– Sequential – one activity is followed by another
+– Parallel – two or more sets of activities are performed
+concurrently, and order is irrelevant
+
+• Activity Diagrams are used to describe activities
+– Activity Diagrams are useful for describing complicated methods
+– Activity Diagrams are useful for describing use cases, since, after
+all, a use case is an interaction, which is a form of activity
+– Activity Diagrams are like Flow Charts, but Flow Charts are usually
+limited to sequential activities while Activity Diagrams can show
+parallel activities as well
+
+Activities Diagram
+Start
+
+Activity diagrams describe the
+workflow behaviour of a system
+
+Fork
+
+Branch
+
+Merge
+
+Joint
+
+End
+
+Activity Diagrams - Notation
+Start at the top black circle
+If condition 1 is TRUE, go right;
+if condition 2 is TRUE, go down
+At first bar (a synchronization
+bar), break apart to follow 2
+parallel paths
+At second bar, come together to
+proceed only when both parallel
+activities are done
+
+65
+
+Activity Diagrams – Notation (concluded)
+Activity – an oval
+Trigger – path exiting an activity
+Guard – each trigger has a guard, a
+logical expression that evaluates to “true”
+or “false”
+Synchronization Bar – can break a
+trigger into multiple triggers operating in
+parallel or can join multiple triggers into
+one when all are complete
+Decision Diamond – used to describe
+nested decisions (the first decision is
+indicated by an activity with multiple
+triggers coming out of it)
+
+66
+
+Activity Diagram Withdraw Money ATM
+
+Architectural Modeling
+Deployment Diagram
+Terminal
+1
+
+Terminal
+X
+
+Terminal
+X
+
+Branch
+Server
+
+Terminal
+1
+
+Terminal
+2
+
+Terminal
+2
+
+Branch
+Server
+
+ATM X
+
+Hub
+
+Central
+Bank
+
+ATM 1
+
+ATM 2
+
+UML Class Diagrams
+
+information structure
+relationships between
+data items
+modular structure for
+the system
+
+Use Cases
+user’s view
+Lists functions
+visual overview of the
+main requirements
+
+UML Package Diagrams
+
+(UML) Statecharts
+
+Overall architecture
+
+responses to events
+
+Dependencies
+between components
+
+dynamic behavior
+
+UML Sequence Diagrams
+
+Activity diagrams
+
+event ordering,
+reachability,
+deadlock, etc
+
+individual scenario
+
+business processes;
+
+interactions between
+users and system
+
+concurrency and
+synchronization;
+
+Sequence of
+messages
+
+dependencies
+between tasks;
+
+What is a Data Flow Diagram?
+• A data flow diagram (DFD) is a graphical tool
+that allows system analysts (and system users)
+to depict the flow of data in an information
+system.
+• The DFD is one of the methods that system
+analysts use to collect information necessary
+to determine information system
+requirements.
+
+Key Definitions
+• Process model
+– A formal way of representing how a business
+operates
+– Illustrates the activities that are performed and
+how data moves among them
+
+• Data flow diagramming
+– A popular technique for creating process models
+
+Key Definitions
+• Logical process models describe processes
+without suggesting how they are conducted
+• Physical process models include process
+implementation information
+
+DFD Elements
+• Process
+– An activity or function performed for a specific
+business reason
+– Manual or computerized
+
+• Data flow
+– A single piece of data or a logical collection of data
+– Always starts or ends at a process
+
+DFD Elements
+• Data Store
+– A collection of data that is stored in some way
+– Data flowing out is retrieved from the data store
+– Data flowing in updates or is added to the data store
+
+• External entity
+– A person, organization, or system that is external to the
+system but interacts with it.
+
+DFD Shapes from Visio
+Visio 2000
+
+Visio 5.x
+From Flow Chart /
+Data Flow Diagram
+
+From Softw are Diagram /
+G ane-Sarson DFD
+
+From Flow Chart /
+Data Flow Diagram
+
+ID #
+
+Process
+Process
+
+Process
+
+Data Store
+Data Store
+
+1
+
+Data Store
+
+ID
+#
+
+External Entity
+
+Slide 75
+
+External
+Entity
+
+External
+Entity
+
+DFD Symbols and Definitions
+Process
+
+Data store
+External
+Entity
+Data flow
+
+• Process - performs some action on
+data, such as creates, modifies,
+stores, delete, etc. Can be manual
+or supported by computer.
+• Data store - information that is kept
+and accessed. May be in paper file
+folder or a database.
+• External entity - is the origin or
+destination of data. Entities are
+external to the system.
+• Data flow - the flow of data into or
+out of a process, datastore or entity
+
+Data Flow Diagrams Symbols
+
+Source/
+Sink
+
+Source/Sink – help to establish the
+boundaries of the system. A source identifies
+the origin of data inflow to the system. A sink
+identifies the outflow of a system, many times
+as information.
+Sometimes referred to an entity, a source
+may be a customer, vendor, employee, or
+even another system. A single entity can be
+both a source and a sink.
+
+Rules for Drawing DFD’s
+A minimum of one data flow
+in and one data flow out of
+a process
+A datastore must be
+connected to a process
+(either in, out, or both)
+
+An external entity must
+be connected to a process
+(either in, out, or both)
+A single data flow must
+only flow one way
+
+Creating Data Flow Diagrams
+Steps:
+
+1. Create a list of activities
+2. Construct Context Level DFD
+(identifies sources and sink)
+3. Construct Level 0 DFD
+(identifies manageable sub process )
+4. Construct Level 1- n DFD
+(identifies actual data flows and data stores )
+
+Creating Data Flow Diagrams
+Lemonade Stand Example
+
+Creating Data Flow Diagrams
+Example
+
+The operations of a
+simple lemonade stand
+will be used to
+demonstrate the
+creation of dataflow
+diagrams.
+
+Steps:
+
+1. Create a list of activities
+2. Construct Context Level DFD
+(identifies sources and sink)
+3. Construct Level 0 DFD
+(identifies manageable sub processes )
+4. Construct Level 1- n DFD
+(identifies actual data flows and data stores )
+
+Creating Data Flow Diagrams
+Example
+
+1. Create a list of activities
+
+Think through the
+activities that take place
+at a lemonade stand.
+Customer Order
+Serve Product
+Collect Payment
+Produce Product
+Store Product
+
+Creating Data Flow Diagrams
+Example
+
+Also think of the
+additional activities
+needed to support the
+basic activities.
+
+1. Create a list of activities
+
+Customer Order
+Serve Product
+Collect Payment
+Produce Product
+Store Product
+Order Raw Materials
+Pay for Raw Materials
+Pay for Labor
+
+Creating Data Flow Diagrams
+Example
+
+Group these activities in
+some logical fashion,
+possibly functional
+areas.
+
+1. Create a list of activities
+
+Customer Order
+Serve Product
+Collect Payment
+Produce Product
+Store Product
+Order Raw Materials
+Pay for Raw Materials
+Pay for Labor
+
+Creating Data Flow Diagrams
+Example
+
+Create a context level
+diagram identifying the
+sources and sinks
+(users).
+Customer Order
+Serve Product
+Collect Payment
+Produce Product
+Store Product
+Order Raw Materials
+Pay for Raw Materials
+Pay for Labor
+
+2. Construct Context Level DFD
+(identifies sources and sink)
+Context Level DFD
+Sales Forecast
+
+Order
+
+CUSTOMER
+
+Product Served
+
+0.0
+Lemonade
+System
+
+Payment
+
+Production Schedule
+Pay
+Time Worked
+
+Received Goods
+Payment
+
+Purchase Order
+
+VENDOR
+
+EMPLOYEE
+
+Creating Data Flow Diagrams
+Example
+
+Create a level 0 diagram
+identifying the logical
+subsystems that may
+exist.
+
+3. Construct Level 0 DFD
+(identifies manageable sub processes )
+Level 0 DFD
+1.0
+Sale
+Product Ordered
+Payment
+
+CUSTOMER
+Product Served
+
+Produce Product
+Store Product
+Order Raw Materials
+Pay for Raw Materials
+Pay for Labor
+
+Sales Forecast
+
+Customer Order
+
+Customer Order
+Serve Product
+Collect Payment
+
+Received Goods
+
+VENDOR
+
+Purchase Order
+
+2.0
+Production
+
+Production
+Schedule
+
+EMPLOYEE
+
+Inventory
+
+3.0
+Procurement
+
+Payment
+
+Order
+Decisions
+
+Pay
+
+4.0
+Payroll
+
+Time Worked
+
+Creating Data Flow Diagrams
+Example
+
+Create a level 1
+decomposing the
+processes in level 0 and
+identifying data stores.
+
+4. Construct Level 1- n DFD
+(identifies actual data flows and data stores )
+Level 1 DFD
+CUSTOMER
+Customer Order
+
+Customer Order
+Serve Product
+Collect Payment
+Produce Product
+Store Product
+Order Raw Materials
+Pay for Raw Materials
+Pay for Labor
+
+ORDER
+
+Request for Forecast
+
+1.1
+Record
+Order
+Severed Order
+Payment
+
+1.3
+Produce Sales
+Forecast
+
+Sales Forecast
+
+1.2
+Receive
+Payment
+
+PAYMENT
+
+Creating Data Flow Diagrams
+Example
+
+Create a level 1
+decomposing the
+processes in level 0 and
+identifying data stores.
+
+4. Construct Level 1 (continued)
+Level 1 DFD
+Product Order
+
+ORDER
+
+Customer Order
+Serve Product
+Collect Payment
+
+2.1
+Serve
+Product
+
+RAW MATERIALS
+
+Production
+Schedule
+
+Produce Product
+Store Product
+Order Raw Materials
+Pay for Raw Materials
+Pay for Labor
+
+Quantity Severed
+
+2.2
+Produce
+Product
+
+Production Data
+2.3
+Store
+Product
+
+Quantity Used
+
+INVENTORTY
+
+Quantity Produced & Location Stored
+
+Creating Data Flow Diagrams
+Example
+
+Create a level 1
+decomposing the
+processes in level 0 and
+identifying data stores.
+Customer Order
+Serve Product
+Collect Payment
+
+4. Construct Level 1 (continued)
+Level 1 DFD
+Order Decision
+PURCHASE ORDER
+3.1
+Produce
+Purchase
+Order
+
+Quantity On-Hand
+RAW MATERIALS
+Quantity
+Received
+
+Received Goods
+
+3.2
+Receive
+Items
+
+Produce Product
+Store Product
+
+RECEIVED ITEMS
+
+Payment Approval
+
+Order Raw Materials
+Pay for Raw Materials
+
+3.3
+Pay
+Vendor
+
+Pay for Labor
+Payment
+
+VENDOR
+
+Creating Data Flow Diagrams
+Example
+
+Create a level 1
+decomposing the
+processes in level 0 and
+identifying data stores.
+Customer Order
+Serve Product
+Collect Payment
+
+4. Construct Level 1 (continued)
+Level 1 DFD
+Time Worked
+
+TIME CARDS
+4.1
+Record Time
+Worked
+
+Employee ID
+
+EMPLOYEE
+Payroll Request
+
+4.2
+Calculate
+Payroll
+
+Produce Product
+Store Product
+
+Unpaid time cards
+
+PAYROLL
+
+Payment Approval
+
+Order Raw Materials
+Pay for Raw Materials
+
+4.3
+Pay
+Employee
+
+Pay for Labor
+Payment
+
+PAYMENTS
+
+Process Decomposition
+
+0.0
+Lemonade
+System
+
+Context Level
+
+1.0
+Sale
+
+1.1
+Record
+Order
+
+1.2
+Receive
+Payment
+
+2.0
+Production
+
+2.1
+Serve
+Product
+
+2.2
+Produce
+Product
+
+2.3
+Store
+Product
+
+3.0
+Procurement
+
+3.1
+Produce
+Purchase
+Order
+
+3.2
+Receive
+Items
+
+3.3
+Pay
+Vendor
+
+4.0
+Payroll
+
+4.1
+Record Time
+Worked
+
+4.2
+Calculate
+Payroll
+
+4.3
+Pay
+Employee
+
+Level 0
+
+Level 1
+
+

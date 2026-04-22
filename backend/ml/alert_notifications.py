@@ -43,23 +43,24 @@ class AlertNotificationSystem:
     def should_alert(self, transaction: Dict, analysis: Dict) -> tuple[bool, str]:
         """Determine if alert should be sent and at what level"""
         risk_score = analysis.get('risk_score', 0)
+        risk_percent = risk_score * 100 if risk_score <= 1 else risk_score
         
         # Critical alerts
         if (transaction.get('phishing_detected') or 
             analysis.get('graph_fraud', {}).get('sender_analysis', {}).get('is_mule') or
-            risk_score >= 90):
+            risk_percent >= 90):
             return True, 'CRITICAL'
         
         # High alerts
         if (analysis.get('pre_auth', {}).get('decision') == 'BLOCK' or
             transaction.get('amount', 0) > 100000 or
-            risk_score >= 75):
+            risk_percent >= 75):
             return True, 'HIGH'
         
         # Medium alerts
         if (analysis.get('pre_auth', {}).get('decision') == 'CHALLENGE' or
             analysis.get('device', {}).get('is_new') or
-            risk_score >= 60):
+            risk_percent >= 60):
             return True, 'MEDIUM'
         
         return False, 'LOW'

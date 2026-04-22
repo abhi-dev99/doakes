@@ -4,183 +4,80 @@
 
 /* ============ BASE STYLES ============ */
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #334155 transparent;
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #D2D2D7 transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-[#3A3A3C] rounded-full;
+  }
+
+  body {
+    @apply bg-[#F5F5F7] dark:bg-black text-[#1D1D1F] dark:text-[#F5F5F7] font-sans antialiased;
+    min-height: 100vh;
+  }
 }
 
-*::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* ============ COMPONENTS ============ */
+
+@layer components {
+  .glass-card {
+    @apply bg-white/60 dark:bg-[#1C1C1E]/50 backdrop-blur-2xl text-[#1D1D1F] dark:text-[#F5F5F7] rounded-3xl relative overflow-hidden;
+    box-shadow: 
+      0 8px 32px 0 rgba(0, 0, 0, 0.05),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  
+  .dark .glass-card {
+    box-shadow: 
+      0 12px 40px 0 rgba(0, 0, 0, 0.3),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* ============ BUTTONS ============ */
+  .btn-primary {
+    @apply bg-apple-blue text-white font-medium 
+           px-5 py-2.5 rounded-full shadow-sm dark:shadow-none
+           hover:opacity-90 hover:scale-[1.01]
+           active:scale-[0.98] transition-all duration-200;
+  }
+
+  .btn-danger {
+    @apply bg-apple-red text-white font-medium 
+           px-5 py-2.5 rounded-full shadow-sm dark:shadow-none
+           hover:opacity-90 hover:scale-[1.01]
+           active:scale-[0.98] transition-all duration-200;
+  }
 }
 
-*::-webkit-scrollbar-track {
-  background: transparent;
+/* ============ UTILITIES ============ */
+
+@layer utilities {
+  .animate-slide-in {
+    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
 }
-
-*::-webkit-scrollbar-thumb {
-  background-color: #334155;
-  border-radius: 3px;
-}
-
-/* ============ DARK THEME (DEFAULT) ============ */
-
-body {
-  @apply bg-argus-darker text-white font-sans antialiased;
-  background-image: 
-    radial-gradient(ellipse at top, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
-  min-height: 100vh;
-}
-
-/* ============ LIGHT THEME ============ */
-
-body.light {
-  @apply bg-argus-light-bg text-argus-light-text;
-  background-image: 
-    radial-gradient(ellipse at top, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
-}
-
-/* ============ GLASSMORPHISM ============ */
-
-.glass {
-  @apply bg-argus-dark/80 backdrop-blur-xl border border-argus-border/50 shadow-xl;
-}
-
-.light .glass {
-  @apply bg-white/90 border-argus-light-border shadow-lg;
-}
-
-.glass-card {
-  @apply bg-argus-card/60 backdrop-blur-md border border-argus-border/30 rounded-xl;
-}
-
-.light .glass-card {
-  @apply bg-white border-argus-light-border;
-}
-
-/* ============ GRADIENTS ============ */
-
-.gradient-text {
-  @apply bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent;
-}
-
-.light .gradient-text {
-  @apply from-cyan-600 to-teal-600;
-}
-
-.gradient-border {
-  position: relative;
-}
-
-.gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, #06b6d4, #0891b2);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* ============ BUTTONS ============ */
-
-.btn-primary {
-  @apply bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-medium 
-         px-4 py-2 rounded-lg shadow-lg shadow-cyan-500/25
-         hover:shadow-cyan-500/40 hover:scale-[1.02]
-         active:scale-[0.98] transition-all duration-200;
-}
-
-.light .btn-primary {
-  @apply shadow-cyan-500/20 hover:shadow-cyan-500/30;
-}
-
-.btn-danger {
-  @apply bg-gradient-to-r from-red-500 to-rose-500 text-white font-medium 
-         px-4 py-2 rounded-lg shadow-lg shadow-red-500/25
-         hover:shadow-red-500/40 hover:scale-[1.02]
-         active:scale-[0.98] transition-all duration-200;
-}
-
-/* ============ INPUTS ============ */
-
-.input {
-  @apply bg-argus-darker border border-argus-border rounded-lg px-3 py-2
-         text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 
-         focus:outline-none transition-all;
-}
-
-.light .input {
-  @apply bg-white border-argus-light-border text-argus-light-text;
-}
-
-/* ============ CARDS ============ */
-
-.stat-card {
-  @apply glass-card p-4 relative overflow-hidden
-         hover:border-cyan-500/30 transition-all duration-300;
-}
-
-.stat-card::before {
-  content: '';
-  @apply absolute -top-12 -right-12 w-24 h-24 rounded-full 
-         bg-gradient-to-br from-cyan-500/10 to-teal-500/10 
-         blur-2xl transition-transform duration-500;
-}
-
-.stat-card:hover::before {
-  @apply scale-150;
-}
-
-/* ============ BADGES ============ */
-
-.badge {
-  @apply px-2 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide;
-}
-
-.badge-low {
-  @apply bg-emerald-500/15 text-emerald-400 border border-emerald-500/30;
-}
-
-.badge-medium {
-  @apply bg-amber-500/15 text-amber-400 border border-amber-500/30;
-}
-
-.badge-high {
-  @apply bg-orange-500/15 text-orange-400 border border-orange-500/30;
-}
-
-.badge-critical {
-  @apply bg-red-500/15 text-red-400 border border-red-500/30 animate-pulse;
-}
-
-.light .badge-low {
-  @apply bg-emerald-100 text-emerald-700 border-emerald-300;
-}
-
-.light .badge-medium {
-  @apply bg-amber-100 text-amber-700 border-amber-300;
-}
-
-.light .badge-high {
-  @apply bg-orange-100 text-orange-700 border-orange-300;
-}
-
-.light .badge-critical {
-  @apply bg-red-100 text-red-700 border-red-300;
-}
-
-/* ============ ANIMATIONS ============ */
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -188,55 +85,10 @@ body.light {
   }
 }
 
-.animate-slide-in {
-  animation: slideIn 0.3s ease-out;
-}
-
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
-.animate-fade-in {
-  animation: fadeIn 0.2s ease-out;
-}
-
-/* ============ RISK INDICATOR ============ */
-
-.risk-indicator {
-  @apply w-1.5 h-full rounded-full;
-}
-
-.risk-indicator.low { @apply bg-emerald-500; }
-.risk-indicator.medium { @apply bg-amber-500; }
-.risk-indicator.high { @apply bg-orange-500; }
-.risk-indicator.critical { @apply bg-red-500 animate-pulse; }
-
-/* ============ LIVE PULSE ============ */
-
-.live-pulse {
-  @apply relative;
-}
-
-.live-pulse::after {
-  content: '';
-  @apply absolute inset-0 rounded-full bg-current animate-ping opacity-75;
-}
-
-/* ============ CHANNEL ICONS ============ */
-
-.channel-icon {
-  @apply w-8 h-8 rounded-lg flex items-center justify-center text-white/80;
-}
-
-.channel-upi { @apply bg-purple-500/20 text-purple-400; }
-.channel-pos { @apply bg-blue-500/20 text-blue-400; }
-.channel-card_online { @apply bg-indigo-500/20 text-indigo-400; }
-.channel-netbanking { @apply bg-cyan-500/20 text-cyan-400; }
-.channel-wallet { @apply bg-amber-500/20 text-amber-400; }
-.channel-atm { @apply bg-emerald-500/20 text-emerald-400; }
-
-/* ============ TOOLTIPS ============ */
 
 [data-tooltip] {
   @apply relative;
@@ -245,36 +97,6 @@ body.light {
 [data-tooltip]:hover::after {
   content: attr(data-tooltip);
   @apply absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-         px-2 py-1 text-xs rounded bg-argus-dark text-white
-         whitespace-nowrap z-50 animate-fade-in;
-}
-
-/* ============ TABLE ============ */
-
-.table-row {
-  @apply border-b border-argus-border/30 hover:bg-argus-darker/50 
-         transition-colors cursor-pointer;
-}
-
-.light .table-row {
-  @apply border-argus-light-border/50 hover:bg-argus-light-border/30;
-}
-
-/* ============ INDIA THEME ============ */
-
-.india-banner {
-  background: linear-gradient(135deg, 
-    rgba(255, 153, 51, 0.1) 0%,  /* Saffron */
-    rgba(255, 255, 255, 0.05) 50%, /* White */
-    rgba(19, 136, 8, 0.1) 100%   /* Green */
-  );
-  @apply border border-cyan-500/20;
-}
-
-.light .india-banner {
-  background: linear-gradient(135deg, 
-    rgba(255, 153, 51, 0.15) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(19, 136, 8, 0.15) 100%
-  );
+         px-2.5 py-1.5 text-xs rounded-lg bg-[#1C1C1E] dark:bg-[#3A3A3C] text-[#F5F5F7]
+         whitespace-nowrap z-50 animate-fade-in shadow-md;
 }

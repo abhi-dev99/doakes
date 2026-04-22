@@ -1,0 +1,1356 @@
+CS2311: Software Engineering
+
+Introduction To Software
+Engineering
+Unit I
+
+Unit 1
+• Introduction to Software Engineering
+--- (4 Hours)
+• Nature and scope of software engineering
+• Software characteristics and application
+domains
+• SDLC models:
+•Waterfall
+•Spiral
+•Incremental
+•Rapid Application Development
+•Agile methodology overview: Scrum, roles,
+and artifacts.
+
+What is software?
+Programs
+
+Documentatio
+n
+
+Operating
+Procedures
+
+Software=Program+Documentation+Operating Procedures
+Components of software
+
+What is software?
+• Computer programs and associated
+documentation
+
+• Software products may be developed for a
+particular customer or may be developed for a
+general market
+• Software products may be
+
+– Generic - developed to be sold to a range of different
+customers
+– Bespoke (custom) - developed for a single customer
+according to their specification
+
+What is software engineering?
+Software engineering is an engineering discipline which is
+concerned with all aspects of software production
+Software engineers should
+– adopt a systematic and organised approach to their work
+– use appropriate tools and techniques depending on
+• the problem to be solved,
+• the development constraints and
+• the resources available
+
+What is software engineering?
+
+• Software Engineering is the systematic,
+disciplined, and quantifiable application of
+engineering principles to the development,
+operation, maintenance, and evolution of
+software systems in order to produce highquality, reliable, and cost-effective software
+that meets user requirements.
+
+• IEEE Definition:
+• Software engineering is the application of
+a systematic, disciplined, quantifiable
+approach
+to
+the
+development,
+operation,
+and
+maintenance
+of
+software.
+
+Why Software Engineering?
+• Software development is hard !
+• Important to distinguish “easy” systems (one developer,
+one user, experimental use only) from “hard” systems
+(multiple developers, multiple users, products)
+
+• The problem is Change in nature & complexity of
+software
+• Many sources, but size is key:
+– UNIX contains 4 million lines of code
+– Windows 2000 contains 108 lines of code
+Software engineering is about managing this complexity.
+• We all want improvement
+Ready for change
+
+Nature of Software Engineering
+
+• Software Engineering is a systematic, disciplined,
+and measurable approach to the development,
+operation, and maintenance of software.
+• Its nature can be understood through the following
+points:
+• Engineering Discipline
+• Applies engineering principles to software creation
+• Focuses on reliability, efficiency, and quality
+• Systematic Process
+• Follows structured phases like requirements analysis,
+design, coding, testing, deployment, and maintenance
+• Uses models such as Waterfall, Agile, Spiral, DevOps
+• Problem-Solving Oriented
+Focuses on solving real-world problems by creating
+software solutions that meet user needs.
+
+Nature of Software Engineering
+
+• Quality-Focused
+•Emphasizes correctness, usability, security,
+performance, and maintainability
+• Team-Based Activity
+•Involves collaboration among developers,
+testers, designers, project managers, and
+clients
+• Documentation-Centric
+•Maintains proper documentation for design,
+code, and user manuals
+• Evolutionary in Nature
+•Software continuously evolves due to changing
+user requirements, technology upgrades, and
+bug fixes.
+
+Scope of Software Engineering
+
+• The scope of software engineering is broad and
+continuously expanding. It includes:
+• Software Development
+•Web applications
+•Mobile applications
+•Desktop software
+•Embedded systems
+• Software Design & Architecture
+•System modeling
+•UI/UX design
+•Database design
+
+Scope of Software Engineering
+
+• Software Testing & Quality Assurance
+•Unit testing, integration testing, system testing
+•Automation testing
+•Performance and security testing
+• Software Maintenance
+•Bug fixing
+•Enhancements
+•Adaptation to new platforms
+• Project Management
+•Cost estimation
+•Scheduling
+•Risk management
+•Team coordination
+
+Software Characteristics:
+Software is evaluated or engineered it is not manufactured in the
+classical sense.
+• In manufacturing we do not design or plan again. We just
+keep replicating the last tested, approved version of the item. For
+example, a hardware, such as a printer. First it goes through
+development phase. Engineers will develop and bring all the
+different parts together to build the printer. Then they will test
+and upon approval will release the product. Then the
+manufacturing phase starts. In manufacturing, the product is
+built in mass number.
+• To develop software, engineers or developers go through various
+software development steps in different software development
+models. Unlike hardware, a software doesn’t have involvement
+of machineries.
+
+Software Characteristics:
+
+Failure Rate
+
+Software does not wear out.
+Failure curve for hardware
+Burn-in
+Wear out
+phase
+phase
+Useful life
+phase
+
+Time
+
+Software Characteristics:
+ Highly Complex : Large number of components and
+interactions Requires careful design and management
+ Intangible in Nature : Software cannot be physically touched It
+exists as programs, data, and documentation
+ Custom-Built Nature: Most of the software is custom-built
+rather than being assembled from the existing components.
+
+Software
+• System Software Applications
+
+•Operating Systems (Windows, Linux, macOS)
+•Device Drivers
+•Compilers and Assemblers
+• Application Software
+•Office automation (Word processors,
+spreadsheets)
+•Business applications (Accounting, Payroll, ERP)
+•Educational software
+
+Software
+Applications
+• Engineering & Scientific
+Software
+•Simulation and modeling
+•CAD/CAM tools
+•Numerical computation software
+• Embedded Software
+•Washing machines, microwave ovens
+•Automobiles and aircraft systems
+•Medical devices
+
+Software
+Applications
+• Web Applications
+•E-commerce websites
+•Social networking platforms
+•Online banking systems
+• Mobile Applications
+•Android and iOS apps
+•Health, fitness, and navigation apps
+
+Software
+• Artificial Intelligence
+Software
+Applications
+
+•Expert systems
+•Machine learning applications
+•Natural language processing systems
+• Real-Time Software
+•Air traffic control systems
+•Industrial automation
+•Defense and surveillance systems
+• Data-Centric Software
+•Database management systems
+•Data analytics and business intelligence tools
+
+Software myths
+• Management myths
+– Standards and procedures for building software
+– Add more programmers if behind the schedule
+
+• Customer myths
+– A general description of objectives enough to start coding
+– Requirements may change as the software is flexible
+
+• Practitioner myths
+– Task accomplished when the program works
+– Quality assessment when the program is running
+– Working program the only project deliverable
+
+Software Myths (Management
+Perspectives)
+Management may be confident about good
+standards and clear procedures of the company.
+But the taste of any food item
+is in the eating;
+not in the Recipe !
+
+Software Myths (Management
+Perspectives)
+Company has latest computers and state-ofthe-art software tools, so we shouldn’t worry
+about the quality of the product.
+T he infr astr uctur e is
+only one of the sever al
+factor s
+that deter mine the quality
+of the pr oduct!
+
+Software Myths (Management
+Perspectives)
+
+Addition of more software specialists, those
+with higher skills and longer experience may
+bring the schedule back on the track!
+
+Unfor tunately,
+that may fur ther delay the
+schedule!
+
+Software Myths (Management
+Perspectives)
+Software is easy to change
+
+T he r eality is totally
+differ ent.
+
+Software Myths (Management
+Perspectives)
+Computers provide greater reliability than
+the devices they replace
+T his is not always
+tr ue.
+
+Software Myths (Customer
+Perspectives)
+A general statement of objectives is sufficient to get started
+with the development of software. Missing/vague
+requirements can easily be incorporated/detailed out as they
+get concretized.
+
+If we do so, we ar e
+heading
+towar ds a disaster.
+
+Software Myths (Customer
+Perspectives)
+Software with more features is better
+software
+Software can work right the first time
+
+Both ar e only
+myths!
+
+Software Myths (Developer
+Perspectives)
+Once the software is demonstrated, the job is done.
+
+Usually, the pr oblems just
+begin!
+
+Software Myths (Developer
+Perspectives)
+Software quality can not be assessed before
+testing.
+H owever, quality assessment
+techniques
+should be used thr ough out the
+softwar e development life cycle.
+
+Software Myths (Developer
+Perspectives)
+
+The only deliverable for a software development
+project is the tested code.
+
+Tested code is only one of the
+deliver able!
+
+Software Myths (Developer
+Perspectives)
+Aim is to develop working programs
+T hose days ar e over. Now objective is
+to
+develop good quality maintainable
+pr ogr ams!
+
+What is a software process?
+• SP is a set of activities whose goal is the development or
+evolution of software
+• Fundamental activities in all software processes are:
+– Specification - what the system should do
+and its development constraints
+– Development - production of the software system
+(design and implementation)
+– Validation - checking that the software is what the customer wants
+– Evolution - changing the software in response to changing demands
+
+31
+
+The Software Process Model
+• A software process model is an abstract
+representation of a process
+– It presents a description of a process from
+some particular perspective
+
+32
+
+A Layered Technology
+Software Engineering
+tools
+methods
+process model
+a “quality” focus
+
+33
+
+Framework Activities
+• Communication
+• Planning
+• Modeling
+
+– Analysis of requirements
+– Design
+
+• Construction
+
+– Code generation
+– Testing
+
+• Deployment
+
+34
+
+What is a software process model?
+SPM is a simplified representation of a software
+process, presented from a specific perspective
+• Examples of process perspectives:
+Workflow perspective represents inputs, outputs and
+dependencies
+Data-flow perspective represents data transformation
+activities
+Role/action perspective represents the roles/activities of the
+people involved in software process
+
+Generic Process Models
+• Waterfall model
+–
+
+Separate and distinct phases of specification and development
+
+• Incremental Process Models
+- Incremental Model
+-RAD
+• Evolutionary Models
+–
+–
+–
+
+Specification and development are interleaved
+Prototyping Model
+Spiral model
+
+• Formal transformation
+–
+
+A mathematical system model is formally transformed to an implementation
+
+• Reuse-based development/ Component Based
+–
+
+The system is assembled from existing components
+
+• Agile Methods
+
+Unit 1
+• Introduction to Software Engineering
+--- (4 Hours)
+• Nature and scope of software engineering
+• Software characteristics and application
+domains
+• SDLC models:
+•Waterfall
+•Spiral
+•Incremental
+•Rapid Application Development
+•Agile methodology overview: Scrum, roles,
+and artifacts.
+
+1. Waterfall model
+
+1. Waterfall model : Requirement Analysis
+•
+•
+•
+•
+
+•
+
+•
+
+•
+
+Developer understands what the customer needs and documents it
+clearly.
+Requirement Analysis is the process of gathering, analyzing,
+validating, and documenting user requirements for a software
+system.
+Activities in Requirement Analysis
+Requirement Gathering
+– Meetings with clients and stakeholders
+– Interviews, questionnaires, observation
+– Studying existing systems
+Requirement Analysis
+– Classify requirements (functional & non-functional)
+– Check feasibility (technical, economic, operational)
+– Remove ambiguity and conflicts
+Requirement Specification
+– Document requirements clearly
+– Prepare SRS (Software Requirement Specification)
+Requirement Validation
+– Review requirements with client
+– Ensure correctness, completeness, and consistency
+
+1. Waterfall model : Requirement Analysis
+•
+•
+•
+•
+
+Types of Requirements
+1. Functional Requirements
+What the system should do
+Example:
+
+• 2. Non-Functional
+Requirements
+• How the system performs
+• Example:
+
+– Performance
+– Security
+– Reliability
+– Usability
+• Tools & Techniques
+
+– User login
+– Generate reports
+– Process transactions
+
+•
+•
+•
+•
+•
+
+Interviews
+Brainstorming
+Use case diagrams
+Prototyping
+Data Flow Diagrams (DFD)
+
+• Output of Requirement Analysis
+• Software Requirement Specification (SRS) document
+
+1. Waterfall model : System Design
+• Requirements are converted into a blueprint for building the
+software system. It defines how the system will work.
+• System Design is the process of defining the architecture,
+components, modules, interfaces, and data of a system based
+on the requirements specified in the SRS.
+
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+
+Types of System Design
+1. High-Level Design (HLD)
+Overall system architecture
+Major modules and their
+interactions
+Technology stack selection
+Data flow between modules
+Examples:
+System architecture diagram
+Module diagram
+Database overview
+
+•
+•
+•
+•
+•
+•
+•
+•
+•
+
+2. Low-Level Design (LLD)
+Detailed design of each module
+Algorithms, data structures
+API details and interfaces
+Error handling and logic
+Examples:
+Class diagrams
+Sequence diagrams
+Pseudocode
+
+1. Waterfall model : System Design
+• Activities in System Design
+• Selecting hardware and software
+platform
+• Designing database schema
+• Defining system interfaces
+• Security and performance design
+• UI/UX design
+
+• Output of System Design
+• Design Document
+•
+•
+•
+•
+
+•
+•
+•
+•
+
+Tools & Diagrams Used
+Flowcharts
+Data Flow Diagrams (DFD)
+UML diagrams (Use Case,
+Class, Sequence)
+• ER diagrams
+
+– HLD document
+– LLD document
+Example
+For a Library Management System:
+HLD: Modules like Login, Book Management, Issue/Return
+LLD: Algorithms for issuing books, database tables
+
+1. Waterfall model : Implementation
+• Actual coding of the software system is done
+according to the design documents.
+• Objectives
+• Develop software modules as per design
+• Follow coding standards and best practices
+• Ensure correctness and efficiency of code
+• Prepare the system for testing
+
+1. Waterfall model : Implementation
+• Coding standards are a set of rules and guidelines that
+developers follow while writing code to ensure
+consistency, readability, and maintainability.
+• Naming conventions
+– Variables: totalMarks, userName
+– Constants: MAX_SIZE
+
+• Indentation & formatting
+– Proper spacing and indentation
+
+• Comments
+– Meaningful comments for complex logic
+
+• File organization
+– One class per file (where applicable)
+
+• Error handling
+– Proper use of exceptions
+
+1. Waterfall model : Integration & Testing
+• Individual modules are combined and the complete
+system is tested to ensure it works correctly as per
+the requirements.
+• Types of Integration
+• Big Bang Integration
+– All modules are integrated at once
+– Simple but risky
+• Incremental Integration
+– Modules are integrated step by step
+– Safer and more systematic
+– Types:
+• Top-down
+• Bottom-up
+• Hybrid
+
+1. Waterfall model : Integration & Testing
+• Testing is the process of verifying and validating the software
+to identify defects and ensure it meets user requirements.
+• Objectives
+• Find errors and bugs
+• Ensure quality and reliability
+• Verify compliance with SRS
+• Types of Testing
+• Unit Testing
+– Tests individual modules
+– Done by developers
+
+• Integration Testing
+
+– Tests interaction between modules
+
+• System Testing
+
+– Tests the complete system
+
+• Acceptance Testing
+
+– Done by users or clients
+– Ensures system meets requirements
+
+• Tools Used
+• Testing frameworks
+(JUnit, TestNG)
+• Automation tools
+(Selenium)
+• Bug tracking tools
+(JIRA)
+
+1. Waterfall model : Deployment
+• Deployment is the process of installing, configuring,
+and delivering the software system in the target
+environment (production).
+• Objectives
+• Make the system operational for users
+• Ensure smooth transition from development to
+production
+• Minimize disruption to existing systems
+• Activities in Deployment Phase
+• Preparing production environment
+• Installing software
+• Configuring system settings
+• Migrating data (if required)
+• User training
+• Final verification
+
+1. Waterfall model : Deployment
+• Types of Deployment
+• Direct Deployment
+– Old system is replaced immediately
+– Faster but risky
+• Tools Used
+• Parallel Deployment
+• CI/CD tools (Jenkins,
+– Old and new systems
+GitHub Actions)
+• Cloud platforms
+run together
+(AWS, Azure)
+– Safer but costly
+• Container tools
+(Docker)
+• Phased Deployment
+– System released in stages
+– Less risk
+• Pilot Deployment
+– Software deployed to a small group first
+– Feedback collected before full release
+
+1. Waterfall model : Maintenance
+• Maintenance is the process of modifying and
+updating software after delivery to fix issues,
+improve performance, or adapt to changes.
+• Objectives
+• Fix errors found after deployment
+• Improve system performance
+• Adapt
+software
+to
+new
+requirements
+or
+environments
+• Increase software life span
+• Activities in Maintenance Phase
+• Bug fixing
+• Performance tuning
+• Software updates and patches
+• User support and feedback handling
+• Documentation updates
+
+1. Waterfall model : Maintenance
+• Types of Maintenance
+• Tools Used
+• Corrective Maintenance
+• Bug tracking tools
+– Fixes bugs and errors
+(JIRA, Bugzilla)
+– Example: correcting
+• Version control
+calculation errors
+systems (Git)
+• Adaptive Maintenance
+• Monitoring tools
+– Adapts software to changes
+in environment
+– Example: OS or hardware
+upgrades
+• Perfective Maintenance
+– Enhances features and performance
+– Example: adding new reports
+• Preventive Maintenance
+– Improves maintainability and prevents future problems
+– Example: code refactoring
+
+Waterfall model problems
+• No Flexibility for Changes
+•Once a phase is completed,
+it is very difficult to go back
+•Changes in requirements
+are costly and timeconsuming
+• Late Testing
+• Testing is done after
+implementation
+• Errors are discovered late,
+increasing fixing cost
+
+• High Risk and Uncertainty
+• Not suitable when
+requirements are unclear or
+evolving
+• Early mistakes affect the
+entire project
+• Customer Feedback Comes
+Late
+• Client sees the working
+product only at the end
+• Leads to dissatisfaction if
+expectations are not met
+
+2. Incremental Development
+• Rather than deliver the system as a single delivery, the
+development and delivery is broken down into
+increments with each increment delivering part of the
+required functionality
+• User requirements are prioritised and the highest priority
+requirements are included in early increments
+• Once the development of an increment is started, the
+requirements are frozen though requirements for later
+increments can continue to evolve
+• They are effective in the situations where requirements
+are defined precisely and there is no confusion about the
+functionality of the final product.
+• After every cycle a useable product is given to the
+customer.
+• Popular particularly when we have to quickly deliver a
+limited functionality system.
+
+The Incremental Model
+increment # n
+Communic at ion
+
+Planning
+Modeling
+analy s is
+des ign
+
+C o n s t ru c t i o n
+c ode
+t es t
+
+De p l o y m e n t
+d e l i v e ry
+fe e d b a c k
+
+deliv ery of
+nt h increment
+
+increment # 2
+Communic at ion
+
+Planning
+Modeling
+analy s is
+des ign
+
+C o n s t ru c t i o n
+c ode
+t es t
+
+De p l o y m e n t
+d e l i v e ry
+fe e d b a c k
+
+increment # 1
+Communic at ion
+Planning
+Modeling
+analy s is
+des ign
+
+C o n s t ru c t i o n
+c ode
+t es t
+
+De p l o y m e n t
+d e l i v e ry
+fe e d b a c k
+
+deliv ery of
+1st increment
+
+project calendar time
+
+deliv ery of
+2nd increment
+
+Incremental Development Advantages
+• Customer value can be delivered with each
+increment so system functionality is available
+earlier
+• Early increments act as a prototype to help
+elicit requirements for later increments
+• Lower risk of overall project failure
+• The highest priority system services
+tend to receive the most testing
+
+2.1 The Rapid Application Development (RAD) Model
+o
+
+Build a rapid prototype
+
+o
+o
+
+Give it to user for evaluation & obtain feedback
+Prototype is refined
+
+2.1 The Rapid Application Development (RAD) Model
+Business Modeling: In this phase of development business model should be
+designed based on the information available from different business activities.
+Data Modeling: Once the business modeling phase over and all the business
+analysis completed, all the required and necessary data based on business
+analysis are identified in data modeling phase.
+Process Modeling: All the data identified in data modeling phase are planned to
+process or implement the identified data to achieve the business functionality
+flow. In this phase all the data modification process is defined.
+Application Modeling: In this phase application id developed and coding
+completed. With help of automation tools all data implemented and
+processed to work as real time.
+Testing and turnover: All the testing activates are performed to test the
+developed application.
+
+When to use RAD model
+When system needs to be produced in a short span of time (2-3
+months)
+When the requirements are known
+When the user will be involved all through the life cycle
+
+When there is a necessity to create a system that can be
+modularized in 2-3 months of time
+When technical risk is less
+
+3. Evolutionary Development
+
+• Exploratory development
+- Objective is to work with customers and to evolve a final
+system from an initial outline specification.
+- Should start with well-understood requirements.
+- The system evolves by adding new features as they are
+proposed by customer.
+• Throw-away prototyping
+– Objective is to understand the system requirements.
+Should start with poorly understood requirements
+• Develop “quick and dirty” system quickly;
+• Expose to user comment;
+• Refine;
+
+Until adequate system developed.
+– Particularly suitable where:
+
+- detailed requirements not possible;
+- powerful development tools (e.g. GUI) available
+
+3.1 Prototyping Model
+
+
+The prototype may be a usable program but is not suitable as
+the final software product.
+
+
+
+The code for the prototype is thrown away. However
+experience gathered helps in developing the actual system.
+
+
+
+The development of a prototype might involve extra cost, but
+overall cost might turnout to be lower than that of an
+equivalent system developed using the waterfall model.
+
+Prototyping Model
+
+• Linear model
+• “Rapid”
+
+Prototyping
+
+Quick
+p lan
+Quick
+
+Communication
+
+plan
+
+communication
+
+Mo
+d e ling
+Modeling
+Quic
+k d e s ig n
+Quick design
+
+Deployment
+Deployment
+Delivery
+delivery &
+&feedback
+Feedback
+
+Construction
+
+Construction
+of
+of prototype
+prototype
+
+• Problems with Prototyping
+– Documentation may get neglected
+– Effort in building a prototype may be wasted
+– Difficult to plan and manage
+
+• Advantages
+– Faster than the waterfall model
+– High level of user involvement from start
+– Technical or other problems discovered early - risk
+reduced
+
+3.2 Spiral Model
+
+The Spiral Model is a risk-driven, iterative process model
+proposed by Barry Boehm (1988). It combines features of the
+Waterfall model and Iterative/Incremental development, with a
+strong emphasis on risk analysis.
+The development process progresses in a spiral of loops, where
+each loop represents one phase of the software lifecycle.
+The Spiral Model insists on the early identification of any
+potential risks and maintaining adjustments through the entire
+development process.
+The model is especially suited for large, complex, and longterm projects that gradually become clearer over time.
+
+Spiral development
+• Process is represented as a spiral rather than as a
+sequence of activities with backtracking.
+• Each loop in the spiral represents a phase in the
+process.
+• No fixed phases such as specification or design loops in the spiral are chosen depending on what is
+required.
+• Risks are explicitly assessed and resolved
+throughout the process.
+
+Spiral Model
+planning
+
+estimation
+scheduling
+risk analysis
+
+communication
+modeling
+analysis
+design
+
+start
+
+deployment
+delivery
+feedback
+
+construction
+code
+test
+
+Spiral Model
+
+Spiral development
+
+• Planning
+• Identify objectives for the phase
+• Define requirements and alternatives
+• Estimate cost and schedule
+• Risk Analysis
+• Identify technical, managerial, and schedule risks
+• Evaluate alternatives
+• Build prototypes to reduce risks
+• Engineering (Development & Testing)
+• Design, coding, and unit testing
+• Implement the selected solution
+• Integration and verification
+• Evaluation (Customer Review)
+• Customer reviews the work done
+• Feedback is collected
+• Decision taken to proceed to the next spiral
+
+Spiral Model : Risk Analysis
+•Identify risks and their triggers (New, unproven technologies, User
+and
+functional
+requirements,
+Application
+and
+system
+architecture,Performance,Organizational)
+•Classify and prioritize all risks (High,Low,Medium)
+•Craft a plan that links each risk to a mitigation
+•Monitor for risk triggers during the project
+ Publish project status reports and include risk management issues
+Revise risk plans according to any major changes in project
+schedule
+Review and reprioritize risks, eliminating those with lowest
+probability
+Brainstorm on potentially new risks after changes to project
+schedule or scope
+•Implement the mitigating action if any risk materializes
+(Accept,Avoid,Control,Transfer,Continue Monitoring )
+•Communicate risk status throughout project
+
+When to use
+
+Spiral Model
+•When costs and risk evaluation is important
+•For medium to high-risk projects
+•Users are unsure of their needs
+•Requirements are complex
+•New product line
+•Significant changes are expected (research and
+exploration)
+
+Unit 1
+• Introduction to Software Engineering
+--- (4 Hours)
+• Nature and scope of software engineering
+• Software characteristics and application
+domains
+• SDLC models:
+•Waterfall
+•Spiral
+•Incremental
+•Rapid Application Development
+•Agile methodology overview: Scrum,
+roles, and artifacts.
+
+AGILE
+• Agile is an iterative and incremental software
+development methodology that emphasizes flexibility,
+customer collaboration, and rapid delivery of working
+software. Instead of delivering everything at the end,
+Agile delivers small, usable features frequently.
+• In traditional software development methodologies like
+Waterfall model, a project can take several months or
+years to complete and the customer may not get to see
+the end product until the completion of the project.
+• Agile projects have Sprints or iterations which are
+shorter in duration (Sprints/iterations can vary from 2
+weeks to 2 months)
+
+Example of Agile software development
+
+• Example: Google is working on project to
+come up with a competing product for
+MS Word, that provides all the features
+provided by MS Word and any other
+features requested by the marketing
+team. The final product needs to be
+ready in 10 months of time. Let us see
+how this project is executed in traditional
+and Agile methodologies.
+
+Example of Agile software development
+
+In traditional Waterfall model –
+• At a high level, the project teams would spend 15%
+of their time on gathering requirements and analysis
+(1.5 months)
+• 20% of their time on design (2 months)
+• 40% on coding (4 months) and unit testing
+• 20% on System and Integration testing (2 months).
+• At the end of this cycle, the project may also have 2
+weeks of User Acceptance testing by marketing
+teams.
+• In this approach, the customer does not get to see
+the end product until the end of the project, when it
+becomes too late to make significant changes.
+
+Example of Agile software development
+
+In traditional Waterfall model –
+
+Example of Agile software development
+With Agile development methodology ––
+• In the Agile methodology, each project is broken up into several
+‘Iterations’.
+• All Iterations should be of the same time duration (between 2 to 8
+weeks).
+• At the end of each iteration, a working product should be delivered.
+• In simple terms, in the Agile approach the project will be broken up
+into 10 releases (assuming each iteration is set to last 4 weeks).
+• Rather than spending 1.5 months on requirements gathering, in Agile
+software development, the team will decide the basic core features that
+are required in the product and decide which of these features can be
+developed in the first iteration.
+• Any remaining features that cannot be delivered in the first iteration
+will be taken up in the next iteration or subsequent iterations, based on
+priority.
+• There will be 10 iterations and at the end of each iteration the
+customer is delivered a working software that is incrementally
+enhanced and updated with the features.
+
+Example of Agile software development
+With Agile development methodology ––
+
+Example of Agile software development
+
+SCRUM
+• It is iterative & incremental agile software
+development method. These iterations are time
+boxed with various iterations & each iteration is
+called Sprint.
+• Scrum is a lightweight Agile framework used to
+manage and complete complex projects. It works
+in short cycles called Sprints.
+• The Sprint is basically 2-4 week long & each
+sprint requires sprint planning estimation.
+• Scrum is ideally used where highly emergent or
+rapidly changing requirements.
+
+Scrum
+
+Scrum
+
+Scrum
+
+• Scrum team:
+• Responsibility: Builds the product increment
+• A typical scrum team has between five to nine
+people, but Scrum projects can easily scale into
+the hundreds.
+• This team includes Cross-functional peoples
+(developers, testers, designers).
+•
+Everyone on the project works together to
+complete the set of work they have collectively
+committed to complete within a sprint.
+• Scrum teams develop a deep form of camaraderie
+and a feeling that “we’re all in this together.”
+
+Scrum
+
+Product owner:
+Responsibility: Maximizes product value
+• Product Owner in Agile is like a spokesperson for
+customer and needs to represent them,
+• This person owns the Product backlog and writes
+user stories and acceptance criteria.
+• Product Backlog is prioritized by him and he decides
+the release date and the content.
+• He accepts or rejects user stories.
+• He has the power to cancel the Sprint, if he thinks
+the Sprint goal is redundant.
+• He is the one who is responsible for the Return on
+Investment of the product.
+
+Scrum
+
+Scrum Master:
+Responsibility: Facilitates Scrum process
+• The Scrum Master is responsible for making sure
+the team is as productive as possible.
+• He is a facilitator and Servant Leader who
+encourages and demands self-organization from the
+development team.
+• He enables close cooperation across all roles and
+functions,
+addresses
+resource
+issue
+and
+disobedience of scrum practices.
+• He protects the team from external and internal
+distractions.
+• He removes impediments so the team can focus on
+the work at hand and follow scrum practices.
+• He is not typically a manager or lead, but he is an
+influential leader and coach who does not do direct
+command and control.
+
+Scrum
+
+• Product backlog:
+• The product backlog is a prioritized features list
+containing every desired feature or change to the
+product.
+• Note: The term “backlog” can get confusing because
+it’s used for two different things. To clarify, the
+product backlog is a list of desired features for the
+product. The sprint backlog is a list of tasks to be
+completed in a sprint.
+• Product backlog Owned by the Product Owner
+• Examples: user stories, bugs, technical tasks
+
+Scrum
+
+Sprint Backlog
+Subset of Product Backlog selected for a sprint
+Owned by the Development Team
+Includes tasks required to complete sprint goals
+Sprint planning meeting:
+At the start of each sprint, a sprint planning meeting
+is held, during which the product owner presents
+the top items on the product backlog to the team.
+• The Scrum team selects the work they can
+complete during the coming sprint.
+• That work is then moved from the product backlog
+to a sprint backlog, which is the list of tasks needed
+to complete the product backlog items the team has
+committed to complete in the sprint.
+•
+•
+•
+•
+•
+•
+
+Scrum
+
+• Daily Scrum:
+• Daily 15-minute stand-up meeting
+• This meeting helps set the context for each
+day’s work and helps the team stay on
+track. All team members are required to
+attend the daily scrum.
+• Team discusses:
+• What was done yesterday?
+• What will be done today?
+• Any blockers?
+
+Scrum
+
+• Sprint review meeting:
+• At the end of each sprint, the team
+demonstrates the completed functionality
+at a sprint review meeting, during which, the
+team shows what they accomplished during
+the sprint.
+• Stakeholder feedback collected
+• Sprint Retrospective
+• Team reflects on:
+• What went well?
+• What didn’t?
+• How to improve next sprint?
+
+Scrum
+
+• Advantages of Scrum
+• Early and continuous delivery
+• High adaptability to change
+• Better stakeholder involvement
+• Improved product quality
+• Limitations of Scrum
+• Requires experienced team
+• Less suitable for fixed-scope projects
+• Difficult in very large teams without scaling
+frameworks
+
+

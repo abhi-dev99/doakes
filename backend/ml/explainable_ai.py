@@ -6,6 +6,7 @@ Provides human-readable explanations for fraud detection decisions
 import logging
 from typing import Dict, List, Tuple
 import numpy as np
+from datetime import datetime
 
 logger = logging.getLogger("ARGUS.ExplainableAI")
 
@@ -116,7 +117,18 @@ class FraudExplainer:
             })
         
         # Time anomaly
-        hour = int(transaction.get('timestamp', '2024-01-01T12:00:00')[-8:-6])
+        ts_value = transaction.get('timestamp')
+        hour = datetime.now().hour
+        if isinstance(ts_value, datetime):
+            hour = ts_value.hour
+        elif isinstance(ts_value, str) and ts_value:
+            try:
+                # Support ISO timestamps with optional Z suffix.
+                parsed = datetime.fromisoformat(ts_value.replace('Z', '+00:00'))
+                hour = parsed.hour
+            except ValueError:
+                # Keep fallback current hour when timestamp format is non-ISO.
+                pass
         if 22 <= hour or hour <= 5:
             factors.append({
                 'reason': f"Unusual time: {hour}:00 (night transaction)",
@@ -173,11 +185,12 @@ class FraudExplainer:
     def _calculate_confidence(self, analysis: Dict) -> float:
         """Calculate confidence in the decision (0-100)"""
         risk_score = analysis.get('risk_score', 0)
+        risk_percent = risk_score * 100 if risk_score <= 1 else risk_score
         
         # High confidence for extreme scores
-        if risk_score > 85 or risk_score < 15:
+        if risk_percent > 85 or risk_percent < 15:
             return 95.0
-        elif risk_score > 70 or risk_score < 30:
+        elif risk_percent > 70 or risk_percent < 30:
             return 85.0
         else:
             return 70.0

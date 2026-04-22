@@ -46,6 +46,12 @@ const api = {
     return res.json();
   },
   
+  async getProfiles(limit = 50) {
+    const res = await fetch(`${API_BASE}/api/users/profiles?limit=${limit}`);
+    if (!res.ok) throw new Error('Failed to fetch profiles');
+    return res.json();
+  },
+  
   async updateAlert(alertId, status) {
     const res = await fetch(`${API_BASE}/api/alerts/${alertId}`, {
       method: 'PUT',
@@ -167,9 +173,9 @@ export class WebSocketClient {
   processQueue() {
     this.throttleTimer = null;
     if (this.messageQueue.length > 0) {
-      const latest = this.messageQueue[this.messageQueue.length - 1];
+      const queued = [...this.messageQueue];
       this.messageQueue = [];
-      this.onMessage?.(latest);
+      queued.forEach((message) => this.onMessage?.(message));
     }
   }
   

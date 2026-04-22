@@ -1,0 +1,961 @@
+Software Design
+
+Unit 3: Software Design (4 Hours)
+• Introduction to Software Design,
+• High-level design
+• Low-level design
+• Software design principles
+• Design Concepts
+• Characteristics of a good design
+• Architectural Design
+• User Interface Design: The Golden Rules
+• Introduction to design patterns
+
+What is Software Design
+• Software design is process of transforming user
+requirements (from the SRS document) into a
+detailed, structured blueprint before coding
+begins.
+• It shifts focus from "what" the system does to
+"how" it will function.
+• It covers the broader picture, including
+hardware,
+software,
+and
+network
+components.
+• It deals with the overall architecture and
+how various parts of the system interact.
+
+Design Process Analysis Model -> Design Model
+
+Software Engineering
+
+4
+
+Design Process Analysis Model -> Design Model
+• The architectural design defines the relationship
+between more structural elements of the software.
+• The architectural design can be derived from the
+System Specs, the analysis model, and interaction of
+subsystems defined within the analysis model.
+• The interface design describes how the software
+communicates with systems that interpolate with it,
+and with humans who use it. An interface implies a
+flow of information (data, and or control) and a specific
+type of behavior.
+The component-level design transforms structural
+elements of the software architecture into a
+procedural description of software components.
+
+Software Design Steps
+• Requirement Analysis: Understand and document
+the system requirements.
+• Architectural
+Design:
+Design
+the
+system’s
+structure, including modules and how they interact.
+• Database Design: Craft the schema, tables,
+relationships, and constraints for the database.
+• User Interface Design: Define how users interact
+with the system through its interface.
+• Component Level Design: Specify the functionality
+of each module in detail, including algorithms and
+data structures.
+
+Why Software Design
+• Software design translates user requirements into
+a technical blueprint, ensuring the system is
+reliable, scalable, and maintainable before
+coding begins. It:
+• Reduces Cost and Risks: Identifying design
+flaws early is significantly cheaper than fixing
+errors during testing or maintenance.
+• Enhances Maintainability and Flexibility: A welldesigned system is modular and flexible, making it
+easier to adapt to changing requirements or add
+new features without breaking existing code.
+
+Why Software Design
+• Enables Team Coordination: It provides a
+blueprint that clarifies how to manage complex
+projects, ensuring team members understand the
+system structure and interdependencies.
+• Ensures
+Quality
+Attributes: Proper
+design
+ensures non-functional requirements are met,
+including performance, security, reliability, and
+reusability.
+• Ensures Technical Soundness: It prevents "design
+drift" or "corrosion" where code becomes chaotic
+and unmanageable over time.
+
+High level Design
+• High-level design or HLD is an initial step in the
+development of applications where the overall
+structure of a system is planned.
+• Focuses mainly on how different components of the
+system work together without getting to know
+about internal coding and implementation.
+• Crucial for developers, architects, and product
+managers because it allows them to make sure
+that all stakeholders are aligned with the project
+objectives.
+
+Components of High-Level Design
+• System Architecture: System architecture is an overview of the
+entire system that represents the structure and the relationships
+between various components. It helps to visually represent how
+different parts interact and function.
+• Modules and Components: High-level design breaks down the
+systems into modules or components, each with specific roles and
+responsibilities, and has a distinct function that contributes to the
+entire system, helping in developing an efficient system.
+• Data Flow Diagrams (DFDs): Data Flow Diagrams demonstrate
+the data movement within the system. They help to understand
+how information is processed and pass from one end to another.
+
+Components of High-Level Design
+• Interface Design: It includes the design of application
+programming interfaces (APIs) for system integration and
+user interfaces (UIs) for user interaction, ensuring seamless
+functionality and communication between components.
+• Technology Stack: The technology stack is various
+technologies and tools that will be used in the development
+of the system. This includes programming languages,
+frameworks, and databases.
+• Deployment Architecture: It includes how the system will
+be hosted and accessed. It includes server configurations,
+cloud infrastructure, and network considerations.
+
+Low Level Design
+• Low-Level Design (LLD) plays a crucial role in
+software development, transforming highlevel abstract concepts into detailed,
+actionable components that developers can
+use to build the system.
+• LLD is the blueprint that guides developers
+on how to implement specific components
+of a system, such as classes, methods,
+algorithms, and data structures.
+
+Low Level Design
+• Create a LLD from given HLD
+• For HLD to LLD conversion, we generally use Unified
+Modelling Language (UML) diagrams. Adding to these
+diagrams we use OOP principles and SOLID principles and
+design patterns while designing.
+
+Low Level Design
+• Create a LLD from given HLD
+• For HLD to LLD conversion, we generally use Unified Modelling
+Language (UML) diagrams. Adding to these diagrams we use OOP
+principles and SOLID principles and design patterns while
+designing.
+• Step 1. Understanding Object-Oriented Principles
+• The user requirement is processed by using concepts of OOPS
+programming. OOP concepts serve as the foundation for LLD, and
+having a deep understanding of them will help you design
+maintainable and scalable software components. Encapsulation,
+Polymorphism, Abstraction.
+
+Low Level Design
+• Step 2. Analyzing and Designing Components
+• LLD requires you to analyze real-world problems and
+break them down into object-world problems using OOP
+concepts. This is a critical step where real-world entities are
+modelled into objects and classes.
+• You should focus on:
+• Identifying classes and objects based on the system
+requirements.
+• Determining relationships (like associations, inheritance,
+etc.) between different entities.
+• Using SOLID principles to ensure your design is clean,
+maintainable, and scalable.
+
+Low Level Design
+• Step 3. Implementing Design Patterns
+• Now the implementation of our above object oriented
+problem is carried out with the help of design patterns.
+Design patterns are reusable solutions to common problems
+encountered in software design.
+•
+
+•
+
+•
+
+Creational Patterns (e.g., Singleton, Factory): These patterns deal
+with object creation mechanisms, trying to create objects in a way
+that is appropriate to the situation.
+Behavioral Patterns (e.g., Observer, Strategy): Focus on
+communication between objects and how they interact with each
+other.
+Structural Patterns (e.g., Adapter, Composite): These patterns are
+concerned with simplifying the structure of the system and its
+components.
+
+Low Level Design
+• Step 4. Use of UML Diagram in LLD
+• UML diagrams play an important role in converting
+HLD to LLD. They provide a proper and clear visual
+representation of the components and their
+relationships, which helps developers significantly.
+Some of the most important UML diagrams used in
+LLD include:
+• Class Diagrams, Sequence Diagrams, Activity
+Diagrams, State Diagrams, Use Case Diagrams
+• These diagrams play a significant role in LLD,
+providing a clear visual representation of the
+components and their interactions.
+
+Low Level Design
+• 5. Implementing SOLID Principles
+•
+
+•
+•
+•
+•
+•
+•
+
+These are sets of 5 principles(rules) that are strictly followed as per
+requirements of the system or requirements for optimal designing. In
+order to write scalable, flexible, maintainable, and reusable code:
+Single-responsibility principle (SRP)
+Open-closed principle (OCP)
+Liskov’s Substitution Principle(LSP)
+Interface Segregation Principle (ISP)
+Dependency Inversion Principle (DIP)
+It's important to keep in mind that SOLID principles are just
+guidelines and not strict rules to be followed. The key is to strike a
+balance between following these principles and considering the
+specific needs and constraints of your business requirement.
+
+Principles of Software Design
+
+• Should not suffer from "Tunnel Vision" - While designing
+the process, it should not suffer from “tunnel vision” which
+means that is should not only focus on completing or
+achieving the aim but on other effects also.
+
+Principles of Software Design
+
+• Traceable to analysis model - The design process should be
+traceable to the analysis model which means it should
+satisfy all the requirements that software requires to
+develop a high-quality product.
+• Should not "Reinvent The Wheel" - The design process
+should not reinvent the wheel that means it should not
+waste time or effort in creating things that already exist.
+• Minimize Intellectual distance - The design process should
+reduce the gap between real-world problems and software
+solutions for that problem meaning it should simply
+minimize intellectual distance.
+• Exhibit uniformity and integration - The design should
+display uniformity which means it should be uniform
+throughout the process without any change. Integration
+means it should mix or combine all parts of software i.e.
+subsystems into one system.
+
+Principles of Software Design
+
+• Accommodate change - The software should be
+designed in such a way that it accommodates the
+change implying that the software should adjust
+to the change that is required to be done as per
+the user's need.
+• Degrade gently - The software should be designed
+in such a way that it degrades gracefully which
+means it should work properly even if an error
+occurs during the execution.
+• Assessed or quality - The design should be
+assessed or evaluated for the quality meaning that
+during the evaluation, the quality of the design
+needs to be checked and focused on.
+
+Principles of Software Design
+
+• Review to discover errors - The design should be
+reviewed which means that the overall evaluation
+should be done to check if there is any error
+present or if it can be minimized.
+• Design is not coding and coding is not design Design means describing the logic of the
+program to solve any problem and coding is a
+type of language that is used for the
+implementation of a design.
+
+Fundamental Design Concepts
+
+• abstraction—data, procedure, control
+• architecture—the overall structure of the software
+• patterns—”conveys the essence” of a proven design solution
+• modularity—compartmentalization of data and function
+• Information hiding—controlled interfaces
+• Functional independence—single-minded function and low
+coupling
+• refinement—elaboration of detail for all abstractions
+• Refactoring—a reorganization technique that simplifies the
+design
+
+Data
+door
+Abstraction
+manufacturer
+model number
+type
+swing direction
+inserts
+lights
+type
+number
+weight
+opening mechanism
+implemented as a data structure
+•
+
+Abstraction (Hide Irrelevant data): Abstraction simply means to hide the
+details to reduce complexity and increase efficiency or quality
+
+Procedural
+Abstraction
+open
+details of enter
+algorithm
+
+implemented with a "knowledge" of the
+object that is associated with enter
+
+Architectur “The overall structure of the software and the ways in
+which that structure provides conceptual integrity for a
+e
+system.”
+Structural properties. This aspect of the architectural design
+representation defines the components of a system (e.g., modules,
+objects, filters) and the manner in which those components are
+packaged and interact with one another. For example, objects are
+packaged to encapsulate both data and the processing that
+manipulates the data and interact via the invocation of methods
+Extra-functional properties. The architectural design description
+should address how the design architecture achieves requirements for
+performance, capacity, reliability, security, adaptability, and other
+system characteristics.
+Families of related systems. The architectural design should draw
+upon repeatable patterns that are commonly encountered in the
+design of families of similar systems. In essence, the design should
+
+Patterns
+
+Design Pattern Template
+A pattern simply means a repeated form or design in which the same
+shape is repeated several times to form a pattern.
+Pattern name—describes the essence of the pattern in a short but
+expressive name
+Intent—describes the pattern and what it does
+Also-known-as—lists any synonyms for the pattern
+Motivation—provides an example of the problem
+Applicability—notes specific design situations in which the pattern is
+applicable
+Structure—describes the classes that are required to implement the
+pattern
+Participants—describes the responsibilities of the classes that are
+required to implement the pattern
+Collaborations—describes how the participants collaborate to carry out
+their responsibilities
+Related patterns—cross-references related design patterns
+
+Modular Design
+• Modularity in design means subdividing a
+system into smaller parts so that these parts
+can be created independently and then use
+these parts in different systems to perform
+different functions.
+• Each module handles one function.
+• With a strong modular design, you can update
+or fix one part without touching the rest.
+• Testing becomes easier. Teams work in
+parallel. You gain speed and stability.
+
+Modular Design
+
+Information Hiding
+module
+
+controlled
+interface
+
+• algorithm
+• data structure
+• details of external interface
+• resource allocation policy
+
+clients
+
+"secret"
+
+a specific design decision
+
+Why Information Hiding?
+• reduces the likelihood of “side effects”
+• limits the global impact of local design
+decisions
+• emphasizes communication through
+controlled interfaces
+• discourages the use of global data
+• leads to encapsulation—an attribute of
+high quality design
+• results in higher quality software
+
+Functional Independence
+• It is design principle where modules (functions,
+classes, components) are developed to perform a
+single, specific task with minimal interaction with
+other modules.
+• Achieved through high cohesion and low coupling,
+it enhances maintainability, testability, and reusability
+while reducing error propagation.
+• Cohesion (High): The degree to which internal elements
+of a module belong together and focus on a single,
+well-defined function.
+• Coupling (Low): The degree to which a module relies on
+other modules to function.
+
+Functional Independence
+• Cohesion (Relationship Within a Module) :
+• Cohesion measures the strength of functional
+relatedness of elements within a single module or
+class.
+• High Cohesion (Good): A Book class that only
+contains data and methods directly related to a
+book's title, author, and ISBN.
+• Low Cohesion (Bad): A UserAccount class that
+handles user credentials, calculates shopping
+cart discounts, and sends emails.
+
+Functional Independence
+
+• Coupling (Relationship Between Modules)
+• Coupling measures the degree of interdependence
+between different modules or classes.
+• Low Coupling (Good): A PaymentGateway module that
+receives only a PaymentDetails object from the Order
+module, making it easy to swap processors.
+• High Coupling (Bad): Module A directly alters the
+private variables of Module B (Content Coupling),
+causing changes in B to break A.
+
+Functional Independence
+• In a library system:
+• High Cohesion: A BorrowingManager class only
+handles borrowing/returning books.
+• Low Coupling: The BorrowingManager does not
+know how the InventoryManager stores books; it
+only calls a method isBookAvailable(bookId).
+
+open
+
+Stepwise
+Refinement
+walk to door;
+reach for knob;
+open door;
+walk through;
+close door.
+
+•
+
+repeat until door opens
+turn knob clockwise;
+if knob doesn't turn, then
+take key out;
+find correct key;
+insert in lock;
+endif
+pull/push door
+move out of way;
+end repeat
+
+The refinement means elaborating a system or software. Refinement is very
+necessary to find out any error if present and then to reduce it.
+
+Refactoring
+
+• "Refactoring is the process of changing a software system
+in such a way that it does not alter the external behavior
+of the code [design] yet improves its internal structure.”
+• When software is refactored, the existing design is examined
+for
+– redundancy
+– unused design elements
+– inefficient or unnecessary algorithms
+– poorly constructed or inappropriate data structures
+– or any other design failure that can be corrected to yield a
+better design.
+
+Characteristics of a good software design
+Characteristic
+
+Description
+
+Goal
+
+Modularity
+
+Break system into small parts
+
+Manageability
+
+Cohesion
+
+Abstraction
+
+One task per module
+Simplicity & clarity
+Low interdependence between
+Flexibility
+modules
+Hide internal details
+Simplicity, security
+
+Reusability
+
+Code usable in multiple places
+
+Saves time and effort
+
+Scalability
+
+System can grow with time
+
+Long-term usefulness
+
+Maintainability
+
+Easy to update and fix
+
+Reduce development cost
+
+Efficiency
+
+Uses fewer resources
+
+Performance
+
+Security
+
+Prevent unauthorized access
+
+Data protection
+
+Consistency
+
+Uniform design standards
+
+Usability & collaboration
+
+Coupling
+
+Design Model
+• The design model has the following layered elements
+– Data/class design
+– Architectural design
+– Interface design
+Component-level Design
+– Component-level design
+Interface Design
+Architectural Design
+Data/Class Design
+
+Design Elements
+•
+•
+•
+
+•
+•
+
+Data/class design
+– Creates a model of data and objects that is represented at a high level of
+abstraction
+Architectural design
+– Depicts the overall layout of the software
+Interface design
+– Tells how information flows into and out of the system and how it is
+communicated among the components defined as part of the architecture
+– Includes the user interface, external interfaces, and internal interfaces
+Component-level design elements
+– Describes the internal detail of each software component by way of data
+structure definitions, algorithms, and interface specifications
+Deployment-level design elements
+– Indicates how software functionality and subsystems will be allocated
+within the physical computing environment that will support the software
+
+40
+
+An Architectural Design
+customer requirements
+Method
+"four bedrooms, three baths,
+lots of glass ..."
+
+architectural design
+
+Analyzing Architectural Design
+
+1. Collect scenarios.
+2. Elicit requirements, constraints, and environment
+description.
+3. Describe the architectural styles/patterns that have been
+chosen to address the scenarios and requirements:
+• module view
+• process view
+• data flow view
+4. Evaluate quality attributes by considered each attribute in
+isolation.
+5. Identify the sensitivity of quality attributes to various
+architectural attributes for a specific architectural style.
+6. Critique candidate architectures (developed in step 3) using
+the sensitivity analysis conducted in step 5.
+
+Why Architecture?
+The architecture is not the operational software.
+Rather, it is a representation that enables a software
+engineer to:
+(1)analyze the effectiveness of the design in meeting its
+stated requirements,
+(2)The architecture highlights early design decisions
+that will have a profound impact on all software
+engineering work that follows and, as important, on the
+ultimate success of the system as an operational entity.
+(3) reduce the risks associated with the construction of
+the software.
+
+Architectural Styles
+
+• The software that is built for computer-based systems exhibit
+one of many architectural styles
+• Each style describes a system category that encompasses
+• A set of component types that perform a function required
+by the system
+• A set of connectors (subroutine call, remote procedure call,
+data stream, socket) that enable communication,
+coordination, and cooperation among components
+• Semantic constraints that define how components can be
+integrated to form the system
+• A topological layout of the components indicating their
+runtime interrelationships
+•
+•
+•
+•
+•
+
+Data-centered architectures
+Data flow architectures
+Call and return architectures
+Object-oriented architectures
+Layered architectures
+
+Data-Centered Style
+• Has the goal of integrating the data
+• Refers to systems in which the access and update of a widely
+accessed data store occur
+• A client runs on an independent thread of control
+• The shared data may be a passive repository or an active
+blackboard
+– A blackboard notifies subscriber clients when changes occur
+in data of interest
+• At its heart is a centralized data store that communicates
+with a number of clients
+• Clients are relatively independent of each other so they can be
+added, removed, or changed in functionality
+• The data store is independent of the clients
+
+Data-Centered Architecture
+
+Data Flow Style
+•
+•
+•
+•
+
+Characterized by viewing the system as a series of transformations on
+successive pieces of input data
+Data enters the system and then flows through the components one at a time
+until they are assigned to output or a data store
+Batch sequential style
+– The processing steps are independent components
+– Each step runs to completion before the next step begins
+Pipe-and-filter style
+– Emphasizes the incremental transformation of data by successive
+components
+– The filters incrementally transform the data (entering and exiting via
+streams)
+– The filters use little contextual information and retain no state between
+instantiations
+– The pipes are stateless and simply exist to move data between filters
+
+Data Flow Architecture
+
+Call-and-Return Style
+•
+•
+
+•
+
+Has been the dominant architecture since the start of software
+development
+Main program and subroutine style
+– Decomposes a program hierarchically into small pieces (i.e., modules)
+– Typically has a single thread of control that travels through various
+components in the hierarchy
+Remote procedure call style
+– Consists of main program and subroutine style of system that is
+decomposed into parts that are resident on computers connected via a
+network
+– Strives to increase performance by distributing the computations and
+taking advantage of multiple processors
+– Incurs a finite communication time between subroutine call and
+response
+
+Call and Return Architecture
+
+Layered Architecture
+
+Architectural Design Process
+• Basic Steps
+– Creation of the data design
+– Derivation of one or more representations of the
+architectural structure of the system
+– Analysis of alternative architectural styles to choose the
+one best suited to customer requirements and quality
+attributes
+– Elaboration of the architecture based on the selected
+architectural style
+•
+A database designer creates the data architecture for a
+system to represent the data components
+• A system architect selects an appropriate architectural
+style derived during system engineering and software
+requirements analysis
+
+User Interface Design
+Easy to learn?
+Easy to use?
+Easy to understand?
+Typical Design Errors
+lack of consistency
+too much memorization
+no guidance / help
+no context sensitivity
+poor response
+unfriendly
+
+User Interface Design
+• User interface (UI) design in software engineering is the
+systematic process of creating intuitive, visual, and
+interactive elements such as screens, buttons, and
+icons that enable users to interact efficiently with
+software.
+• It focuses on maximizing usability, user experience
+(UX), and responsiveness, often through iterative
+development (analysis, design, construction, validation) to
+reduce user errors and increase satisfaction.
+• Types of User Interface
+• Command Line Interface
+• Graphical User Interface
+
+User Interface Design Process
+• User interface (UI) design
+
+User Interface Design Process
+• The analysis and design process of a user interface is iterative
+and can be represented by a spiral model.
+• The analysis and design process of user interface consists of
+four framework activities.
+
+User Interface Design Process
+•
+•
+
+•
+
+•
+•
+•
+•
+•
+
+1. User, Task, Environmental Analysis, and Modeling
+Initially, the focus is based on the profile of users who will interact
+with the system, i.e., understanding, skill and knowledge, type of
+user, etc., based on the user's profile users are made into categories.
+Based on the requirement's developer understand how to develop
+the interface. Once all the requirements are gathered a detailed
+analysis is conducted.
+The analysis of the user environment focuses on the physical work
+environment. Among the questions to be asked are:
+Where will the interface be located physically?
+Will the user be sitting, standing, or performing other tasks unrelated to the
+interface?
+Does the interface hardware accommodate space, light, or noise constraints?
+Are there special human factors considerations driven by environmental factors?
+
+User Interface Design Process
+• 2. Interface Design
+• The goal of this phase is to define the set of interface
+objects and actions i.e., control mechanisms that enable
+the user to perform desired tasks.
+• Indicate how these control mechanisms affect the system.
+Specify the action sequence of tasks and subtasks.
+• Always follow the three golden rules stated by Theo
+Mandel. Design issues such as response time, command
+and action structure, error handling, and help facilities
+are considered as the design model is refined. This phase
+serves as the foundation for the implementation phase.
+
+User Interface Design Process
+•
+•
+
+•
+•
+
+3. Interface Construction and Implementation
+The implementation activity begins with the creation of a prototype
+(model) that enables usage scenarios to be evaluated. As iterative
+design process continues a User Interface toolkit that allows the
+creation of windows, menus, device interaction, error messages,
+commands, and many other elements of an interactive environment
+can be used for completing the construction of an interface.
+4. Interface Validation
+This phase focuses on testing the interface. The interface should be
+in such a way that it should be able to perform tasks correctly,
+and it should be able to handle a variety of tasks. It should
+achieve all the user's requirements. It should be easy to use and
+easy to learn. Users should accept the interface as a useful one in
+their work.
+
+User Interface Design Golden Rules
+
+• Place the user in control
+• Reduce the user’s memory load
+• Make the interface consistent
+
+Place the User in Control
+
+1. Define interaction modes in a way that does not force a
+user into unnecessary or undesired actions.
+2. Provide for flexible interaction.
+3. Allow user interaction to be interruptible and undoable.
+4. Streamline interaction as skill levels advance and allow
+the interaction to be customized.
+5. Hide technical internals from the casual user.
+6. Design for direct interaction with objects that appear on
+the screen.
+
+Reduce the User’s Memory Load
+1. Reduce demand on short-term memory.
+2. Establish meaningful defaults.
+3. Define shortcuts that are intuitive.
+4. The visual layout of the interface should be
+based on a real world metaphor.
+5. Disclose information in a progressive
+fashion.
+
+Make the Interface Consistent
+1. Allow the user to put the current task
+into a meaningful context.
+2. Maintain consistency across a family
+of applications.
+3. If past interactive models have
+created user expectations, do not
+make changes unless there is a
+compelling reason to do so.
+
+User Interface Design Models
+• User model — a profile of all end users of the
+system
+• Design model — a design realization of the
+user model
+• Mental model (system perception) — the
+user’s mental image of what the interface is
+• Implementation model — the interface “look
+and feel” coupled with supporting information
+that describe interface syntax and semantics
+
+Interface Design Patterns
+• Patterns are available for
+– The complete UI
+– Page layout
+– Forms and input
+– Tables
+– Direct data manipulation
+– Navigation
+– Searching
+– Page elements
+
+Introduction to Design patterns
+• Design patterns are reusable
+solutions
+to
+common
+software design problems
+that help developers build
+cleaner
+and
+more
+maintainable systems.
+• They provide templates for
+solving issues in object
+creation,
+structure,
+and
+behaviour. They improve code
+flexibility and scalability.
+• Unlike
+a
+library
+or
+framework, which can be
+inserted and used right
+away, a design pattern is more
+of a template to approach the
+problem at hand.
+
+Creational design patterns
+• These design patterns are all about class instantiation. This pattern can
+be further divided into class-creation patterns and object-creational patterns.
+While class-creation patterns use inheritance effectively in the instantiation
+process, object-creation patterns use delegation effectively to get the job
+done.
+• Abstract Factory
+Creates an instance of several families of classes
+• Factory Method
+Creates an instance of several derived classes
+• Prototype
+A fully initialized instance to be copied or cloned
+• Singleton
+A class of which only a single instance can exist
+
+Structural design patterns
+• These design patterns are all about Class and Object
+composition. Structural class-creation patterns use inheritance
+to compose interfaces. Structural object-patterns define ways
+to compose objects to obtain new functionality.
+• Adapter : Match interfaces of different classes
+• Façade: A single class that represents an entire subsystem
+• Proxy :An object representing another object
+
+Behavioral design patterns
+• These design patterns are all about Class's objects communication.
+Behavioral patterns are those patterns that are most specifically
+concerned with communication between objects.
+• Command: Encapsulate a command request as an object
+• Mediator: Defines simplified communication between classes
+• Observer: A way of notifying change to a number of classes
+
+

@@ -88,6 +88,28 @@ def init_db():
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+
+    # Backward-compatible migration for older local DBs.
+    cursor.execute("PRAGMA table_info(transactions)")
+    existing_txn_cols = {row[1] for row in cursor.fetchall()}
+    required_txn_cols = {
+        'dynamic_behavior_score': 'REAL',
+        'pre_auth_decision': 'TEXT',
+        'pre_auth_latency_ms': 'REAL',
+        'auth_method_required': 'TEXT',
+        'block_reasons': 'TEXT',
+        'challenge_reasons': 'TEXT',
+        'device_id': 'TEXT',
+        'ip_address': 'TEXT',
+        'geo_city': 'TEXT',
+        'geo_country': 'TEXT',
+        'amount_zscore': 'REAL',
+        'amount_vs_avg_ratio': 'REAL',
+        'is_behavioral_anomaly': 'INTEGER',
+    }
+    for col_name, col_type in required_txn_cols.items():
+        if col_name not in existing_txn_cols:
+            cursor.execute(f"ALTER TABLE transactions ADD COLUMN {col_name} {col_type}")
     
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS alerts (
@@ -1127,8 +1149,8 @@ async def _run_simulation():
                 })
                 
                 # Submit high-risk transactions for analyst review
-                if result['risk_score'] >= 85 or pre_auth_result.decision == 'BLOCK':
-                    priority = 'critical' if result['risk_score'] >= 90 else 'high'
+                if result['risk_score'] >= 0.85 or pre_auth_result.decision == 'BLOCK':
+                    priority = 'critical' if result['risk_score'] >= 0.90 else 'high'
                     case_id = submit_for_review(txn_with_result, priority=priority)
                     if case_id:
                         logger.info(f"Created case {case_id} for transaction {txn['transaction_id']}")
@@ -1147,7 +1169,7 @@ async def _run_simulation():
         except asyncio.CancelledError:
             break
         except Exception as e:
-            logger.error(f"Simulation error: {e}")
+            logger.exception(f"Simulation error: {e}")
             await asyncio.sleep(1)
 
 def _save_transaction(txn: Dict, result: Dict, pre_auth_result, device_analysis, geo_data, ip_address):

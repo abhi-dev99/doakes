@@ -1,0 +1,3250 @@
+Unit 6: Software Project
+Management (3 Hours)
+• Project planning and scheduling (Gantt, PERT),
+• Software cost estimation (COCOMO, Function Point, Use Case Point),
+• Risk management and mitigation,
+• Quality assurance processes and metrics
+• Tools: Trello, JIRA (introduction).
+
+What is the Gantt Chart?
+• A Gantt Chart is a bar chart that shows:
+• Tasks/activities of a project (on Y-axis)
+• Time duration (on X-axis)
+• Start and end dates of each task
+• Dependencies between tasks
+
+What is the Purpose of a Gantt Chart?
+•A Gantt chart visually displays project tasks on a timeline
+•Helps in project planning, scheduling, and tracking
+•Breaks project into manageable tasks with dependencies
+•Assists in resource allocation
+•Defines task sequence and duration
+•Enables progress monitoring and delay identification
+•Supports clear communication with stakeholders
+•Ensures team members understand roles and deadlines
+
+Who Invented the Gantt Chart?
+•Named after Henry Gantt, an American mechanical engineer
+and management consultant
+•Developed in the 1910s
+•Created to manage and control production in manufacturing
+•Introduced as a visual scheduling tool
+•Played a key role in the development of project management
+techniques
+•Still widely used across various industries today
+
+Basic components of a Gantt chart
+•Task List – All activities required to complete the project
+•Timeline – Days, weeks, or months
+•Bars – Represent duration of each task
+•Milestones – Important checkpoints
+•Dependencies – Relationship between tasks (e.g., Task B starts
+after Task A)
+
+How to Create a Gantt Chart?
+
+• Although creating a Gantt Chart depends on multiple factors such as project status,
+its current phase, team size, deadlines, structure of tasks, and subtasks, it is easy to
+create it for your Project. The various steps in creating the Gantt Chart are stated
+below.
+• Step 1: List out every task you will need to complete to finish the project. For
+example, you can mention tasks such as Backend Configuration, Database
+Integration, Testing and Validation, Deployment, etc.
+• Step 2: Define chronological order and put each task in order of when it needs to be
+done. Also, identify whether some tasks depend on others or they need to be
+completed before any other tasks.
+• Step 3: Estimate how much time it will take you to complete each task to a level of
+quality that has been defined during the requirement elicitation and gathering.
+• Step 4: In this step, assign a realistic due date and start dates for each task. You
+should analyze whether the task execution will need some extra time or not.
+• Step 5: Fill up your Gantt Chart and Continuously update your Gantt chart with
+actual timelines.
+
+Gantt Chart for ERP
+
+Activities for ATM Cash Withdrawal System
+• Main Activities
+• Requirement Analysis
+• System Design (UML, Flowcharts)
+• Database Design (Account, Transaction tables)
+• User Interface Design (ATM screens)
+• Implementation (Coding)
+• Integration (Hardware + Software simulation)
+• Testing (Unit + System Testing)
+• Deployment (Demo setup)
+• Documentation
+
+Detailed Task Breakdown
+•Requirement Analysis
+•Identify user needs (withdrawal, PIN verification)
+•Define functional & non-functional requirements
+•System Design
+•Use Case Diagram (User interacts with ATM)
+•Sequence Diagram (Transaction flow)
+Activity
+•Database Design
+Requirement
+•Account details
+Analysis
+•Transaction records
+•UI Design
+System Design
+•PIN entry screen
+Database Design
+•Amount selection screen
+•Implementation
+UI Design
+•Authentication module
+Implementation
+•Transaction processing
+•Balance update
+Integration
+•Testing
+Testing
+•Valid/invalid PIN
+Documentation
+•Insufficient balance
+•Transaction success/failure
+
+Deployment / Demo
+
+W1
+
+W2
+
+██
+
+██
+██
+
+W3
+
+W4
+
+W5
+
+W6
+
+██
+
+██
+
+██
+
+██
+
+W7
+
+W8
+
+██
+██
+██
+
+██
+██
+
+██
+
+██
+
+██
+
+██
+
+██
+
+██
+██
+
+Gantt Chart Tools
+• Microsoft Project: It is a tool of project management that the client can create, control, and
+review Gantt charts. It also has ‘scheduling’, ‘resourcing’, and ‘working together’ as features.
+• Smartsheet: It is the best web-based program for managing projects that include Gantt
+charting. It allows team collaboration in real-time on any project regardless of where you are
+located or any other form of project administration that you may wish to use.
+• Trello: Trello is some software amongst the very best that manages projects using Kanban
+boards, cards, and checklists. They do not have built-in Gantt charts in these extensions
+though there are numerous integrations available for those who want to use them.
+• Wrike: This is a collaborative project management software integrated with Gantt Chart
+which helps in planning, monitoring, and sharing between partners.
+• Asana: All such apps have one aim: to plan, organize, and keep track of tasks by teams
+carrying out different jobs within a company at once; however Asana uses Gantt charts as
+well as schedule visuals.
+• TeamGantt: TeamGantt is web-based software created for the creation and usage of Gantt
+charts to aid in the process of planning and teamwork. More is offered by them.
+
+Features of Gantt Chart
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+
+Here are the following features of the Gantt Chart:
+1. Helps in Project Management
+The Gantt Chart gives us a high-level interpretation of the Project timeline using which we can schedule our Project Delivery,
+wrap up the pending tasks, and extend the timeline according to the requirement.
+2. Simple to Use
+It has a drag-and-drop feature that enables us to easily make changes or update the timeframes of the tasks.
+3. Supports Integration with Existing Projects
+You can easily integrate the Gantt Chart into your existing Project Workflow. Therefore, you do not need to create the Gantt
+Log from scratch.
+4. Ideal for Complex Projects
+If the project structure is complex with multiple tasks or issues and the subtasks within them, the Gantt Chart serves as a
+proven solution to easily manage the complex work breakdown structure.
+5. Provides Useful Insights along with Timelines
+A Gantt chart does not only deliver an overview of the sequence of events, but it also provides important information for proj
+ect managers. Also, it visualizes the critical path and hence guides the schedulers’ attention to those activities that are
+crucial and deserve a specific treatment
+
+Advantages of Gantt Chart
+•Easy visualization of project schedule
+•Helps in time management
+•Identifies task dependencies
+•Tracks progress effectively
+•Improves team coordination
+
+Disadvantages of Gantt Chart
+• Here are the following disadvantages of Gantt Chart:
+• Time-consuming: Setting up the Gantt Chart includes various
+activities such as planning the tasks, resources, timelines, due dates,
+dependencies, etc. This makes the Gantt Chart a time-consuming tool
+for the project.
+• Can turn into complex sheets: Putting too much information about
+the Project timelines can turn the Gantt Chart into complex sheets, due
+to which timeline management becomes challenging.
+• Sometimes tough to update Gantt Chart: If the Project includes the
+switching between multiple tools and platforms for the task execution,
+it is tough to update the Gantt Chart we need to configure it repeatedly,
+as the workflow switches to another platform.
+
+PERT (Program Evaluation and Review
+Technique)
+• PERT (Program Evaluation and Review Technique) is a project
+management tool used to plan, schedule, and control complex
+software projects, especially when task durations are uncertain.
+
+PERT (Program Evaluation and Review
+Technique)
+• Key Features
+• Focuses on time estimation under uncertainty
+• Uses a network diagram (nodes and arrows)
+• Identifies task dependencies
+• Helps find the critical path (longest path in project)
+
+What does a PERT Chart Contain?
+• Here are the main components of a PERT chart:
+• Nodes: it represents the task or milestones. every node represents the task
+name and may also show duration of the task.
+• Arrows: it indicates the direction or sequence of task and also dependencies
+between them. suppose an array from A to B, then task A must be completed
+before task B.
+• Time Estimation: It estimates the time duration to complete the task.
+• Critical Path: The critical path is the largest path in project management that
+always results in the shortest time to complete the project.
+• Milestones: It is Key point in the project timeline that represent significant
+events or deadlines.
+
+What does a PERT Chart Contain?
+
+How a PERT Chart Works?
+• A PERT chart used to plan and visualize tasks in a project. It
+breaks down the project into individual tasks and shows the
+sequence in which they must be completed. Each task is
+represented by a node, and arrows indicate the dependencies
+between tasks. By analyzing the chart, teams can identify the
+critical path, which helps determine the shortest time to complete
+the project and allocate resources effectively.
+
+Time Estimates in PERT
+•
+
+Activity
+
+O
+
+M
+
+P
+
+Expected Time
+(weighted average)
+
+A
+
+2
+
+4
+
+6
+
+4
+
+B
+
+1
+
+2
+
+3
+
+2
+
+C
+
+3
+
+5
+
+7
+
+5
+
+How to Create a PERT chart?
+• To create a PERT chart, we can follow the below
+steps:
+• Step 1: Identify Project Tasks
+• Step 2: Define task dependencies
+• Step 3: Estimate Timeline
+• Step 4: Calculate Critical Path
+• Step 5: Manage task progress
+
+How to Draw PERT
+•
+
+How to Draw PERT
+• 4. Draw the network diagram
+• Use:
+• Circles (nodes) → Events (start/end)
+• Arrows → Activities
+• Example:
+• (Start)
+|
+A
+/\
+B C
+\/
+D
+|
+(End)
+
+How to Draw PERT
+• 5. Add time on each activity
+• Write TE value on arrows
+• Example:
+• A (4 days)
+B (2 days)
+C (5 days)
+D (3 days)
+
+• 6. Find all paths
+• Path 1: A → B → D
+• Path 2: A → C → D
+
+• 7. Identify Critical Path
+• Longest time path = Critical Path
+• This determines total project duration
+
+PERT Chart for ATM Cash Withdrawal Project
+• Step 1: Activities & Dependencies
+Activity
+
+Description
+
+Depends On
+
+A
+
+Requirement Analysis
+
+—
+
+B
+
+System Design
+
+A
+
+C
+
+Database Design
+
+A
+
+D
+
+UI Design
+
+B
+
+E
+
+Implementation (Coding)
+
+B, C
+
+F
+
+Integration
+
+D, E
+
+G
+
+Testing
+
+F
+
+H
+
+Deployment
+
+G
+
+PERT Chart for ATM Cash Withdrawal Project
+• Step 2: Time Estimation (PERT)
+Activity
+
+O
+
+M
+
+P
+
+Expected Time (TE)
+
+A
+
+2
+
+3
+
+4
+
+3
+
+B
+
+2
+
+4
+
+6
+
+4
+
+C
+
+1
+
+2
+
+3
+
+2
+
+D
+
+2
+
+3
+
+4
+
+3
+
+E
+
+4
+
+6
+
+8
+
+6
+
+F
+
+2
+
+4
+
+6
+
+4
+
+G
+
+3
+
+5
+
+7
+
+5
+
+H
+
+1
+
+2
+
+3
+
+2
+
+PERT Chart for ATM Cash Withdrawal
+Project
+• Step 3: PERT Network Diagram (Text Form)
+• (Start)
+Step 4: Path Calculation
+|
+A (3)
+Path 1:
+/ \
+A→B→D→E→F→G→H
+B(4) C(2)
+= 3 + 4 + 3 + 6 + 4 + 5 + 2 = 27 days
+|
+|
+Path 2:
+D(3) |
+\ /
+A→C→E→F→G→H
+E(6)
+= 3 + 2 + 6 + 4 + 5 + 2 = 22 days
+|
+F(4)
+|
+G(5)
+🔹 Step 5: Critical Path
+|
+H(2)
+✅ Critical Path = A → B → D → E → F → G → H
+|
+✅ Total Project Duration = 27 days
+(End)
+
+Tools to Draw PERT
+• Paper (for exams ✔️)
+• Microsoft Visio
+• Lucidchart
+• Draw.io
+
+Advantages of PERT Chart
+• It has the following advantages:
+• Estimation of completion time of project is given by the PERT.
+• It supports the identification of the activities with slack time.
+• The start and dates of the activities of a specific project is
+determined.
+• It helps project manager in identifying the critical path activities.
+• PERT makes well organized diagram for the representation of large
+amount of data.
+
+Disadvantages of PERT Chart
+• The complexity of PERT is more which leads to the problem in
+implementation.
+• The estimation of activity time are subjective in PERT which is a
+major disadvantage.
+• Maintenance of PERT is also expensive and complex.
+• The actual distribution of may be different from the PERT beta
+distribution which causes wrong assumptions.
+• It under estimates the expected project completion time as there
+is chances that other paths can become the critical path if their
+related activities are deferred.
+
+PERT Chart Vs Gantt Chart
+Feature
+
+PERT Chart
+
+Gantt Chart
+
+Purpose
+
+Visualize project tasks and dependencies
+
+Schedule tasks over time
+
+Focus
+
+Task relationships and sequence
+
+Task duration and timeline
+
+Representation
+
+Network diagram with nodes and arrows
+
+Horizontal bar chart
+
+Time Estimation
+
+Includes optimistic, pessimistic, and most likely
+durations
+
+Shows start and end dates
+
+More complex, suitable for large projects
+
+Simpler, easier to read
+
+Adaptable for changing project paths
+
+Less flexible once
+established
+
+Research and development projects
+
+Construction and
+production schedules
+
+Complexity
+Flexibility
+Best Use Case
+
+Lab Assignment
+• Prepare a software project plan with scheduling using Gantt
+charts and PERT charts for a sample project.
+
+Software Cost Estimation
+• Software Cost Estimation is the process of predicting the effort,
+time, and cost required to develop a software system.
+
+Software Cost Estimation: Objectives
+•Estimate development cost
+•Plan budget and resources
+•Schedule project timeline
+•Avoid cost overruns
+
+Software Cost Estimation
+• Key Factors Affecting Cost
+• Project size (LOC / Function Points)
+• Complexity of the system
+• Team experience
+• Technology used
+• Development time constraints
+
+Software Cost Estimation
+• Common Estimation Techniques
+• 1. Expert Judgment
+• Based on experience of experts
+• Quick but may be subjective
+• 2. Analogous Estimation
+• Uses data from similar past projects
+• Simple and fast
+
+Software Cost Estimation
+• 3. Algorithmic Models (e.g., COCOMO)
+• Uses mathematical formulas
+• Basic COCOMO Effort Formula:
+• Effort is measured in person-months
+• Constants a, b depend on project type
+• 4. Bottom-Up Estimation
+• Estimate cost of each module
+• Sum up for total cost
+• More accurate
+
+Software Cost Estimation
+
+• 5. Top-Down Estimation
+• Estimate total cost first
+• Then divide among components
+
+• Steps in Cost Estimation
+• Estimate size of software
+• Estimate effort required
+• Estimate time (schedule)
+• Calculate cost (effort × cost per person)
+• Example
+• If:
+• Effort = 10 person-months
+• Cost per person/month = ₹50,000
+• Total Cost = ₹5,00,000
+
+Software Cost Estimation
+• Advantages
+• Helps in budget planning
+• Improves resource allocation
+• Supports project scheduling
+• Limitations
+• Estimates may be inaccurate early
+• Depends on assumptions
+• Changes in requirements affect cost
+
+COCOMO (Constructive Cost Model )
+• The Constructive Cost Model (COCOMO) It was proposed
+by Barry Boehm in 1981 and is based on the study of 63 projects,
+which makes it one of the best-documented models.
+• It is a Software Cost Estimation Model that helps predict the
+effort, cost, and schedule required for a software development
+project.
+
+COCOMO (Constructive Cost Model )
+• Types of Projects in COCOMO Model
+• In the COCOMO model, software projects are categorized into
+three types based on their complexity, size, and the development
+environment. These types are:
+• 1. Organic
+• A software project is said to be an organic type if the team size
+required is adequately small, the problem is well understood and
+has been solved in the past and also the team members have a
+nominal experience regarding the problem.
+
+COCOMO (Constructive Cost Model )
+• 2. Semi-detached
+• A software project is said to be a Semi-detached type if the vital
+characteristics such as team size, experience, and knowledge of
+the various programming environments lie in between organic and
+embedded.
+• The projects classified as Semi-Detached are comparatively less
+familiar and difficult to develop compared to the organic ones and
+require more experience better guidance and creativity. Eg:
+Compilers or different Embedded Systems can be considered
+Semi-Detached types.
+
+COCOMO (Constructive Cost Model )
+• 3. Embedded
+• A software project requiring the highest level of complexity,
+creativity, and experience requirement falls under this category.
+Such software requires a larger team size than the other two
+models and also the developers need to be sufficiently
+experienced and creative to develop such complex models.
+
+COCOMO (Constructive Cost Model )
+Aspects
+
+Organic
+
+Semidetached
+
+Embedded
+
+Project Size
+
+2 to 50 KLOC
+
+50-300 KLOC
+
+300 and above KLOC
+
+Complexity
+
+Low
+
+Medium
+
+High
+
+Some experienced
+as well as
+inexperienced staff
+
+Mixed experience,
+includes experts
+
+Environment
+
+Flexible, fewer
+constraints
+
+Somewhat flexible,
+moderate
+constraints
+
+Highly rigorous,
+strict requirements
+
+Effort Equation
+
+E = 2.4(400)1.05
+
+E = 3.0(400)1.12
+
+E = 3.6(400)1.20
+
+Example
+
+Simple payroll
+system
+
+New system
+interfacing with
+existing systems
+
+Flight control
+software
+
+Team Experience Highly experienced
+
+COCOMO (Constructive Cost Model )
+• Structure of COCOMO Model
+• Detailed COCOMO incorporates all characteristics of the
+intermediate version with an assessment of the cost driver's
+impact on each step of the Software Engineering Process.
+• In detailed COCOMO, the whole software is divided into
+different modules and then we apply COCOMO in different
+modules to estimate effort and then sum the effort.
+• Six phases
+
+COCOMO (Constructive Cost Model )
+
+COCOMO (Constructive Cost Model )
+• Different models of COCOMO have been proposed to predict the
+cost estimation at different levels, based on the amount of
+accuracy and correctness required.
+• All of these models can be applied to a variety of projects, whose
+characteristics determine the value of the constant to be used in
+subsequent calculations.
+• Boehm’s definition of organic, semidetached, and embedded
+systems:
+
+COCOMO (Constructive Cost Model )
+• Importance of the COCOMO Model
+• Cost Estimation
+• Resource Management
+• Project Planning
+• Risk management
+• Support for Decisions
+• Benchmarking
+• Resource Optimization
+
+COCOMO (Constructive Cost Model )
+• Types of COCOMO Model
+• There are three types of COCOMO Model:
+
+COCOMO (Constructive Cost Model )
+• 1. Basic COCOMO Model
+• The Basic COCOMO model is a straightforward way to estimate the effort needed for a
+software development project. It uses a simple mathematical formula to predict how
+many person-months of work are required based on the size of the project, measured
+in thousands of lines of code (KLOC).
+• It estimates effort and time required for development using the following expression:
+
+• E = a*(KLOC)b PM
+• Tdev = c*(E)d
+• Person required = Effort/ Time
+
+• Where,
+• E is effort applied in Person-Months
+• KLOC is the estimated size of the software product indicate in Kilo Lines of Code
+• Tdev is the development time in months
+• a, b, c, d are constants determined by the category of software project given in below
+table.
+
+COCOMO (Constructive Cost Model )
+• The above formula is used for the cost estimation of the basic
+COCOMO model and also is used in the subsequent models. The
+constant values a, b, c, and d for the Basic Model for the different
+categories of the software projects are:
+Projects
+
+a
+
+b
+
+c
+
+d
+
+Organic
+
+2.4
+
+1.05
+
+2.5
+
+0.38
+
+SemiDetached
+
+3.0
+
+1.12
+
+2.5
+
+0.35
+
+Embedde
+d
+
+3.6
+
+1.20
+
+2.5
+
+0.32
+
+COCOMO (Constructive Cost Model )
+• The effort is measured in Person-Months and as evident from the
+formula is dependent on Kilo-Lines of code. The development time
+is measured in months.
+• These formulas are used as such in the Basic Model calculations,
+as not much consideration of different factors such as reliability,
+and expertise is taken into account, henceforth the estimate is
+rough.
+
+COCOMO (Constructive Cost Model )
+• Example of Basic COCOMO Model:
+• Suppose that a Basic project was estimated to be 400 KLOC (kilo lines of
+code). Calculate effort and time for each of the three modes of
+development. All the constants value provided in the following table:
+• Solution: From the above table we take the value of constant a,b,c and d.
+• For organic mode,
+E = a*(KLOC)b PM
+• effort = 2.4 × (400)1.05 ≈ 1295 person-month.
+• dev. time = 2.5 × (1295)0.38 ≈ 38 months.
+
+• For semi-detach mode,
+
+• effort = 3 × (400)1.12 ≈ 2462 person-month.
+• dev. time = 2.5 × (2462)0.35 ≈ 38 months.
+
+• For Embedded mode,
+
+• effort = 3.6 × (400)
+≈ 4772 person-month.
+• dev. time = 2.5 × (4772)0.32 ≈ 38 months.
+1.20
+
+Tdev = c*(E)d
+Person required = Effort/ Time
+
+Projects
+
+a
+
+b
+
+c
+
+d
+
+Organic
+
+2.4
+
+1.05
+
+2.5
+
+0.38
+
+SemiDetached
+
+3.0
+
+1.12
+
+2.5
+
+0.35
+
+Embedded
+
+3.6
+
+1.20
+
+2.5
+
+0.32
+
+COCOMO (Constructive Cost Model )
+• 2. Intermediate COCOMO Model
+• The basic COCOMO model assumes that the effort is only a
+function of the number of lines of code and some constants
+evaluated according to the different software systems. However,
+in reality, no system's effort and schedule can be solely calculated
+based on Lines of Code. For that, various other factors such as
+reliability, experience, and Capability. These factors are known
+as Cost Drivers (multipliers) and the Intermediate Model utilizes
+15 such drivers for cost estimation.
+
+COCOMO (Constructive Cost Model )
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+•
+
+Classification of Cost Drivers and their Attributes:
+The cost drivers are divided into four categories
+Product attributes:
+Required Software Reliability extent
+Size of the application database
+The complexity of the product
+Hardware attributes:
+Run-time performance constraints
+Memory constraints
+The volatility of the virtual machine environment
+Required turnabout time
+Personal attributes:
+Analyst capability
+Software engineering capability
+Application experience
+Virtual machine experience
+Programming language experience
+Project attributes:
+Use of Software Tools.
+Application of Software Engineering Methods.
+Required development schedule.
+
+COCOMO (Constructive Cost Model )
+Category
+
+Cost Driver
+
+Short Form
+
+Meaning
+
+Product Attributes
+
+Required Software Reliability extent
+
+RELY
+
+Degree of reliability and correctness required in software
+
+Size of the application database
+
+DATA
+
+Size of database used by the application
+
+Complexity of the product
+
+CPLX
+
+Complexity of processing, logic, and operations
+
+TIME
+
+Required execution speed and performance constraints
+
+Memory constraints
+
+STOR
+
+Limitations on main memory and storage
+
+Volatility of the virtual machine environment
+
+VIRT
+
+Frequency of hardware or OS changes
+
+Required turnabout time
+
+TURN
+
+Required response and processing time
+
+ACAP
+
+Skills and experience of system analysts
+
+Software engineering capability (Programmer
+capability)
+
+PCAP
+
+Ability of programmers and developers
+
+Application experience
+
+AEXP
+
+Experience in similar application domain
+
+Virtual machine experience
+
+VEXP
+
+Experience with hardware and OS
+
+Programming language experience
+
+LEXP
+
+Experience in programming language used
+
+Use of Software Tools
+
+TOOL
+
+Use of CASE tools, IDEs, automation tools
+
+Application of Software Engineering Methods
+
+MODP
+
+Use of structured and modern development methods
+
+Required development schedule
+
+SCED
+
+Project deadline and schedule constraints
+
+Hardware Attributes Run-time performance constraints
+
+Personnel Attributes Analyst capability
+
+Project Attributes
+
+COCOMO (Constructive Cost Model )
+
+• Each of the 15 such attributes can be rated on a six-point scale ranging
+from "very low" to "extra high" in their relative order of importance. Each
+attribute has an effort multiplier fixed as per the rating. Table give below
+represents Cost Drivers and their respective rating:
+• The Effort Adjustment Factor (EAF) is determined by multiplying the effort
+multipliers associated with each of the 15 attributes.
+• The Effort Adjustment Factor (EAF) is employed to enhance the estimates
+generated by the basic COCOMO model in the following expression:
+Rating
+
+Meaning
+
+Multiplier
+
+Very Low
+
+System failure acceptable
+
+0.75
+
+Low
+
+Minor importance
+
+0.88
+
+Nominal
+
+Normal system
+
+1.00
+
+High
+
+Important system
+
+1.15
+
+Very High
+
+Critical system
+
+1.40
+
+COCOMO (Constructive Cost Model )
+• Intermediate COCOMO Model equation:
+• E = a*(KLOC)b * EAF PM
+• Tdev = c*(E)d
+• Where,
+• E is effort applied in Person-Months
+• KLOC is the estimated size of the software product indicate in Kilo Lines of
+Code
+• EAF is the Effort Adjustment Factor (EAF) is a multiplier used to refine the
+effort estimate obtained from the basic COCOMO model.
+• Tdev is the development time in months
+• a, b, c are constants determined by the category of software project given in
+below table.
+
+COCOMO (Constructive Cost Model )
+• The constant values a, b, c, and d for the Basic Model for the different
+categories of the software projects are:
+Software
+Projects
+
+a
+
+b
+
+c
+
+d
+
+Organic
+
+3.2
+
+1.05
+
+2.5
+
+0.38
+
+Semi-Detached
+
+3.0
+
+1.12
+
+2.5
+
+0.35
+
+Embedded
+
+2.8
+
+1.20
+
+2.5
+
+0.32
+
+• Problem
+• Estimate the Effort, Development
+Time, and Team Size for an ATM
+Banking System using the
+Intermediate COCOMO Model.
+• Given
+• Project: ATM Banking System
+• Size = 32 KLOC
+• Project Type = Semi-Detached
+(moderate complexity, banking
+system)
+• Cost Driver Ratings Table
+
+Cost Driver
+RELY
+DATA
+CPLX
+TIME
+STOR
+VIRT
+TURN
+ACAP
+PCAP
+AEXP
+VEXP
+LEXP
+TOOL
+MODP
+SCED
+
+Rating
+High
+High
+High
+Nominal
+Nominal
+Nominal
+Nominal
+High
+High
+Low
+Nominal
+Nominal
+High
+High
+Nominal
+
+Multiplier
+1.15
+1.08
+1.15
+1.00
+1.00
+1.00
+1.00
+0.86
+0.86
+1.13
+1.00
+1.00
+0.91
+0.91
+1.00
+
+•
+
+•
+
+•
+Parameter
+
+Result
+
+Project
+
+ATM Banking System
+
+KLOC
+
+32
+
+Project Type
+
+Semi-Detached
+
+EAF
+
+0.99
+
+Effort
+
+143 Person-Months
+
+Development Time
+
+14 Months
+
+Team Size
+
+10 Persons
+
+COCOMO (Constructive Cost Model )
+• 3. Detailed COCOMO Model
+• Detailed COCOMO goes beyond Basic and Intermediate COCOMO
+by diving deeper into project-specific factors. It considers a wider
+range of parameters, like team experience, development practices,
+and software complexity. By analyzing these factors in more detail,
+Detailed COCOMO provides a highly accurate estimation of effort,
+time, and cost for software projects. It's like zooming in on a project's
+unique characteristics to get a clearer picture of what it will take to
+complete it successfully.
+
+COCOMO (Constructive Cost Model )
+• CASE Studies and Examples
+• NASA Space Shuttle Software Development
+• Big Business Software Development
+• Commercial Software goods
+• Academic Research Initiatives
+
+COCOMO (Constructive Cost Model )
+• Advantages of the COCOMO Model
+• Systematic cost estimation
+• Helps to estimate cost and effort
+• Helps in high-impact factors
+• Helps to evaluate the feasibility of a project
+
+COCOMO (Constructive Cost Model )
+• Disadvantages of the COCOMO Model
+• Assumes project size as the main factor
+• Does not count development team-specific characteristics
+• Not enough precise cost and effort estimate
+
+Functional Point (FP) Analysis
+• Functional Point Analysis (FPA) is a software measurement
+technique used to assess the size and complexity of a software
+system based on its functionality.
+• It involves categorizing the functions of the software, such as input
+screens, output reports, inquiries, files, and interfaces, and
+assigning weights to each based on their complexity.
+• By quantifying these functions and their associated weights, FPA
+provides an objective measure of the software's size and
+complexity.
+
+Functional Point (FP) Analysis
+• What is Functional Point Analysis?
+• Function Point Analysis was initially developed by Allan J. Albrecht in 1979
+at IBM and has been further modified by the International Function Point
+User's Group (IFPUG) in 1984, to clarify rules, establish standards, and
+encourage their use and evolution.
+• Allan J. Albrecht gave the initial definition.
+• Functional Point Analysis gives a dimensionless number defined in function
+points which we have found to be an effective relative measure of function
+value delivered to our customer.
+• A systematic approach to measuring the different functionalities of a
+software application is offered by function point metrics.
+• Function point metrics evaluate functionality from the perspective of the
+user, that is, based on the requests and responses they receive.
+
+Functional Point (FP) Analysis
+• Objectives of Functional Point Analysis
+• Encourage Approximation
+• To assist with project management
+• Comparative analysis
+• Improve Your Cost-Benefit Analysis
+• Comply with Business Objectives
+
+Functional Point (FP) Analysis
+• Types of Functional Point Analysis
+• There are two types of Functional Point Analysis:
+
+Functional Point (FP) Analysis
+• 1. Transactional Functional Type
+• External Input (EI): EI processes data or control information that
+comes from outside the application’s boundary. The EI is an
+elementary process.
+• External Output (EO): EO is an elementary process that generates
+data or control information sent outside the application’s boundary.
+• External Inquiries (EQ): EQ is an elementary process made up of an
+input-output combination that results in data retrieval.
+
+Functional Point (FP) Analysis
+Real-Life
+ExampleType
+Data Functional
+• 2.
+Online Shopping
+System
+Logical File
+(ILF): ILF is a logically related group of data that is maintained within the
+• Internal
+system
+boundary.
+ILF
+means:
+• This
+•Product
+database
+is stored
+inside the system
+• Data
+•Customer
+database
+•Order database
+can create, update, delete, and manage the data
+• System
+Systemhas
+maintains
+these.over the data
+full control
+• System
+• External Interface File (EIF): EIF is a logically related group of data used by the system but
+maintained by another system.
+• This
+EIF means:
+is outside
+the database
+system
+• Data
+•Payment
+gateway
+•Bank system
+can read only
+• System
+•Delivery
+partner
+update
+or system
+modify
+• Cannot
+System onlybyuses
+data.software
+another
+• Maintained
+
+Functional Point (FP) Analysis
+• Benefits of Functional Point Analysis
+• Technological Independence
+• Better Accurate Project Estimation
+• Improved Interaction
+• Making Well-Informed Decisions
+• Early Recognition of Changes in Scope
+
+Functional Point (FP) Analysis
+• Disadvantage of Functional Point Analysis
+• Subjective Judgement
+• Low Accuracy
+• Time Consuming
+• Steep Learning Curve
+• Less Research Data
+• Costly
+
+Functional Point (FP) Analysis
+• Characteristics of Functional Point Analysis
+• We can calculate the functional point with the help of the
+number of functions and types of functions used in applications.
+These are classified into five types:
+• Types of FP Attributes or Information Domain Characteristics
+Measurement Parameters
+Number of External Inputs (EI)
+
+Examples
+Input screen and tables
+
+Number of External Output (EO)
+
+Output screens and reports
+
+Number of external inquiries (EQ)
+
+Prompts and interrupts
+
+Number of internal files (ILF)
+
+Databases and directories
+
+Number of external interfaces (EIF)
+
+Shared databases and shared routines
+
+Functional Point (FP) Analysis
+• Functional Point helps in describing system complexity and also
+shows project timelines.
+• It is majorly used for business systems like information systems.
+• FP is language and technology independent, meaning it can be
+applied to software systems developed using any programming
+language or technology stack.
+• All the factors mentioned above are given weights, and these
+weights are determined through practical experiments in the
+following table.
+
+Functional Point (FP) Analysis
+• Weights of 5 Functional Point Attributes
+Measurement Parameter
+
+Low
+
+Average
+
+High
+
+Number of external inputs (EI)
+
+3
+
+4
+
+6
+
+Number of external outputs (EO)
+
+4
+
+5
+
+7
+
+Number of external inquiries (EQ)
+
+3
+
+4
+
+6
+
+Number of internal files (ILF)
+
+7
+
+10
+
+15
+
+5
+
+7
+
+10
+
+Number of External Interfaces (EIF)
+
+Functional Point (FP) Analysis
+• Functional Complexities help us in finding the corresponding
+weights, which results in finding the Unadjusted Functional point
+(UFp) of the Subsystem. Consider the complexity as average for all
+cases. Below-mentioned is the way how to compute FP.
+
+Functional Point (FP) Analysis
+Measurement
+Parameter
+
+Count
+
+Number of external inputs (EI)
+
+Weighing Factor
+
+Total_Count
+
+Simple
+
+Average
+
+Complex
+
+32
+
+32*4=128
+
+3
+
+4
+
+6
+
+Number of external outputs
+(EO)
+
+60
+
+60*5=300
+
+4
+
+5
+
+7
+
+Number of external inquiries
+(EQ)
+
+24
+
+24*4=96
+
+3
+
+4
+
+6
+
+Number of internal files (ILF)
+
+8
+
+8*10=80
+
+7
+
+10
+
+15
+
+Number of external interfaces
+(EIF)
+
+2
+
+2*7=14
+
+5
+
+7
+
+10
+
+Functional Point (FP) Analysis
+• From the above tables, Functional Point is calculated with the following
+formula
+• FP = Count-Total * [0.65 + 0.01 * ⅀(fi)]
+Complexity Adjustment Factor (CAF)
+•
+= Count * CAF
+• Here, the count-total is taken from the chart.
+• CAF = [0.65 + 0.01 * ⅀(fi)]
+• ⅀(fi) = sum of all 14 questions and it also shows the complexity factor - CAF.
+• CAF varies from 0.65 to 1.35 and ⅀(fi) ranges from 0 to 70.
+• When ⅀(fi) = 0, CAF = 0.65 and when ⅀(fi) = 70, CAF = 0.65 + (0.01*70) = 0.65
++ 0.7 = 1.35
+
+Functional Point (FP) Analysis
+• Set of 14 questions:
+
+Sr No Question (General System Characteristic)
+
+Meaning
+
+1
+
+Data communications
+
+Does the system use communication networks?
+
+2
+
+Distributed data processing
+
+Is processing distributed across multiple systems?
+
+3
+
+Performance
+
+Are there performance requirements?
+
+4
+
+Heavily used configuration
+
+Does the system run on heavily used hardware?
+
+5
+6
+7
+
+Transaction rate
+On-line data entry
+End-user efficiency
+
+Is transaction processing high?
+Is online data entry required?
+Is user efficiency important?
+
+8
+
+On-line update
+
+Does the system update data online?
+
+9
+
+Complex processing
+
+Does the system have complex logic or calculations?
+
+10
+11
+12
+
+Reusability
+Installation ease
+Operational ease
+
+Is software designed for reuse?
+Is easy installation required?
+Is easy operation required?
+
+13
+
+Multiple sites
+
+Will the system be used at multiple locations?
+
+14
+
+Facilitate change
+
+Is the system designed for future changes?
+
+Functional Point (FP) Analysis
+• Each question is rated:
+Rating
+0
+1
+2
+3
+4
+5
+
+Meaning
+No influence
+Incidental
+Moderate
+Average
+Significant
+Strong influence
+ATM Case Study
+
+Use Case Point Analysis
+• Use Case Points Analysis estimates the development effort by
+analyzing:
+• Number and complexity of actors
+• Number and complexity of use cases
+• Technical factors
+• Environmental factors
+• It was proposed by Gustav Karner as an extension of objectoriented analysis methods.
+
+Use Case Point Analysis
+• Steps in Use Case Points Analysis
+• Step 1: Identify and Classify Actors
+• Actors are external entities interacting with the system.
+Actor Type
+
+Description
+
+Weight
+
+Simple
+
+Another system with API
+
+1
+
+Average
+
+System interacting through protocol (e.g., TCP/IP)
+
+2
+
+Complex
+
+Human user using GUI
+
+3
+
+Use Case Point Analysis
+• Step 2: Identify and Classify Use Cases
+• Use cases are categorized based on the number of transactions.
+
+Use Case Type
+Simple
+Average
+Complex
+
+Transactions
+≤3
+4–7
+≥8
+
+Weight
+5
+10
+15
+
+Use Case Point Analysis
+• Step 2: Identify and Classify Use Cases
+• Use cases are categorized based on the number of transactions.
+
+Use Case Type
+Simple
+Average
+Complex
+
+Transactions
+≤3
+4–7
+≥8
+
+Weight
+5
+10
+15
+
+Use Case Point Analysis
+•
+
+Use Case Point Analysis
+•
+
+Use Case Point Analysis
+•
+
+Use Case Point Analysis
+•
+
+Use Case Point Analysis
+•
+
+Use Case Point Analysis
+• Advantages of Use Case Points
+• Works well with object-oriented projects
+• Easy to apply in early development stages
+• Based on functional requirements
+• Suitable for Agile and UML-based development
+• Limitations
+• Depends on accurate use case documentation
+• Estimation may vary with analyst experience
+• Not ideal for systems without clear use cases
+
+Use Case Point Analysis
+•
+Actor
+
+Type
+
+Weight
+
+Customer (ATM User)
+
+Complex
+
+3
+
+Bank Server System
+
+Average
+
+2
+
+ATM Hardware System
+
+Simple
+
+1
+
+Use Case Point Analysis
+•
+
+Transactions
+
+Type
+
+Weight
+
+≤3
+
+Simple
+
+5
+
+4–7
+
+Average
+
+10
+
+≥8
+
+Complex
+
+15
+
+Use Case
+
+Type
+
+Weight
+
+Withdraw Cash
+
+Complex
+
+15
+
+Use Case Point Analysis
+•
+
+Use Case Point Analysis
+• Prepare Use Case Point estimation for ATM Withdrawal System
+• 4. Technical Complexity Factor (TCF)
+No
+
+Factor
+
+1
+
+Rating
+
+Result
+
+Distributed system 2
+
+3
+
+6
+
+2
+
+Performance
+
+2
+
+4
+
+8
+
+3
+
+End user efficiency 1
+
+3
+
+3
+
+4
+
+Complex
+processing
+
+1
+
+4
+
+4
+
+5
+
+Reusability
+
+1
+
+3
+
+3
+
+6
+
+Easy installation
+
+0.5
+
+2
+
+1
+
+7
+
+Easy use
+
+0.5
+
+3
+
+1.5
+
+8
+
+Portability
+
+2
+
+3
+
+6
+
+9
+
+Easy change
+
+1
+
+3
+
+3
+
+10
+
+Concurrency
+
+1
+
+4
+
+4
+
+11
+
+Security
+
+1
+
+5
+
+5
+
+12
+
+Access for third
+party
+
+1
+
+2
+
+2
+
+13
+
+Training required
+
+1
+
+2
+
+2
+
+• Sum = 48.5
+TCF=0.6+(0.01×48.5)=0.6+0.485=1.085
+
+Weight
+
+Use Case Point Analysis
+•
+No
+
+Factor
+
+Weight
+
+Rating
+
+Result
+
+1
+
+Analyst capability
+
+1.5
+
+4
+
+6
+
+2
+
+Application
+experience
+
+0.5
+
+3
+
+1.5
+
+3
+
+OO experience
+
+1
+
+3
+
+3
+
+4
+
+Lead analyst
+capability
+
+0.5
+
+4
+
+2
+
+5
+
+Motivation
+
+1
+
+4
+
+4
+
+6
+
+Stable
+requirements
+
+2
+
+3
+
+6
+
+7
+
+Part-time workers
+
+-1
+
+1
+
+-1
+
+8
+
+Difficult language
+
+-1
+
+2
+
+-2
+
+Use Case Point Analysis
+•
+
+Use Case Point Analysis
+•
+
+Use Case Point Analysis
+•
+
+Step
+
+Value
+
+UAW
+
+6
+
+UUCW
+
+15
+
+UUCP
+
+21
+
+TCF
+
+1.085
+
+ECF
+
+0.815
+
+UCP
+
+19
+
+Effort
+
+380 hours
+
+Time
+
+48 days
+
+Lab Assignment
+• 8. Perform software cost estimation exercises using Function
+Point Analysis and Use Case Points for a given software project.
+
+Risk management and mitigation
+• Definition
+• Risk management is the process of identifying, analyzing, and
+controlling potential problems (risks) that may affect the success
+of a software project.
+• A risk is an uncertain event that can negatively impact cost, time,
+quality, or performance of the software project.
+
+Risk management and mitigation
+• Objectives of Risk Management
+• Identify possible risks in the project
+• Analyze their impact
+• Reduce project uncertainty
+• Avoid project failure
+• Ensure timely and successful project completion
+
+Risk management and mitigation
+• Risk management strategies in software engineering can be
+classified into:
+• Reactive Risk Management
+• Proactive Risk Management
+
+• These approaches define how a team handles risks in a project.
+
+Risk management and mitigation
+• 1. Reactive Risk Management
+• Definition
+• Reactive risk management means responding to risks only after they occur.
+• The team takes action when a problem happens.
+
+• Simple Meaning
+
+• Fix the problem after it occurs
+
+• Working
+• No advance planning
+• Wait for issue
+• Solve when it appears
+• Crisis management approach
+
+Risk management and mitigation
+1. Reactive Risk Management
+
+• Example
+• ATM Software Project
+• Problem: Server crashes during testing
+• Action:
+• Fix bug
+• Restart server
+• Patch software
+• Risk handled after occurrence.
+• Characteristics
+• Fire-fighting approach
+• No early planning
+• High stress
+• May cause delay
+• May increase cost
+
+• Advantages
+• Simple to implement
+• No extra planning needed
+• Useful for small projects
+• Disadvantages
+• Late problem detection
+• Increased cost
+• Schedule delay
+• Poor project control
+
+Risk management and mitigation
+• 2. Proactive Risk Management
+• Definition
+• Proactive risk management means identifying and preventing risks before they occur.
+• The team plans in advance.
+
+• Simple Meaning
+• Prevent the problem before it occurs
+
+• Working
+• Identify risks early
+• Analyze risks
+• Plan mitigation
+• Monitor continuously
+
+Risk management and mitigation
+• 2. Proactive Risk Management
+• Example
+• ATM Software Project
+• Risk: Server failure
+• Action:
+• Backup server
+• Cloud backup
+• Testing
+• Risk prevented before occurrence.
+
+• Characteristics
+• Planned approach
+• Continuous monitoring
+• Risk mitigation
+• Better project control
+
+• Advantages
+• Reduces project failure
+• Saves cost
+• Improves quality
+• Timely completion
+
+• Disadvantages
+• Requires planning
+• Requires effort
+• Needs experience
+
+Risk management and mitigation
+• Reactive vs Proactive Risk Management
+Feature
+
+Reactive
+
+Proactive
+
+Approach
+
+Fix after problem
+
+Prevent before
+problem
+
+Planning
+
+No
+
+Yes
+
+Risk handling
+
+After occurrence
+
+Before occurrence
+
+Cost
+
+High
+
+Low
+
+Project control
+
+Poor
+
+Good
+
+Example
+
+Fix server crash
+
+Backup server
+
+Suitable for
+
+Small projects
+
+Large projects
+
+Risk management and mitigation
+• software risk has two important characteristics:
+• Uncertainty
+• Loss
+
+• This means a risk in software engineering is something that may
+happen in the future and can cause damage to the project.
+
+Risk management and mitigation
+• 1. Uncertainty
+• Meaning
+• Uncertainty means the risk may or may not happen.
+• It is not confirmed
+• It is not 100% sure
+• It is a possible future problem
+• There are no guaranteed risks
+• So, risk is a possibility, not a certainty.
+
+• Example
+• ATM Software Project
+• Risk: Server may fail during operation
+• It may fail
+• It may not fail
+• No guarantee
+• So this is uncertainty.
+
+Risk management and mitigation
+•
+•
+•
+•
+•
+•
+•
+•
+•
+
+2. Loss
+Meaning
+Loss means if the risk happens, it will create problems or damage.
+Financial loss
+Time delay
+System failure
+Quality issues
+Security issues
+So risk causes negative impact.
+
+•
+•
+•
+•
+•
+•
+•
+•
+•
+
+Example
+ATM System
+Risk: Server failure
+Loss:
+ATM stops working
+Customers cannot withdraw money
+Bank loses reputation
+Financial loss
+This is loss.
+
+Simple Example
+Risk: Developer may leave project
+Uncertainty:
+• Developer may leave
+• Developer may not leave
+Loss:
+• Delay in project
+• Extra cost
+• Work disruption
+So it is a software risk.
+
+Real-Life Example
+Risk: Requirement changes
+Uncertainty:
+•Client may change requirements
+•Client may not change requirements
+Loss:
+•Rework
+•Delay
+•Cost increase
+
+Risk management and mitigation:Types of Software Risks
+• Risk identification is the process of finding possible risks that may
+affect the project.
+• Software risks can be classified into the following categories:
+• Project Risks
+• Technical Risks
+• Business Risks
+• Known Risks
+• Predictable Risks
+
+Risk management and mitigation:Types of Software Risks
+• 1. Project Risks
+• Definition
+• Project risks affect the project schedule, cost, resources, and timeline.
+• They are related to project planning and management.
+• Examples
+Project Risk
+
+Explanation
+
+Lack of developers
+
+Work may get delayed
+
+Budget shortage
+
+Project cannot continue
+
+Schedule delay
+
+Late delivery
+
+Resource unavailability
+
+Development slows down
+
+• ATM System Example
+• Risk: Developer leaves project
+Impact: Delay in ATM software development
+• This is a project risk.
+
+Risk management and mitigation:Types of Software Risks
+•
+•
+•
+•
+•
+
+•
+•
+•
+•
+•
+•
+
+2. Technical Risks
+Definition
+Technical risks affect the quality and performance of the software system.
+They are related to technology, design, and implementation.
+Examples
+
+Technical Risk
+
+Explanation
+
+New technology
+
+Difficult to implement
+
+System crash
+
+Poor performance
+
+Security issues
+
+Data leakage
+
+Integration failure
+
+Modules not working together
+
+ATM Example
+Risk: ATM server fails due to software bug
+Impact:
+System failure
+Transaction errors
+This is technical risk.
+
+Risk management and mitigation:Types of Software Risks
+• 3. Business Risks
+• Definition
+• Business risks affect the business success of the software project.
+• They are related to market, management, and financial success.
+• Examples
+Business Risk
+
+Explanation
+
+Product not accepted
+
+Loss in market
+
+Budget cut
+
+Project stopped
+
+Competitor product
+
+Loss of customers
+
+Change in business strategy
+
+Project cancelled
+
+• ATM Example
+• Risk: Bank decides to stop ATM project
+• Impact:
+• Financial loss
+• Project cancelled
+• This is business risk.
+
+Risk management and mitigation:Types of Software Risks
+• 4. Known Risks
+• Definition
+• Known risks are risks that can be identified in advance during project planning.
+• They are already known and documented.
+• Examples
+Known Risk
+
+Explanation
+
+Requirement changes
+
+Common in projects
+
+Staff shortage
+
+Known issue
+
+Technology limitation
+
+Identified early
+
+• ATM Example
+• Risk: Network connectivity issue
+• Already known in planning
+• So it is known risk.
+
+Risk management and mitigation:Types of Software Risks
+• 5. Predictable Risks
+• Definition
+• Predictable risks are risks that can be predicted based on past experience.
+• They are expected from previous projects or historical data.
+• Examples
+Predictable Risk
+
+Explanation
+
+Schedule delay
+
+Common in software projects
+
+Requirement changes
+
+Happens frequently
+
+Cost overrun
+
+Based on past experience
+
+• ATM Example
+• Risk: Delay in testing phase
+• Based on previous ATM projects
+• So it is predictable risk.
+
+Risk management and mitigation:Types of Software Risks
+
+Risk Type
+
+Meaning
+
+Example
+
+Project Risk
+
+Affects schedule and cost
+
+Developer leaves
+
+Technical Risk
+
+Affects software quality
+
+Server crash
+
+Business Risk
+
+Affects business success
+
+Project cancelled
+
+Known Risk
+
+Identified in advance
+
+Requirement change
+
+Predictable Risk
+
+Expected from past experience
+
+Testing delay
+
+Risk management and mitigation: Principles of Risk Management
+• Risk management is the process of identifying, analyzing, and controlling risks in a software
+project to reduce their negative impact.
+• Principles
+• Maintain global perspective
+Consider risks from technical, business, and project viewpoints.
+• Take a forward-looking view
+Identify risks early and plan mitigation strategies.
+• Encourage open communication
+Team members should freely report risks.
+• Integrate risk management into project management
+Risk management should be part of planning and development.
+• Emphasize continuous process
+Risk management should be done throughout the project.
+• Develop a shared product vision
+All stakeholders should understand project goals.
+• Encourage teamwork
+Risk handling requires coordination among team members.
+
+Risk management and mitigation: Risk Components and Drivers
+• Risk components and drivers help in analyzing the impact of risks on a software project.
+Each identified risk is evaluated based on four components and four severity categories.
+• Risk Components
+• Performance – Impact on software quality and functionality
+• Support – Impact on maintainability and usability
+• Cost – Impact on project budget
+• Schedule – Impact on project timeline
+• These components help determine how serious a risk is.
+• Risk Severity Categories
+• Each risk component is evaluated in four categories:
+Category
+
+Meaning
+
+Negligible
+
+Very small impact
+
+Marginal
+
+Minor impact
+
+Critical
+
+Serious impact
+
+Catastrophic
+
+Project failure
+
+Risk management and mitigation: Risk Components and Drivers
+• 1. Performance Risk
+• Impact on system performance and functionality.
+Category
+
+Description
+
+Negligible
+
+Small performance issue, easily fixable
+
+Marginal
+
+Some features affected but system works
+
+Critical
+
+Major functionality affected
+
+Catastrophic
+
+System fails to work
+
+• Example
+• Online Banking System
+• Negligible → Slight delay in page loading
+• Marginal → Some reports not generated
+• Critical → Transaction failure
+• Catastrophic → System crashes completely
+
+Risk management and mitigation: Risk Components and Drivers
+• 2. Support Risk
+• Impact on maintenance and support.
+Category
+
+Description
+
+Negligible
+
+Easy to maintain
+
+Marginal
+
+Some maintenance effort required
+
+Critical
+
+Difficult to maintain
+
+Catastrophic
+
+System cannot be supported
+
+• Example
+• College ERP System
+• Negligible → Minor bug fixes needed
+• Marginal → Frequent updates required
+• Critical → Complex debugging needed
+• Catastrophic → System cannot be modified
+
+Risk management and mitigation: Risk Components and Drivers
+• 3. Cost Risk
+• Impact on project budget.
+Category
+
+Description
+
+Negligible
+
+Small cost increase
+
+Marginal
+
+Moderate cost increase
+
+Critical
+
+High budget increase
+
+Catastrophic
+
+Budget exceeds limits
+
+• Example
+• Software Development Project
+• Negligible → Extra ₹10,000 needed
+• Marginal → Extra ₹50,000 needed
+• Critical → Extra ₹2,00,000 needed
+• Catastrophic → Project cancelled due to cost
+
+Risk management and mitigation: Risk Components and Drivers
+• 4. Schedule Risk
+• Impact on project timeline.
+Category
+
+Description
+
+Negligible
+
+Delay of few days
+
+Marginal
+
+Delay of few weeks
+
+Critical
+
+Delay of few months
+
+Catastrophic
+
+Project completely delayed
+
+• Example
+• Mobile App Development
+• Negligible → 2-day delay
+• Marginal → 2-week delay
+• Critical → 2-month delay
+• Catastrophic → Project stopped
+
+Risk management and mitigation: Risk Components and Drivers
+• Risk Components and Drivers Table
+Risk Component
+
+Negligible
+
+Marginal
+
+Critical
+
+Catastrophic
+
+Performance
+
+Minor issue
+
+Some features
+affected
+
+Major function
+failure
+
+System fails
+
+Support
+
+Easy maintenance
+
+Moderate effort
+
+Difficult
+maintenance
+
+No support
+possible
+
+Cost
+
+Small increase
+
+Moderate increase
+
+High increase
+
+Budget failure
+
+Schedule
+
+Few days delay
+
+Weeks delay
+
+Months delay
+
+Project collapse
+
+Risk management and mitigation:Risk Projection
+• Risk projection means estimating:
+• Probability
+• Impact
+• Risk priority
+
+• Steps
+
+1. Estimate likelihood
+2. Estimate consequences
+3. Determine risk priority
+4. Create risk table
+
+Risk management and mitigation: Risk Table
+• A risk table helps prioritize risks.
+• Example
+Risk
+
+Probability
+
+Impact
+
+Priority
+
+Requirement change
+
+0.7
+
+High
+
+1
+
+Staff shortage
+
+0.6
+
+High
+
+2
+
+Hardware failure
+
+0.3
+
+Medium
+
+3
+
+• Higher probability and impact = higher priority.
+
+Risk management and mitigation: Risk Impact
+• Risk impact means how much damage risk causes.
+Level
+
+Meaning
+
+Low
+
+Minor delay
+
+Medium
+
+Moderate loss
+
+High
+
+Major failure
+
+• Example
+• Requirement change → delay in project → high impact
+
+Risk management and mitigation: Risk Exposure
+•
+
+Risk management and mitigation: Risk Refinement
+• Risk refinement means breaking large risks into smaller risks.
+• Example
+• Technical Risk
+• ↓
+• New technology risk
+• ↓
+• Developers not trained
+• Integration issues
+• Testing difficulty
+• This helps in better planning.
+
+Risk management and mitigation
+All of the risk analysis activities presented to this point have a single
+
+goal—to assist the project team in developing a strategy for dealing
+with risk.
+ An effective strategy must consider three issues:
+ risk avoidance,
+ risk monitoring, and
+ risk management and contingency planning.
+
+Risk management and mitigation
+• Risk mitigation means reducing risk.
+• Strategies
+• Avoid risk
+• Reduce risk
+• Transfer risk
+• Accept risk
+• Example
+
+Risk
+
+Mitigation
+
+Staff shortage
+
+Hire backup staff
+
+Requirement change
+
+Freeze requirements
+
+Server failure
+
+Use backup server
+
+Risk management and mitigation: Risk Monitoring
+• Risk monitoring means tracking risks during project.
+• Activities
+• Check risk status
+• Identify new risks
+• Review mitigation plan
+• Update risk table
+• Example:
+• Weekly risk review meeting.
+
+Risk management and mitigation: Risk Management
+• Risk management is the complete process.
+• Steps
+• Risk Identification
+• Risk Analysis
+• Risk Projection
+• Risk Mitigation
+• Risk Monitoring
+• Flow
+• Risk Identification → Risk Analysis → Risk Projection → Risk Mitigation
+→ Risk Monitoring
+
+Lab Assignment
+• 9. Identify potential risks and prepare mitigation strategies for a
+hypothetical software development project.
+
+Quality assurance processes and metrics
+• When you download a mobile app and it crashes, what do you
+feel?
+• Quality Assurance ensures that software works correctly, reliably,
+and meets user requirements before delivery.
+
+Quality assurance processes and metrics
+• 2. What is Quality Assurance (QA)?
+• Quality Assurance is a set of activities that ensures software
+processes and products meet quality standards.
+• Simple definition : QA is a process that ensures software is
+developed correctly and without defects.
+
+Quality assurance processes and metrics
+• 3. Difference Between QA and Testing
+Quality Assurance
+
+Testing
+
+Process oriented
+
+Product oriented
+
+Prevents defects
+
+Finds defects
+
+Done throughout development
+
+Done after development
+
+Example: Reviews, standards
+
+Example: Test cases
+
+Quality assurance processes and metrics
+4. Quality Assurance Process
+
+• Step
+1:
+Define
+Quality Standards
+• Decide:
+• Coding standards
+• Documentation
+standards
+• Testing standards
+• Design standards
+
+• Example:
+• Use proper variable
+names in C program.
+
+• Step 2: Process Definition
+• Define how software will be
+developed.
+• Example:
+• Requirement analysis
+• Design
+• Coding
+• Testing
+• Maintenance
+
+• This ensures
+development.
+
+structured
+
+Quality assurance processes and metrics
+4. Quality Assurance Process
+
+• Step 3: Reviews and
+Audits
+• Check work at each stage.
+• Types:
+• Requirement review
+• Design review
+• Code review
+• Testing review
+
+• Example:
+• Teacher checking student
+assignment before
+submission.
+
+• Step 4: Testing
+• Testing ensures:
+
+• Software works correctly
+• No bugs
+• Requirements satisfied
+
+• Example:
+• ATM withdrawal system
+test.
+
+Quality assurance processes and metrics
+4. Quality Assurance Process
+
+• Step 5: Defect Tracking
+• Record errors.
+• Example:
+
+Bug ID
+
+Description
+
+Status
+
+101
+
+Login error
+
+Fixed
+
+• Step
+6:
+Continuous
+Improvement
+• Improve process.
+• Example:
+• If many bugs in coding →
+improve coding standards
+
+Quality assurance processes and metrics
+• 5. Quality Assurance Activities
+• 1. Quality Planning
+• Plan quality standards.
+• Example:
+• Project should have less than 5% bugs.
+• 2. Quality Control
+• Check product quality.
+• Example:
+• Testing software.
+• 3. Quality Improvement
+• Improve development process.
+• Example:
+• Training developers.
+
+Quality assurance processes and metrics
+• 6. Quality Metrics
+• How do we measure student performance?
+• Similarly,
+• Software quality is measured using metrics.
+• 7. What is Quality Metric?
+• Quality Metric is a measure used to evaluate software quality.
+• Example:
+• Number of bugs
+• Code size
+• Testing coverage
+• Failure rate
+
+Quality assurance processes and metrics
+• 8. Types of Quality
+Metrics
+• 1. Product Metrics
+• Measure software product.
+• Examples:
+• Lines of code
+• Number of defects
+• Reliability
+• Example:
+• Banking software has 20
+bugs.
+
+• 2. Process Metrics
+• Measure development
+process.
+• Examples:
+• Time taken to develop
+• Cost
+• Efficiency
+• Example:
+• Project completed in 3
+months.
+
+• 3. Project Metrics
+• Measure
+project
+performance.
+• Examples:
+• Cost
+• Schedule
+• Team productivity
+• Example:
+• Project completed
+within budget.
+
+Tools: Trello, JIRA (introduction)
+• 10. Hands-on with Project Management Tools: Practice project
+tracking, task assignment, and progress monitoring using Trello
+and JIRA on a simulated project.
+
+

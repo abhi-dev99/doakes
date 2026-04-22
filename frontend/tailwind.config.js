@@ -8,39 +8,76 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Dark theme - Deep blue/teal accent (unique, not generic purple)
-        argus: {
-          darker: '#0a0f1a',
-          dark: '#0f172a',
-          card: '#1e293b',
-          border: '#334155',
-          accent: '#06b6d4',      // Cyan accent
-          'accent-dark': '#0891b2',
-          success: '#10b981',
-          warning: '#f59e0b',
-          danger: '#ef4444',
+        // Sophisticated, neutral 'Apple' palette
+        apple: {
+          blue: '#0071e3', // Standard iOS blue
+          blueHover: '#0077ED',
+          gray: '#F5F5F7', // Standard Apple background off-white
+          grayDark: '#1D1D1F', // Standard Apple dark text
+          grayBorder: '#D2D2D7', // Subtle borders
+          red: '#FF3B30',
+          orange: '#FF9500',
+          green: '#34C759',
+          glass: 'rgba(255, 255, 255, 0.72)', // Frosted glass
+          glassDark: 'rgba(29, 29, 31, 0.72)'
         },
-        // Light theme
+        argus: {
+          darker: '#000000',
+          dark: '#1C1C1E',
+          card: '#2C2C2E',
+          border: '#3A3A3C',
+          accent: '#0A84FF',
+          'accent-dark': '#0071E3',
+          success: '#30D158',
+          warning: '#FF9F0A',
+          danger: '#FF453A',
+        },
         'argus-light': {
-          bg: '#f8fafc',
-          card: '#ffffff',
-          border: '#e2e8f0',
-          text: '#0f172a',
-          muted: '#64748b',
+          bg: '#F5F5F7',
+          card: '#FFFFFF',
+          border: '#E5E5EA',
+          text: '#1D1D1F',
+          muted: '#86868B',
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        sans: [
+          'Inter',
+          '-apple-system', 
+          'BlinkMacSystemFont', 
+          '"SF Pro Display"', 
+          '"SF Pro Text"', 
+          '"Helvetica Neue"', 
+          'Helvetica', 
+          'Arial', 
+          'sans-serif'
+        ],
+        mono: [
+          'JetBrains Mono',
+          'SFMono-Regular',
+          'Consolas',
+          'Liberation Mono',
+          'Menlo',
+          'monospace'
+        ],
+      },
+      boxShadow: {
+        'apple-soft': '0 4px 24px rgba(0, 0, 0, 0.04)',
+        'apple-float': '0 10px 40px rgba(0, 0, 0, 0.08)',
+        'apple-dark': '0 4px 24px rgba(0, 0, 0, 0.4)',
       },
       animation: {
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'glow': 'glow 2s ease-in-out infinite alternate',
+        'fade-in': 'fadeIn 0.3s ease-out forwards',
+        'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       },
       keyframes: {
-        glow: {
-          '0%': { boxShadow: '0 0 5px rgb(6, 182, 212, 0.5)' },
-          '100%': { boxShadow: '0 0 20px rgb(6, 182, 212, 0.8)' },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
         }
       }
     },

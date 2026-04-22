@@ -270,21 +270,95 @@ const StatCard = memo(function StatCard({ icon: Icon, title, value, subtitle, co
 });
 
 // Transaction Row
-const TransactionRow = memo(function TransactionRow({ transaction, isNew }) {
-  const [expanded, setExpanded] = useState(false);
+const TransactionRow = memo(function TransactionRow({ transaction, isNew, expanded, onToggle }) {
   const risk = transaction.risk_level || 'LOW';
   const channelKey = (transaction.channel || 'upi').toLowerCase();
   const channel = CHANNEL_CONFIG[channelKey] || CHANNEL_CONFIG.upi;
   const ChannelIcon = channel.icon;
+  const summaryId = `txn-summary-${transaction.transaction_id}`;
+  const detailsId = `txn-details-${transaction.transaction_id}`;
+
+  const handleToggle = () => {
+    onToggle?.(transaction.transaction_id);
+  };
+
+  const signalTiles = [
+    {
+      key: 'graph_fraud',
+      title: 'Graph Analysis',
+      color: 'purple',
+      active: Boolean(transaction.graph_fraud?.enabled),
+      score: transaction.graph_fraud?.graph_risk_score,
+      detail: transaction.graph_fraud?.risk_factors?.[0] || 'No connected fraud pattern detected'
+    },
+    {
+      key: 'sequence_risk',
+      title: 'Rule-based Sequence',
+      color: 'cyan',
+      active: Boolean(transaction.sequence_risk?.sequence_length > 0),
+      score: transaction.sequence_risk?.sequence_risk_score,
+      detail: transaction.sequence_risk?.risk_factors?.[0] || 'Insufficient history'
+    },
+    {
+      key: 'merchant_risk',
+      title: 'Merchant Risk',
+      color: 'amber',
+      active: Boolean(transaction.merchant_risk),
+      score: transaction.merchant_risk?.merchant_risk_score,
+      detail: transaction.merchant_risk?.risk_factors?.[0] || 'New/untested merchant'
+    },
+    {
+      key: 'pre_auth',
+      title: 'Pre-Auth',
+      color: transaction.pre_auth?.decision === 'BLOCK' ? 'red' : transaction.pre_auth?.decision === 'CHALLENGE' ? 'amber' : 'emerald',
+      active: Boolean(transaction.pre_auth),
+      score: transaction.pre_auth?.decision === 'BLOCK' ? 100 : transaction.pre_auth?.decision === 'CHALLENGE' ? 70 : 0,
+      detail: transaction.pre_auth?.decision === 'BLOCK'
+        ? (transaction.pre_auth?.block_reasons?.[0] || 'Blocked before authorization')
+        : transaction.pre_auth?.decision === 'CHALLENGE'
+          ? (transaction.pre_auth?.challenge_reasons?.[0] || 'Challenge required')
+          : 'ALLOW'
+    },
+    {
+      key: 'phishing_detected',
+      title: 'Phishing Check',
+      color: transaction.phishing_detected ? 'rose' : 'emerald',
+      active: Boolean(transaction.phishing_detected),
+      score: transaction.phishing_detected ? 100 : 0,
+      detail: transaction.phishing_detected
+        ? (transaction.phishing_indicators?.[0] || transaction.attack_type || 'Phishing indicators found')
+        : 'No phishing indicators'
+    }
+  ];
+
+  const signalStyles = {
+    purple: { icon: 'text-purple-400', label: 'text-purple-400', score: 'bg-purple-500/20 text-purple-300' },
+    cyan: { icon: 'text-cyan-400', label: 'text-cyan-400', score: 'bg-cyan-500/20 text-cyan-300' },
+    amber: { icon: 'text-amber-400', label: 'text-amber-400', score: 'bg-amber-500/20 text-amber-300' },
+    emerald: { icon: 'text-emerald-400', label: 'text-emerald-400', score: 'bg-emerald-500/20 text-emerald-300' },
+    red: { icon: 'text-red-400', label: 'text-red-400', score: 'bg-red-500/20 text-red-300' },
+    rose: { icon: 'text-rose-400', label: 'text-rose-400', score: 'bg-rose-500/20 text-rose-300' }
+  };
   
   return (
     <div className={clsx(
-      "table-row transition-all",
-      isNew && "animate-slide-in bg-cyan-500/5"
+      "txn-row transition-all overflow-hidden",
+      isNew && "animate-slide-in bg-cyan-500/5 ring-1 ring-cyan-400/20"
     )}>
       <div 
-        className="p-2.5 sm:p-3 flex items-center gap-2 sm:gap-3 cursor-pointer"
-        onClick={() => setExpanded(!expanded)}
+        id={summaryId}
+        className="p-2.5 sm:p-3 flex items-center gap-2 sm:gap-3 cursor-pointer select-none"
+        onClick={handleToggle}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleToggle();
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-expanded={expanded}
+        aria-controls={detailsId}
       >
         {/* Risk Indicator */}
         <div className={clsx("risk-indicator h-10 shrink-0", risk.toLowerCase())} />
@@ -322,162 +396,49 @@ const TransactionRow = memo(function TransactionRow({ transaction, isNew }) {
           </div>
         </div>
         
-        <ChevronRight className={clsx(
-          "w-4 h-4 text-gray-600 transition-transform shrink-0",
-          expanded && "rotate-90"
-        )} />
+        <button
+          type="button"
+          className="ml-1 inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition"
+          onClick={(event) => {
+            event.stopPropagation();
+            handleToggle();
+          }}
+          aria-label={expanded ? 'Collapse transaction details' : 'Expand transaction details'}
+        >
+          <span className="hidden sm:inline">{expanded ? 'Hide' : 'Details'}</span>
+          <ChevronRight className={clsx(
+            "w-4 h-4 text-gray-600 transition-transform shrink-0",
+            expanded && "rotate-90"
+          )} />
+        </button>
       </div>
       
       {expanded && (
-        <div className="px-3 pb-3 animate-fade-in">
-          {/* Advanced Features Panel */}
-          {(transaction.graph_fraud || transaction.sequence_risk || transaction.merchant_risk || transaction.pre_auth || transaction.phishing_detected) && (
-            <div className="mb-3 space-y-2">
-              {/* Graph Fraud Detection */}
-              {transaction.graph_fraud && transaction.graph_fraud.enabled && (
-                <div className="glass-card p-2 border-l-2 border-purple-500">
+        <div id={detailsId} className="px-3 pb-3 animate-fade-in" aria-live="polite">
+          <div className="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {signalTiles.map((tile) => {
+              const tone = tile.color === 'rose' ? 'rose' : tile.color;
+              const styles = signalStyles[tile.color] || signalStyles.emerald;
+              const scoreValue = typeof tile.score === 'number' ? tile.score : null;
+              const scoreTone = scoreValue === null ? 'text-gray-500' : scoreValue >= 70 ? 'bg-red-500/20 text-red-400' : scoreValue >= 40 ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400';
+              const Icon = tile.key === 'graph_fraud' ? Network : tile.key === 'sequence_risk' ? Brain : tile.key === 'merchant_risk' ? Store : tile.key === 'pre_auth' ? Shield : AlertOctagon;
+
+              return (
+                <div key={tile.key} className="glass-card p-2 border-l-2 border-argus-border/60">
                   <div className="flex items-center gap-2 mb-1">
-                    <Network className="w-3.5 h-3.5 text-purple-400" />
-                    <span className="text-xs font-semibold text-purple-400">Graph Analysis</span>
-                    <span className={`ml-auto text-xs font-mono px-2 py-0.5 rounded-full ${
-                      transaction.graph_fraud.graph_risk_score >= 70 ? 'bg-red-500/20 text-red-400' :
-                      transaction.graph_fraud.graph_risk_score >= 40 ? 'bg-amber-500/20 text-amber-400' :
-                      'bg-emerald-500/20 text-emerald-400'
-                    }`}>
-                      {transaction.graph_fraud.graph_risk_score?.toFixed(0)}%
+                    <Icon className={`w-3.5 h-3.5 ${styles.icon}`} />
+                    <span className={`text-xs font-semibold ${styles.label}`}>{tile.title}</span>
+                    <span className={`ml-auto text-xs font-mono px-2 py-0.5 rounded-full ${scoreTone}`}>
+                      {scoreValue === null ? 'n/a' : `${scoreValue.toFixed(0)}%`}
                     </span>
                   </div>
-                  {transaction.graph_fraud.risk_factors && transaction.graph_fraud.risk_factors.length > 0 && (
-                    <div className="text-xs text-gray-400 space-y-0.5 pl-5">
-                      {transaction.graph_fraud.risk_factors.slice(0, 2).map((factor, i) => (
-                        <div key={i}>• {factor}</div>
-                      ))}
-                    </div>
-                  )}
-                  {transaction.graph_fraud.sender_analysis?.is_mule && (
-                    <div className="text-xs text-red-400 font-semibold pl-5 mt-1">
-                      ⚠️ Mule Account Detected
-                    </div>
-                  )}
-                </div>
-              )}
-              
-              {/* Sequence Risk (Deep Learning) */}
-              {transaction.sequence_risk && transaction.sequence_risk.sequence_length > 0 && (
-                <div className="glass-card p-2 border-l-2 border-cyan-500">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Brain className="w-3.5 h-3.5 text-cyan-400" />
-                    <span className="text-xs font-semibold text-cyan-400">
-                      {transaction.sequence_risk.model_type || 'ML'} Sequence
-                    </span>
-                    <span className="text-xs text-gray-500">({transaction.sequence_risk.sequence_length} txns)</span>
-                    <span className={`ml-auto text-xs font-mono px-2 py-0.5 rounded-full ${
-                      transaction.sequence_risk.sequence_risk_score >= 70 ? 'bg-red-500/20 text-red-400' :
-                      transaction.sequence_risk.sequence_risk_score >= 40 ? 'bg-amber-500/20 text-amber-400' :
-                      'bg-emerald-500/20 text-emerald-400'
-                    }`}>
-                      {transaction.sequence_risk.sequence_risk_score?.toFixed(0)}%
-                    </span>
+                  <div className="text-xs text-gray-400 pl-5">
+                    {tile.active ? tile.detail : 'Not triggered on this transaction'}
                   </div>
-                  {transaction.sequence_risk.risk_factors && transaction.sequence_risk.risk_factors.length > 0 && (
-                    <div className="text-xs text-gray-400 pl-5">
-                      {transaction.sequence_risk.risk_factors[0]}
-                    </div>
-                  )}
                 </div>
-              )}
-              
-              {/* Merchant Reputation */}
-              {transaction.merchant_risk && (
-                <div className="glass-card p-2 border-l-2 border-amber-500">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Store className="w-3.5 h-3.5 text-amber-400" />
-                    <span className="text-xs font-semibold text-amber-400">Merchant Risk</span>
-                    <span className="text-xs text-gray-500">
-                      Rep: {transaction.merchant_risk.merchant_reputation || 50}/100
-                    </span>
-                    <span className={`ml-auto text-xs font-mono px-2 py-0.5 rounded-full ${
-                      transaction.merchant_risk.merchant_risk_score >= 70 ? 'bg-red-500/20 text-red-400' :
-                      transaction.merchant_risk.merchant_risk_score >= 40 ? 'bg-amber-500/20 text-amber-400' :
-                      'bg-emerald-500/20 text-emerald-400'
-                    }`}>
-                      {transaction.merchant_risk.merchant_risk_score?.toFixed(0)}%
-                    </span>
-                  </div>
-                  {transaction.merchant_risk.risk_factors && transaction.merchant_risk.risk_factors.length > 0 && (
-                    <div className="text-xs text-gray-400 pl-5">
-                      {transaction.merchant_risk.risk_factors[0]}
-                    </div>
-                  )}
-                  {transaction.merchant_risk.chargeback_ratio > 0.01 && (
-                    <div className="text-xs text-red-400 pl-5 mt-1">
-                      Chargeback: {(transaction.merchant_risk.chargeback_ratio * 100).toFixed(2)}%
-                    </div>
-                  )}
-                </div>
-              )}
-              
-              {/* Pre-Auth Decision */}
-              {transaction.pre_auth && (
-                <div className={`glass-card p-2 border-l-2 ${
-                  transaction.pre_auth.decision === 'BLOCK' ? 'border-red-500' :
-                  transaction.pre_auth.decision === 'CHALLENGE' ? 'border-amber-500' :
-                  'border-emerald-500'
-                }`}>
-                  <div className="flex items-center gap-2">
-                    <Shield className={`w-3.5 h-3.5 ${
-                      transaction.pre_auth.decision === 'BLOCK' ? 'text-red-400' :
-                      transaction.pre_auth.decision === 'CHALLENGE' ? 'text-amber-400' :
-                      'text-emerald-400'
-                    }`} />
-                    <span className={`text-xs font-semibold ${
-                      transaction.pre_auth.decision === 'BLOCK' ? 'text-red-400' :
-                      transaction.pre_auth.decision === 'CHALLENGE' ? 'text-amber-400' :
-                      'text-emerald-400'
-                    }`}>
-                      {transaction.pre_auth.decision}
-                    </span>
-                    {transaction.pre_auth.decision === 'CHALLENGE' && transaction.pre_auth.auth_method && (
-                      <span className="text-xs text-gray-500">
-                        → {transaction.pre_auth.auth_method}
-                      </span>
-                    )}
-                    <span className="ml-auto text-xs text-gray-500">
-                      {transaction.pre_auth.latency_ms?.toFixed(1)}ms
-                    </span>
-                  </div>
-                  {transaction.pre_auth.block_reasons && transaction.pre_auth.block_reasons.length > 0 && (
-                    <div className="text-xs text-red-400 pl-5 mt-1">
-                      {transaction.pre_auth.block_reasons[0]}
-                    </div>
-                  )}
-                  {transaction.pre_auth.challenge_reasons && transaction.pre_auth.challenge_reasons.length > 0 && (
-                    <div className="text-xs text-amber-400 pl-5 mt-1">
-                      {transaction.pre_auth.challenge_reasons[0]}
-                    </div>
-                  )}
-                </div>
-              )}
-              
-              {/* Phishing Attack Detected */}
-              {transaction.phishing_detected && (
-                <div className="glass-card p-2 border-l-2 border-rose-500 bg-rose-500/5">
-                  <div className="flex items-center gap-2">
-                    <AlertOctagon className="w-3.5 h-3.5 text-rose-400" />
-                    <span className="text-xs font-semibold text-rose-400">
-                      PHISHING ATTACK
-                    </span>
-                    <span className="text-xs text-gray-500">{transaction.attack_type}</span>
-                  </div>
-                  {transaction.phishing_indicators && transaction.phishing_indicators.length > 0 && (
-                    <div className="text-xs text-rose-300 pl-5 mt-1">
-                      {transaction.phishing_indicators[0]}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+              );
+            })}
+          </div>
           
           <div className="glass-card p-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
             {/* Scores */}
@@ -595,7 +556,8 @@ const TransactionRow = memo(function TransactionRow({ transaction, isNew }) {
   );
 }, (prev, next) => 
   prev.transaction.transaction_id === next.transaction.transaction_id && 
-  prev.isNew === next.isNew
+  prev.isNew === next.isNew &&
+  prev.expanded === next.expanded
 );
 
 // Alert Card
@@ -903,6 +865,7 @@ function App() {
   const [modelStats, setModelStats] = useState({});
   const [filters, setFilters] = useState({ riskLevel: 'all', channel: 'all', search: '' });
   const [activeTab, setActiveTab] = useState('monitoring'); // monitoring, performance, fraudRings
+  const [expandedTxnId, setExpandedTxnId] = useState(null);
   
   const wsRef = useRef(null);
   const newTxnIds = useRef(new Set());
@@ -922,7 +885,23 @@ function App() {
           case 'transaction':
             const txn = data.data;
             newTxnIds.current.add(txn.transaction_id);
-            setTransactions(prev => [txn, ...prev.slice(0, 99)]);
+            setTransactions(prev => {
+              const existingIndex = prev.findIndex(item => item.transaction_id === txn.transaction_id);
+
+              if (existingIndex === 0) {
+                const next = [...prev];
+                next[0] = txn;
+                return next;
+              }
+
+              if (existingIndex > 0) {
+                const next = [...prev];
+                next[existingIndex] = txn;
+                return next;
+              }
+
+              return [txn, ...prev.slice(0, 99)];
+            });
             
             setSessionStats(prev => {
               const n = prev.total_transactions + 1;
@@ -944,6 +923,8 @@ function App() {
                 }
               };
             });
+
+            setExpandedTxnId(txn.transaction_id);
             
             setTimeout(() => newTxnIds.current.delete(txn.transaction_id), 2000);
             break;
@@ -1041,9 +1022,19 @@ function App() {
       return true;
     });
   }, [transactions, filters]);
+
+  useEffect(() => {
+    if (expandedTxnId && !transactions.some(txn => txn.transaction_id === expandedTxnId)) {
+      setExpandedTxnId(null);
+    }
+  }, [expandedTxnId, transactions]);
+
+  const toggleExpandedTxn = useCallback((transactionId) => {
+    setExpandedTxnId(current => current === transactionId ? null : transactionId);
+  }, []);
   
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Header 
         connected={connected}
         simulationActive={simulationActive}
@@ -1054,7 +1045,7 @@ function App() {
         onThemeToggle={theme.toggle}
       />
       
-      <main className="p-3 sm:p-4 max-w-[1800px] mx-auto">
+      <main className="p-3 sm:p-4 max-w-[1800px] mx-auto flex-1 w-full">
         <IndiaBanner stats={stats} />
         
         {/* Stats Header */}
@@ -1144,10 +1135,10 @@ function App() {
         />
         
         {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 items-stretch">
           {/* Transactions */}
-          <div className="lg:col-span-2">
-            <div className="glass-card overflow-hidden">
+          <div className="lg:col-span-2 h-full min-h-0">
+            <div className="glass-card overflow-hidden h-full flex flex-col min-h-[680px]">
               <div className="p-3 border-b border-argus-border/30 flex items-center justify-between">
                 <h3 className="font-semibold text-sm flex items-center gap-2">
                   <Activity className="w-4 h-4 text-cyan-400" />
@@ -1162,12 +1153,14 @@ function App() {
                 )}
               </div>
               
-              <div className="max-h-[500px] overflow-y-auto">
+              <div className="flex-1 min-h-0 overflow-y-auto divide-y divide-argus-border/20">
                 {filteredTxns.length === 0 ? (
                   <div className="p-8 text-center text-gray-500">
                     <Activity className="w-10 h-10 mx-auto mb-2 opacity-30" />
-                    <p className="text-sm">No transactions yet</p>
-                    <p className="text-xs mt-1">Start simulation to see live data</p>
+                    <p className="text-sm">{transactions.length === 0 ? 'No transactions yet' : 'No matching transactions'}</p>
+                    <p className="text-xs mt-1">
+                      {transactions.length === 0 ? 'Start simulation to see live data' : 'Clear filters to view the live stream'}
+                    </p>
                   </div>
                 ) : (
                   filteredTxns.slice(0, 50).map((txn) => (
@@ -1175,6 +1168,8 @@ function App() {
                       key={txn.transaction_id} 
                       transaction={txn}
                       isNew={newTxnIds.current.has(txn.transaction_id)}
+                      expanded={expandedTxnId === txn.transaction_id}
+                      onToggle={toggleExpandedTxn}
                     />
                   ))
                 )}

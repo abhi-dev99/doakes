@@ -120,9 +120,10 @@ class MerchantReputationSystem:
         score = 50  # Start neutral
         
         # Factor 1: Chargeback ratio
-        total_txns = merchant.get('total_transactions', 1)
+        total_txns = merchant.get('total_transactions', 0)
+        safe_total_txns = max(total_txns, 1)
         chargeback_count = merchant.get('chargebacks', 0)
-        chargeback_ratio = chargeback_count / total_txns
+        chargeback_ratio = chargeback_count / safe_total_txns
         
         if chargeback_ratio > 0.02:  # >2% chargeback rate
             score -= 30
@@ -194,9 +195,10 @@ class MerchantReputationSystem:
             risk_factors.append(f"Below-average reputation ({reputation}/100)")
         
         # Factor 2: Chargeback ratio
-        total_txns = merchant.get('total_transactions', 1)
+        total_txns = merchant.get('total_transactions', 0)
+        safe_total_txns = max(total_txns, 1)
         chargeback_count = merchant.get('chargebacks', 0)
-        chargeback_ratio = chargeback_count / total_txns
+        chargeback_ratio = chargeback_count / safe_total_txns
         
         if chargeback_ratio > 0.02:
             risk_score += 25
@@ -223,7 +225,7 @@ class MerchantReputationSystem:
             risk_factors.append(f"Moderate-risk category: {category}")
         
         # Factor 5: Transaction amount vs. average
-        avg_amount = merchant.get('total_volume', 0) / max(total_txns, 1)
+        avg_amount = merchant.get('total_volume', 0) / safe_total_txns
         if avg_amount > 0 and transaction_amount > avg_amount * 5:
             risk_score += 15
             risk_factors.append(f"Amount {transaction_amount/avg_amount:.1f}x higher than average")
