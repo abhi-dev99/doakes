@@ -32,5 +32,9 @@ Thumbs.db
 # Large local datasets (do NOT commit raw training data)
 AIML Dataset.csv
 backend/ml/data/*.csv
+dataset/
+
+# Agent scripts and internal guides
+agent/
 
 # NOTE: docs/ folder is intentionally NOT ignored — all docs are version controlled

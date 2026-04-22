@@ -1,0 +1,21 @@
+List of experiments:
+1. To prepare a Statement Of Work (SOW) document, which addresses the vision, goals and 
+objectives of the real-world problem. 
+2.  To prepare a Software Requirement Specification (SRS) document, based on several types of 
+system requirements, such as functional and non-functional requirements. 
+3. Create and manage use case diagrams for a real-world application (e.g., Online Shopping 
+System) to capture functional requirements. 
+4.  Design detailed class and object diagrams using UML tools (e.g., StarUML, Visual Paradigm) 
+for a given problem statement such as a Student Management System. 
+5.  Develop sequence diagrams illustrating object interactions and activity diagrams representing 
+workflows for a banking transaction system.
+6.  Model the dynamic behavior of a system using state diagrams (e.g., ticket booking process in 
+a cinema management system). 
+7.  Prepare a software project plan with scheduling using Gantt charts and PERT charts for a 
+sample project. 
+8.  Perform software cost estimation exercises using Function Point Analysis and Use Case Points 
+for a given software project. 
+9.  Identify potential risks and prepare mitigation strategies for a hypothetical software 
+development project. 
+10. Hands-on with Project Management Tools: Practice project tracking, task assignment, and 
+progress monitoring using Trello and JIRA on a simulated project. 
