@@ -67,6 +67,7 @@ def init_db():
             risk_level TEXT,
             recommendation TEXT,
             xgboost_score REAL,
+            lightgbm_score REAL,
             anomaly_score REAL,
             rule_score REAL,
             dynamic_behavior_score REAL,
@@ -93,6 +94,7 @@ def init_db():
     cursor.execute("PRAGMA table_info(transactions)")
     existing_txn_cols = {row[1] for row in cursor.fetchall()}
     required_txn_cols = {
+        'lightgbm_score': 'REAL',
         'dynamic_behavior_score': 'REAL',
         'pre_auth_decision': 'TEXT',
         'pre_auth_latency_ms': 'REAL',
@@ -254,23 +256,23 @@ simulation = SimulationState()
 async def lifespan(app: FastAPI):
     """Application lifecycle management"""
     init_db()
-    logger.info("🚀 Initializing ARGUS Fraud Detection Engine...")
+    logger.info("[INIT] Initializing ARGUS Fraud Detection Engine...")
     
     # Initialize ML engine (loads user profiles from disk/database)
     engine = get_engine()
-    logger.info(f"✅ ML Models loaded - {engine.VERSION}")
-    logger.info(f"📊 User Profiles: {len(engine.user_profiles)} loaded ({sum(1 for p in engine.user_profiles.values() if p.is_mature)} mature)")
+    logger.info(f"[READY] ML Models loaded - {engine.VERSION}")
+    logger.info(f"[PROFILES] User Profiles: {len(engine.user_profiles)} loaded ({sum(1 for p in engine.user_profiles.values() if p.is_mature)} mature)")
     
     yield
     
     # Cleanup - SAVE USER PROFILES before shutdown
-    logger.info("💾 Saving user profiles before shutdown...")
+    logger.info("[SAVE] Saving user profiles before shutdown...")
     engine.save_profiles()
     if simulation.active:
         simulation.active = False
         if simulation.task:
             simulation.task.cancel()
-    logger.info("👋 ARGUS shutdown complete")
+    logger.info("[SHUTDOWN] ARGUS shutdown complete")
 
 # ============ FASTAPI APP ============
 
@@ -341,7 +343,10 @@ def get_stats() -> Dict[str, Any]:
             'MEDIUM': risk_dist.get('MEDIUM', 0),
             'HIGH': risk_dist.get('HIGH', 0),
             'CRITICAL': risk_dist.get('CRITICAL', 0)
-        }
+        },
+        'active_alerts': risk_dist.get('HIGH', 0) + risk_dist.get('CRITICAL', 0),
+        'active_profiles': len(get_engine().user_profiles),
+        'mature_profiles': sum(1 for p in get_engine().user_profiles.values() if p.is_mature)
     }
 
 def get_recent_transactions(limit: int = 50) -> List[Dict]:
@@ -352,7 +357,9 @@ def get_recent_transactions(limit: int = 50) -> List[Dict]:
     cursor.execute("""
         SELECT transaction_id, user_id, amount, channel, merchant_category,
                city, state, timestamp, risk_score, risk_level, recommendation,
-               xgboost_score, anomaly_score, rule_score, triggered_rules, latency_ms
+               xgboost_score, lightgbm_score, anomaly_score, rule_score, dynamic_behavior_score, 
+               triggered_rules, latency_ms,
+               amount_zscore, amount_vs_avg_ratio, is_behavioral_anomaly
         FROM transactions
         ORDER BY created_at DESC
         LIMIT ?
@@ -363,13 +370,24 @@ def get_recent_transactions(limit: int = 50) -> List[Dict]:
     
     transactions = []
     for row in rows:
-        txn = dict(row)
+        # Convert row to dict for easier access and to avoid row.get() errors
+        r_dict = dict(row)
+        txn = r_dict.copy()
         txn['model_scores'] = {
-            'xgboost': row['xgboost_score'],
-            'anomaly_detection': row['anomaly_score'],
-            'rule_engine': row['rule_score']
+            'xgboost': r_dict.get('xgboost_score', 0),
+            'lightgbm': r_dict.get('lightgbm_score', 0),
+            'anomaly_detection': r_dict.get('anomaly_score', 0),
+            'rule_engine': r_dict.get('rule_score', 0),
+            'dynamic_behavior': r_dict.get('dynamic_behavior_score', 0)
         }
-        txn['triggered_rules'] = json.loads(row['triggered_rules'] or '[]')
+        txn['behavior_analysis'] = {
+            'amount_zscore': r_dict.get('amount_zscore', 0),
+            'amount_vs_avg_ratio': r_dict.get('amount_vs_avg_ratio', 1),
+            'is_behavioral_anomaly': bool(r_dict.get('is_behavioral_anomaly', 0))
+        }
+        txn['amount_zscore'] = r_dict.get('amount_zscore', 0)
+        txn['amount_vs_avg_ratio'] = r_dict.get('amount_vs_avg_ratio', 1)
+        txn['triggered_rules'] = json.loads(r_dict.get('triggered_rules') or '[]')
         transactions.append(txn)
     
     return transactions
@@ -421,7 +439,8 @@ async def api_transactions(
     query = """
         SELECT transaction_id, user_id, amount, channel, merchant_category,
                city, state, timestamp, risk_score, risk_level, recommendation,
-               xgboost_score, anomaly_score, rule_score, triggered_rules, latency_ms
+               xgboost_score, lightgbm_score, anomaly_score, rule_score, dynamic_behavior_score,
+               triggered_rules, latency_ms
         FROM transactions WHERE 1=1
     """
     params = []
@@ -443,13 +462,16 @@ async def api_transactions(
     # Transform to include model_scores object and parse triggered_rules
     transactions = []
     for row in rows:
-        txn = dict(row)
+        r_dict = dict(row)
+        txn = r_dict.copy()
         txn['model_scores'] = {
-            'xgboost': row['xgboost_score'],
-            'anomaly_detection': row['anomaly_score'],
-            'rule_engine': row['rule_score']
+            'xgboost': r_dict.get('xgboost_score', 0),
+            'lightgbm': r_dict.get('lightgbm_score', 0),
+            'anomaly_detection': r_dict.get('anomaly_score', 0),
+            'rule_engine': r_dict.get('rule_score', 0),
+            'dynamic_behavior': r_dict.get('dynamic_behavior_score', 0)
         }
-        txn['triggered_rules'] = json.loads(row['triggered_rules'] or '[]')
+        txn['triggered_rules'] = json.loads(r_dict.get('triggered_rules') or '[]')
         transactions.append(txn)
     
     return transactions
@@ -551,7 +573,7 @@ async def start_simulation(rate: int = Query(3, ge=1, le=20)):
     simulation.txn_per_second = rate
     simulation.task = asyncio.create_task(_run_simulation())
     
-    logger.info(f"▶️ Simulation started at {rate} txn/sec")
+    logger.info(f"[SIM] Simulation started at {rate} txn/sec")
     return {"status": "started", "rate": rate}
 
 @app.post("/api/simulation/stop")
@@ -561,7 +583,7 @@ async def stop_simulation():
     if simulation.task:
         simulation.task.cancel()
     
-    logger.info("⏹️ Simulation stopped")
+    logger.info("[SIM] Simulation stopped")
     return {"status": "stopped", "total_generated": simulation.total_generated}
 
 @app.get("/api/simulation/status")
@@ -1043,7 +1065,7 @@ async def _run_simulation():
                 
             elif pre_auth_result.decision == 'CHALLENGE':
                 # Transaction requires step-up authentication
-                logger.info(f"⚠️ CHALLENGE: {txn['transaction_id']} - {pre_auth_result.auth_method}")
+                logger.info(f"[CHALLENGE] {txn['transaction_id']} - {pre_auth_result.auth_method}")
                 
                 # Simulate authentication challenge
                 # In real system, would wait for user to complete OTP/3DS/Biometric
@@ -1140,6 +1162,17 @@ async def _run_simulation():
                 'data': txn_with_result
             })
             
+            # CLI Logging for EVERY transaction as requested by user
+            log_color = "[OK]" if result['recommendation'] == 'APPROVE' else "[WARN]" if result['recommendation'] in ['FLAG', 'REVIEW', 'CHALLENGE'] else "[BLOCK]"
+            logger.info(
+                f"{log_color} TXN: {txn['transaction_id']} | "
+                f"User: {txn['user_id']} | "
+                f"Amount: ₹{txn['amount']:,.0f} | "
+                f"Score: {result['risk_score']:.2f} ({result['risk_level']}) | "
+                f"Decision: {result['pre_auth_decision']} | "
+                f"Latency: {result['latency_ms']:.1f}ms"
+            )
+            
             # Create alert for blocked/high risk
             if pre_auth_result.decision == 'BLOCK' or result['risk_level'] in ['HIGH', 'CRITICAL']:
                 alert = _create_alert(txn, result)
@@ -1186,13 +1219,13 @@ def _save_transaction(txn: Dict, result: Dict, pre_auth_result, device_analysis,
             INSERT OR REPLACE INTO transactions (
                 transaction_id, user_id, amount, channel, merchant_category,
                 city, state, timestamp, risk_score, risk_level, recommendation,
-                xgboost_score, anomaly_score, rule_score, dynamic_behavior_score,
+                xgboost_score, lightgbm_score, anomaly_score, rule_score, dynamic_behavior_score,
                 triggered_rules, latency_ms, is_fraud,
                 amount_zscore, amount_vs_avg_ratio, is_behavioral_anomaly,
                 pre_auth_decision, pre_auth_latency_ms, auth_method_required,
                 block_reasons, challenge_reasons,
                 device_id, ip_address, geo_city, geo_country
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             txn.get('transaction_id'),
             txn.get('user_id'),
@@ -1206,6 +1239,7 @@ def _save_transaction(txn: Dict, result: Dict, pre_auth_result, device_analysis,
             result.get('risk_level'),
             result.get('recommendation'),
             result['model_scores'].get('xgboost'),
+            result['model_scores'].get('lightgbm', 0),
             result['model_scores'].get('anomaly_detection'),
             result['model_scores'].get('rule_engine'),
             result['model_scores'].get('dynamic_behavior', 0),

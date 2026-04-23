@@ -25,7 +25,7 @@ except ImportError:
 class TransactionLSTM(nn.Module if TORCH_AVAILABLE else object):
     """LSTM model for sequential transaction analysis"""
     
-    def __init__(self, input_size: int = 20, hidden_size: int = 64, num_layers: int = 2):
+    def __init__(self, input_size: int = 16, hidden_size: int = 64, num_layers: int = 2):
         if not TORCH_AVAILABLE:
             return
             
@@ -60,7 +60,7 @@ class TransactionLSTM(nn.Module if TORCH_AVAILABLE else object):
 class TransactionTransformer(nn.Module if TORCH_AVAILABLE else object):
     """Transformer model for attention-based transaction analysis"""
     
-    def __init__(self, input_size: int = 20, d_model: int = 64, nhead: int = 4, 
+    def __init__(self, input_size: int = 16, d_model: int = 64, nhead: int = 4, 
                  num_layers: int = 2, dim_feedforward: int = 128):
         if not TORCH_AVAILABLE:
             return
@@ -133,9 +133,9 @@ class SequenceAnalyzer:
             self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
             
             if use_transformer:
-                self.model = TransactionTransformer(input_size=20).to(self.device)
+                self.model = TransactionTransformer(input_size=16).to(self.device)
             else:
-                self.model = TransactionLSTM(input_size=20).to(self.device)
+                self.model = TransactionLSTM(input_size=16).to(self.device)
             
             self.model.eval()  # Inference mode
             logger.info(f"Deep learning model initialized: {'Transformer' if use_transformer else 'LSTM'} on {self.device}")

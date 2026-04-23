@@ -1,0 +1,95 @@
+{
+  "version": "4.0.0-india",
+  "training_date": "2026-04-23T03:42:59.339208",
+  "features": [
+    "amount",
+    "amount_log",
+    "balance_delta_ratio",
+    "amount_to_channel_limit_ratio",
+    "channel_encoded",
+    "channel_risk_score",
+    "category_risk_score",
+    "category_encoded",
+    "is_high_risk_category",
+    "channel_category_valid",
+    "hour",
+    "is_night",
+    "is_weekend",
+    "is_salary_period",
+    "is_month_end",
+    "hour_sin",
+    "is_new_device",
+    "device_age_hours",
+    "is_new_location",
+    "location_distance_km",
+    "is_cross_state",
+    "device_location_risk",
+    "amount_zscore",
+    "amount_deviation_ratio",
+    "txn_velocity",
+    "amount_velocity",
+    "daily_cumulative_ratio",
+    "is_unusual_channel",
+    "exceeds_channel_limit",
+    "near_str_threshold",
+    "is_round_structuring_amount",
+    "cooling_period_risk",
+    "merchant_risk_score",
+    "is_new_beneficiary"
+  ],
+  "num_features": 34,
+  "optimal_threshold": 0.5493682368464832,
+  "ensemble_weights": {
+    "xgboost": 0.4,
+    "lightgbm": 0.35,
+    "isolation_forest": 0.25
+  },
+  "performance": {
+    "xgb_auc": 0.9999999866926577,
+    "lgb_auc": 1.0,
+    "iso_auc": 0.9573737577128005,
+    "xgb_ap": 0.9999997473569302,
+    "lgb_ap": 1.0,
+    "xgb_time": 13.877853870391846,
+    "lgb_time": 5.359787225723267,
+    "iso_time": 5.6439666748046875,
+    "test_roc_auc": 1.0,
+    "test_ap": 1.0,
+    "test_f1": 0.9999111032091742,
+    "test_precision": 1.0,
+    "test_recall": 0.9998222222222222,
+    "threshold": 0.5493682368464832
+  },
+  "per_channel": {
+    "atm": {
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0
+    },
+    "card_online": {
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0
+    },
+    "netbanking": {
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0
+    },
+    "pos": {
+      "f1": 0.999000999000999,
+      "recall": 0.998003992015968,
+      "precision": 1.0
+    },
+    "upi": {
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0
+    },
+    "wallet": {
+      "f1": 1.0,
+      "recall": 1.0,
+      "precision": 1.0
+    }
+  }
+}

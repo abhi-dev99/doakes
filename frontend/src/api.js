@@ -94,6 +94,24 @@ const api = {
     const res = await fetch(`${API_BASE}/api/data`, { method: 'DELETE' });
     if (!res.ok) throw new Error('Failed to clear data');
     return res.json();
+  },
+  
+  async getGraphStats() {
+    const res = await fetch(`${API_BASE}/api/analytics/graph-stats`);
+    if (!res.ok) throw new Error('Failed to fetch graph stats');
+    return res.json();
+  },
+
+  async getUserProfile(userId) {
+    const res = await fetch(`${API_BASE}/api/user/${userId}/profile`);
+    if (!res.ok) throw new Error('Failed to fetch user profile');
+    return res.json();
+  },
+  
+  async getPerformanceMetrics() {
+    const res = await fetch(`${API_BASE}/api/performance/metrics`);
+    if (!res.ok) throw new Error('Failed to fetch performance metrics');
+    return res.json();
   }
 };
 

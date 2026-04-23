@@ -27,9 +27,9 @@ class FraudExplainer:
     
     def __init__(self):
         self.decision_templates = {
-            'BLOCK': "🚫 **Transaction BLOCKED** - {primary_reason}",
-            'CHALLENGE': "⚠️ **Authentication Required** - {primary_reason}",
-            'ALLOW': "✅ **Transaction Approved** - Low risk detected"
+            'BLOCK': "[BLOCKED] {primary_reason}",
+            'CHALLENGE': "[AUTH REQUIRED] {primary_reason}",
+            'ALLOW': "[APPROVED] Low risk detected"
         }
     
     def explain_decision(self, transaction: Dict, analysis: Dict) -> Dict:

@@ -206,7 +206,7 @@ class PreAuthEngine:
                 block_reasons.append(f"HIGH_RISK_SCORE: {total_risk_score:.2%}")
             
             logger.warning(
-                f"🚫 BLOCKED pre-auth | User: {user_id} | Amount: ₹{amount:,.0f} | "
+                f"[BLOCK] Pre-auth | User: {user_id} | Amount: \u20b9{amount:,.0f} | "
                 f"Risk: {total_risk_score:.2%} | Reasons: {', '.join(block_reasons)}"
             )
             
@@ -235,7 +235,7 @@ class PreAuthEngine:
                 auth_method = "OTP"  # Basic OTP
             
             logger.info(
-                f"⚠️ CHALLENGE required | User: {user_id} | Amount: ₹{amount:,.0f} | "
+                f"[CHALLENGE] Pre-auth | User: {user_id} | Amount: \u20b9{amount:,.0f} | "
                 f"Risk: {total_risk_score:.2%} | Auth: {auth_method}"
             )
             
@@ -253,7 +253,7 @@ class PreAuthEngine:
         
         # ALLOW decision
         logger.info(
-            f"✅ ALLOWED pre-auth | User: {user_id} | Amount: ₹{amount:,.0f} | "
+            f"[ALLOW] Pre-auth | User: {user_id} | Amount: \u20b9{amount:,.0f} | "
             f"Risk: {total_risk_score:.2%}"
         )
         

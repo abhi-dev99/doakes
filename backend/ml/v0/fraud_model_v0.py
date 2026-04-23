@@ -1,17 +1,17 @@
 """
-ARGUS - AI Fraud Detection Engine v4.0.0-india
+ARGUS - AI Fraud Detection Engine v3.2.0-india
 ===============================================
 Production-ready fraud detection for Indian payment ecosystem.
 Supports UPI, Cards, NetBanking, Wallets with DYNAMIC thresholds.
 
 Key Features:
-- XGBoost + LightGBM + Isolation Forest ensemble (34 features)
+- XGBoost + Isolation Forest ensemble
 - India-specific rule engine (RBI/NPCI compliant)
-- UPI-SPECIFIC FRAUD DETECTION - Digital arrest, SIM swap, mule accounts
-- DYNAMIC User Behavior Analysis - Personalized anomaly detection
-- PERSISTENT User Profiles - Survives server restarts
-- Trained on 750K synthetic Indian transactions
-- Sub-5ms inference latency
+- **UPI-SPECIFIC FRAUD DETECTION** - Digital arrest, SIM swap, mule accounts
+- **DYNAMIC User Behavior Analysis** - Personalized anomaly detection
+- **PERSISTENT User Profiles** - Survives server restarts
+- 0.1% realistic fraud rate
+- Sub-10ms inference latency
 """
 
 import numpy as np
@@ -35,12 +35,6 @@ try:
 except ImportError:
     UPI_DETECTOR_AVAILABLE = False
     logger.warning("UPI fraud detector not available")
-
-# Import unified v4 feature extractor
-try:
-    from .feature_extractor import extract_features as unified_extract_features, FEATURE_NAMES as V4_FEATURE_NAMES
-except ImportError:
-    from feature_extractor import extract_features as unified_extract_features, FEATURE_NAMES as V4_FEATURE_NAMES
 
 # ============ CONFIGURATION ============
 
@@ -345,9 +339,9 @@ class FraudDetectionEngine:
     2. Loading historical transactions from database on startup
     """
     
-    VERSION = "4.0.0-india"
+    VERSION = "3.2.0-india"
     
-    # Risk level thresholds
+    # Risk level thresholds (conservative for India's 0.1% fraud rate)
     RISK_THRESHOLDS = {
         'CRITICAL': 0.55,  # Block immediately
         'HIGH': 0.35,      # Manual review required
@@ -355,7 +349,13 @@ class FraudDetectionEngine:
         'LOW': 0.0         # Approve
     }
     
-    FEATURE_NAMES = V4_FEATURE_NAMES
+    # Feature names for XGBoost
+    FEATURE_NAMES = [
+        'amount', 'amount_zscore', 'hour', 'is_night', 'is_weekend',
+        'channel_risk', 'category_risk', 'velocity_score', 'is_new_device',
+        'is_new_location', 'amount_velocity', 'txn_velocity', 'device_age_hours',
+        'location_distance_km', 'merchant_risk_score', 'user_avg_txn_ratio'
+    ]
     
     def __init__(self, models_dir: Optional[Path] = None, db_path: Optional[Path] = None):
         self.models_dir = models_dir or Path(__file__).parent / "models"
@@ -363,10 +363,8 @@ class FraudDetectionEngine:
         self.profiles_path = self.models_dir / "user_profiles.json"
         
         self.xgb_model = None
-        self.lgb_model = None
         self.isolation_forest = None
         self.scaler = None
-        self.optimal_threshold = 0.5
         self.model_loaded = False
         
         # Initialize UPI fraud detector
@@ -382,37 +380,26 @@ class FraudDetectionEngine:
         self._load_user_profiles()  # Load persisted profiles on startup
     
     def _load_models(self) -> None:
-        """Load v4 pre-trained models. No fallback — models must exist."""
+        """Load pre-trained models or initialize new ones"""
         try:
             self.models_dir.mkdir(parents=True, exist_ok=True)
             
             xgb_path = self.models_dir / "xgb_model.joblib"
-            lgb_path = self.models_dir / "lgb_model.joblib"
             iso_path = self.models_dir / "isolation_forest.joblib"
             scaler_path = self.models_dir / "scaler.joblib"
-            threshold_path = self.models_dir / "optimal_threshold.joblib"
             
             if xgb_path.exists() and iso_path.exists() and scaler_path.exists():
                 self.xgb_model = joblib.load(xgb_path)
                 self.isolation_forest = joblib.load(iso_path)
                 self.scaler = joblib.load(scaler_path)
                 self.model_loaded = True
-                logger.info(f"Loaded XGBoost + IsolationForest {self.VERSION}")
-                
-                if lgb_path.exists():
-                    self.lgb_model = joblib.load(lgb_path)
-                    logger.info("Loaded LightGBM model")
-                
-                if threshold_path.exists():
-                    self.optimal_threshold = joblib.load(threshold_path)
-                    logger.info(f"Optimal threshold: {self.optimal_threshold:.4f}")
+                logger.info(f"Loaded pre-trained models {self.VERSION}")
             else:
-                logger.error("MODELS NOT FOUND. Run train_model_v4.py first.")
-                self.model_loaded = False
+                self._initialize_models()
                 
         except Exception as e:
-            logger.error(f"Model loading failed: {e}")
-            self.model_loaded = False
+            logger.warning(f"Model loading failed: {e}, initializing fresh")
+            self._initialize_models()
     
     def _load_user_profiles(self) -> None:
         """
@@ -431,7 +418,7 @@ class FraudDetectionEngine:
                     self.user_profiles[user_id] = UserBehaviorProfile.from_dict(profile_dict)
                     profiles_loaded += 1
                 
-                logger.info(f"[PROFILES] Loaded {profiles_loaded} user profiles from cache")
+                logger.info(f"✅ Loaded {profiles_loaded} user profiles from cache")
                 return
             except Exception as e:
                 logger.warning(f"Could not load profiles from cache: {e}")
@@ -440,7 +427,7 @@ class FraudDetectionEngine:
         if self.db_path.exists():
             profiles_loaded = self._rebuild_profiles_from_db()
             if profiles_loaded > 0:
-                logger.info(f"[PROFILES] Rebuilt {profiles_loaded} user profiles from transaction history")
+                logger.info(f"✅ Rebuilt {profiles_loaded} user profiles from transaction history")
                 self._save_user_profiles()  # Cache for next time
     
     def _rebuild_profiles_from_db(self) -> int:
@@ -682,10 +669,7 @@ class FraudDetectionEngine:
         # Parse timestamp
         timestamp = transaction.get('timestamp', datetime.now())
         if isinstance(timestamp, str):
-            try:
-                timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-            except Exception:
-                timestamp = datetime.now()
+            timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
         
         # Get or create user behavior profile
         if user_id not in self.user_profiles:
@@ -696,35 +680,25 @@ class FraudDetectionEngine:
         # Calculate dynamic anomaly indicators
         anomaly_info = user_profile.add_transaction(amount, timestamp)
         
-        # Extract features using UNIFIED v4 extractor (34 features)
-        features_1d = unified_extract_features(transaction, user_profile, anomaly_info)
-        features = features_1d.reshape(1, -1)
+        # Extract features (now with user profile context)
+        features = self._extract_features(transaction, user_profile, anomaly_info)
         
         # Get model predictions
         xgb_score = self._get_xgb_score(features)
-        lgb_score = self._get_lgb_score(features)
         anomaly_score = self._get_anomaly_score(features)
         rule_score, triggered_rules = self._apply_rules(transaction, user_profile, anomaly_info)
         
         # Add dynamic anomaly score component
         dynamic_anomaly_score = self._calculate_dynamic_anomaly_score(anomaly_info)
         
-        # v4 Ensemble: XGB 30% + LGB 25% + IF 15% + Rules 15% + Dynamic 15%
-        if self.lgb_model is not None:
-            final_score = (
-                xgb_score * 0.30 +
-                lgb_score * 0.25 +
-                anomaly_score * 0.15 +
-                rule_score * 0.15 +
-                dynamic_anomaly_score * 0.15
-            )
-        else:
-            final_score = (
-                xgb_score * 0.35 +
-                anomaly_score * 0.20 +
-                rule_score * 0.25 +
-                dynamic_anomaly_score * 0.20
-            )
+        # Ensemble scoring with weights (must total 100%)
+        # XGBoost: 35%, Isolation Forest: 20%, Rules: 25%, Dynamic Behavior: 20%
+        final_score = (
+            xgb_score * 0.35 +
+            anomaly_score * 0.20 +
+            rule_score * 0.25 +
+            dynamic_anomaly_score * 0.20
+        )
         
         # Run UPI-specific fraud detection
         upi_fraud_result = None
@@ -750,7 +724,6 @@ class FraudDetectionEngine:
             'recommendation': recommendation,
             'model_scores': {
                 'xgboost': round(xgb_score, 4),
-                'lightgbm': round(lgb_score, 4),
                 'anomaly_detection': round(anomaly_score, 4),
                 'rule_engine': round(rule_score, 4),
                 'dynamic_behavior': round(dynamic_anomaly_score, 4)
@@ -903,29 +876,16 @@ class FraudDetectionEngine:
             logger.error(f"XGBoost prediction error: {e}")
             return 0.1
     
-    def _get_lgb_score(self, features: np.ndarray) -> float:
-        """Get LightGBM fraud probability"""
-        if self.lgb_model is None:
-            return 0.1
-        try:
-            scaled = self.scaler.transform(features)
-            proba = self.lgb_model.predict_proba(scaled)[0]
-            return float(proba[1]) if len(proba) > 1 else float(proba[0])
-        except Exception as e:
-            logger.error(f"LightGBM prediction error: {e}")
-            return 0.1
-    
     def _get_anomaly_score(self, features: np.ndarray) -> float:
         """Get Isolation Forest anomaly score (normalized to 0-1)"""
         if self.isolation_forest is None:
             return 0.1
         try:
             scaled = self.scaler.transform(features)
-            # decision_function: negative = anomaly, positive = normal
-            raw_score = self.isolation_forest.decision_function(scaled)[0]
-            # Invert and normalize: -0.5 (extreme anomaly) -> 1.0, +0.5 (normal) -> 0.0
-            normalized = float(np.clip((-raw_score + 0.15) / 0.6, 0, 1))
-            return normalized
+            # score_samples returns negative values, more negative = more anomalous
+            raw_score = -self.isolation_forest.score_samples(scaled)[0]
+            # Normalize to 0-1 range
+            return float(np.clip((raw_score + 0.5) / 0.5, 0, 1))
         except Exception as e:
             logger.error(f"Isolation Forest error: {e}")
             return 0.1
@@ -1104,7 +1064,7 @@ class FraudDetectionEngine:
         """Force save all user profiles (call on shutdown)"""
         if self.user_profiles:
             self._save_user_profiles()
-            logger.info(f"[SAVE] Saved {len(self.user_profiles)} user profiles on shutdown")
+            logger.info(f"💾 Saved {len(self.user_profiles)} user profiles on shutdown")
     
     def get_user_profile_summary(self, user_id: str) -> Optional[Dict[str, Any]]:
         """Get summary of a user's behavioral profile for debugging/monitoring"""

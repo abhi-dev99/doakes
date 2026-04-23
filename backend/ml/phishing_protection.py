@@ -129,7 +129,7 @@ class PhishingProtectionEngine:
         
         if is_unauthorized:
             logger.warning(
-                f"🚨 UNAUTHORIZED TRANSACTION DETECTED | "
+                f"[ALERT] UNAUTHORIZED TRANSACTION DETECTED | "
                 f"User: {user_id} | Amount: ₹{amount:,.0f} | "
                 f"Attack: {attack_type} | Risk: {risk_score:.0%} | "
                 f"Indicators: {', '.join(indicators)}"
@@ -373,7 +373,7 @@ class PhishingProtectionEngine:
             Verification result
         """
         logger.info(
-            f"🔐 USER PRESENCE VERIFICATION | "
+            f"[VERIFY] USER PRESENCE VERIFICATION | "
             f"User: {user_id} | Method: {challenge_type}"
         )
         
