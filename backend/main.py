@@ -18,10 +18,17 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Query
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Query, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, HTMLResponse
 from pydantic import BaseModel
+
+class EngineWeights(BaseModel):
+    xgboost: float
+    lightgbm: float
+    isolation_forest: float
+    rule_engine: float
+    dynamic_behavior: float
 
 from ml.fraud_model import get_engine
 from simulator.transaction_gen import get_generator
@@ -556,10 +563,18 @@ async def update_alert(alert_id: int, action: AlertAction):
         "UPDATE alerts SET status = ? WHERE id = ?",
         (action.status, alert_id)
     )
+    
+    # Simulate End-User Notification
+    customer_notified = False
+    if action.status == 'confirmed':
+        # Simulated log representing a notification sent to the customer
+        logger.info(f"🔔 [SIMULATED] Notification sent to customer for confirmed fraud alert {alert_id}")
+        customer_notified = True
+        
     conn.commit()
     conn.close()
     
-    return {"status": "updated", "alert_id": alert_id}
+    return {"status": "updated", "alert_id": alert_id, "customer_notified": customer_notified}
 
 # ============ SIMULATION ENDPOINTS ============
 
@@ -596,6 +611,105 @@ async def simulation_status():
     }
 
 # ============ ADVANCED ANALYTICS ENDPOINTS ============
+
+@app.get("/api/graph/visualize")
+async def get_visual_graph():
+    """Get nodes and edges for the Fraud Graph UI"""
+    from backend.ml.graph_fraud_detector import graph_detector
+    if graph_detector:
+        return graph_detector.get_visual_graph_data()
+    return {"nodes": [], "edges": []}
+
+@app.post("/api/settings/engines")
+async def update_engine_weights(weights: EngineWeights):
+    """Dynamically update ML ensemble weights"""
+    engine = get_engine()
+    engine.update_weights(weights.dict())
+    return {"status": "success", "message": "Engine weights updated successfully."}
+
+@app.post("/api/user/{user_id}/block")
+async def block_user(user_id: str):
+    """Simulate blocking a user from the system"""
+    logger.info(f"User {user_id} has been blocked by an Analyst.")
+    # In a real system, this would update the user database.
+    return {"status": "success", "message": f"User {user_id} blocked successfully."}
+
+@app.get("/api/transactions/{transaction_id}")
+async def get_transaction(transaction_id: str):
+    """Get full details of a specific transaction"""
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT * FROM transactions WHERE transaction_id = ?
+    """, (transaction_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+    
+    txn = dict(row)
+    if 'triggered_rules' in txn and txn['triggered_rules']:
+        txn['triggered_rules'] = json.loads(txn['triggered_rules'])
+    else:
+        txn['triggered_rules'] = []
+    
+    return txn
+
+@app.get("/api/audit-logs")
+async def get_audit_logs(limit: int = Query(50, le=200)):
+    """Get system and analyst audit logs"""
+    # Since we are not building full RBAC, we will return a mix of system actions and alert updates
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT id, transaction_id, risk_level, status, timestamp, created_at 
+        FROM alerts 
+        ORDER BY created_at DESC LIMIT ?
+    """, (limit,))
+    rows = cursor.fetchall()
+    conn.close()
+    
+    logs = []
+    for r in rows:
+        action = "Flagged" if r[3] == 'pending' else ("Confirmed Fraud" if r[3] == 'confirmed' else "Dismissed")
+        logs.append({
+            "id": f"log_{r[0]}",
+            "timestamp": r[5],
+            "user": "System Admin" if r[3] != 'pending' else "ARGUS Engine",
+            "action": action,
+            "target": f"Txn {r[1][:8]}",
+            "details": f"Risk Level: {r[2]}"
+        })
+    return logs
+
+@app.get("/api/compliance-report")
+async def get_compliance_report(limit: int = Query(100)):
+    """Generate regulatory compliance export data"""
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT transaction_id, user_id, amount, channel, risk_score, risk_level, recommendation, triggered_rules, timestamp
+        FROM transactions 
+        WHERE risk_level IN ('HIGH', 'CRITICAL') OR recommendation = 'BLOCK'
+        ORDER BY timestamp DESC LIMIT ?
+    """, (limit,))
+    rows = cursor.fetchall()
+    conn.close()
+    
+    report_data = []
+    for r in rows:
+        report_data.append({
+            "transaction_id": r[0],
+            "user_id": r[1],
+            "amount": r[2],
+            "channel": r[3],
+            "risk_score": r[4],
+            "risk_level": r[5],
+            "action_taken": r[6],
+            "flags": r[7],
+            "timestamp": r[8]
+        })
+    return report_data
 
 @app.get("/api/analytics/graph-stats")
 async def get_graph_stats():
@@ -995,6 +1109,7 @@ async def _run_simulation():
                 # Block transaction - no pre-auth needed
                 result = engine.analyze_transaction(txn)
                 result['recommendation'] = 'BLOCK'
+                result['risk_level'] = 'CRITICAL'
                 result['pre_auth_decision'] = 'BLOCK_PHISHING'
                 result['phishing_detected'] = True
                 result['attack_type'] = phishing_check['attack_type']
@@ -1060,6 +1175,7 @@ async def _run_simulation():
                 # Still analyze for reporting, but mark as blocked
                 result = engine.analyze_transaction(txn)
                 result['recommendation'] = 'BLOCK'
+                result['risk_level'] = 'CRITICAL'
                 result['pre_auth_decision'] = 'BLOCK'
                 result['pre_auth_blocked'] = True
                 

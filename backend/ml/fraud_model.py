@@ -372,6 +372,15 @@ class FraudDetectionEngine:
         # Initialize UPI fraud detector
         self.upi_detector = UPIFraudDetector() if UPI_DETECTOR_AVAILABLE else None
         
+        # Ensemble weights
+        self.ensemble_weights = {
+            'xgboost': 0.30,
+            'lightgbm': 0.25,
+            'isolation_forest': 0.15,
+            'rule_engine': 0.15,
+            'dynamic_behavior': 0.15
+        }
+        
         # Dynamic user behavior profiles (PERSISTENT)
         self.user_profiles: Dict[str, UserBehaviorProfile] = {}
         self._profiles_dirty = False  # Track if profiles need saving
@@ -709,21 +718,22 @@ class FraudDetectionEngine:
         # Add dynamic anomaly score component
         dynamic_anomaly_score = self._calculate_dynamic_anomaly_score(anomaly_info)
         
-        # v4 Ensemble: XGB 30% + LGB 25% + IF 15% + Rules 15% + Dynamic 15%
+        # v4 Ensemble: Dynamic weights
+        w = self.ensemble_weights
         if self.lgb_model is not None:
             final_score = (
-                xgb_score * 0.30 +
-                lgb_score * 0.25 +
-                anomaly_score * 0.15 +
-                rule_score * 0.15 +
-                dynamic_anomaly_score * 0.15
+                xgb_score * w['xgboost'] +
+                lgb_score * w['lightgbm'] +
+                anomaly_score * w['isolation_forest'] +
+                rule_score * w['rule_engine'] +
+                dynamic_anomaly_score * w['dynamic_behavior']
             )
         else:
             final_score = (
-                xgb_score * 0.35 +
-                anomaly_score * 0.20 +
-                rule_score * 0.25 +
-                dynamic_anomaly_score * 0.20
+                xgb_score * (w['xgboost'] + w['lightgbm']) +
+                anomaly_score * w['isolation_forest'] +
+                rule_score * w['rule_engine'] +
+                dynamic_anomaly_score * w['dynamic_behavior']
             )
         
         # Run UPI-specific fraud detection
@@ -788,6 +798,17 @@ class FraudDetectionEngine:
         self._maybe_save_profiles()
         
         return response
+    
+    def update_weights(self, new_weights: Dict[str, float]) -> None:
+        """Dynamically update ensemble weights"""
+        for k, v in new_weights.items():
+            if k in self.ensemble_weights:
+                self.ensemble_weights[k] = float(v)
+        # Normalize to 1.0
+        total = sum(self.ensemble_weights.values())
+        if total > 0:
+            for k in self.ensemble_weights:
+                self.ensemble_weights[k] /= total
     
     def _calculate_dynamic_anomaly_score(self, anomaly_info: Dict[str, Any]) -> float:
         """Calculate anomaly score based on user's behavioral deviation"""

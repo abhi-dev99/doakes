@@ -271,6 +271,53 @@ class FraudRingDetector:
         self.transaction_graph.remove_nodes_from(nodes_to_remove)
         logger.info(f"Removed {len(nodes_to_remove)} inactive nodes older than {days} days")
 
+    def get_visual_graph_data(self) -> Dict:
+        """Export graph data formatted for visual frontend rendering"""
+        if not nx or not self.transaction_graph:
+            return {"nodes": [], "edges": []}
+            
+        nodes = []
+        for node_id, data in self.transaction_graph.nodes(data=True):
+            node_type = data.get('node_type', 'unknown')
+            
+            # Determine risk class
+            is_mule = node_id in self.mule_accounts
+            in_ring = any(node_id in ring for ring in self.fraud_rings)
+            
+            risk_level = "LOW"
+            if is_mule or in_ring:
+                risk_level = "CRITICAL"
+                
+            nodes.append({
+                "id": node_id,
+                "type": node_type,
+                "risk": risk_level,
+                "is_mule": is_mule,
+                "in_ring": in_ring,
+                "in_degree": self.transaction_graph.in_degree(node_id),
+                "out_degree": self.transaction_graph.out_degree(node_id)
+            })
+            
+        edges = []
+        for u, v, data in self.transaction_graph.edges(data=True):
+            edges.append({
+                "source": u,
+                "target": v,
+                "count": data.get('count', 1),
+                "total_amount": data.get('total_amount', 0)
+            })
+            
+        # Optional: Limit to top 500 nodes to prevent UI lag
+        if len(nodes) > 500:
+            # Simple heuristic: prioritize high degree and risky nodes
+            nodes.sort(key=lambda x: (x['risk'] == 'CRITICAL', x['in_degree'] + x['out_degree']), reverse=True)
+            top_nodes = nodes[:500]
+            top_node_ids = {n['id'] for n in top_nodes}
+            edges = [e for e in edges if e['source'] in top_node_ids and e['target'] in top_node_ids]
+            nodes = top_nodes
+            
+        return {"nodes": nodes, "edges": edges}
+
 
 # Global instance
 graph_detector = FraudRingDetector() if nx else None

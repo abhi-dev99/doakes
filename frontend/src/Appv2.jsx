@@ -6,7 +6,7 @@ import {
   Search, X, Download, Sun, Moon, Smartphone, CreditCard, 
   Wallet, Building2, Banknote, Network, Brain, Store, AlertOctagon,
   LayoutDashboard, List, Settings, LogOut, ChevronLeft,
-  PauseCircle, Cpu, Wifi, MapPin, Copy
+  PauseCircle, Cpu, Wifi, MapPin, Copy, Info
 } from 'lucide-react';
 import { 
   AreaChart, Area, PieChart, Pie, Cell, BarChart, Bar,
@@ -135,7 +135,7 @@ const NotificationToast = memo(function NotificationToast({ message, type = 'inf
 });
 
 // Advanced Data Density Inspector Panel (Pop-out Modal)
-const TransactionInspector = memo(function TransactionInspector({ transaction, onClose, sidebarOpen }) {
+const TransactionInspector = memo(function TransactionInspector({ transaction, onClose, sidebarOpen, onUserClick }) {
   if (!transaction) return null;
   const risk = transaction.risk_level || 'LOW';
 
@@ -176,7 +176,7 @@ const TransactionInspector = memo(function TransactionInspector({ transaction, o
       sidebarOpen ? "left-52" : "left-16"
     )} onClick={onClose}>
       <div 
-        className="bg-white/10 dark:bg-[#1C1C1E]/60 backdrop-blur-[40px] rounded-[32px] w-full max-w-4xl max-h-[90vh] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col border border-white/20 dark:border-white/10 relative ring-1 ring-white/20"
+        className="bg-white/10 dark:bg-[#1C1C1E]/60 backdrop-blur-[40px] rounded-[32px] w-full max-w-6xl max-h-[90vh] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col border border-white/20 dark:border-white/10 relative ring-1 ring-white/20"
         onClick={e => e.stopPropagation()}
       >
         
@@ -266,7 +266,7 @@ const TransactionInspector = memo(function TransactionInspector({ transaction, o
                   <div className="flex flex-col">
                     <span className="text-gray-500 text-[10px] uppercase font-bold tracking-widest">User Identity</span>
                     <button 
-                      onClick={() => window.dispatchEvent(new CustomEvent('argus-navigate', { detail: { view: 'Profiles', user_id: transaction.user_id } }))}
+                      onClick={(e) => { e.stopPropagation(); onUserClick && onUserClick(transaction.user_id); }}
                       className="text-apple-blue font-mono font-bold text-base hover:underline text-left mt-0.5 flex items-center gap-1 group"
                     >
                       {transaction.user_id}
@@ -487,6 +487,99 @@ const VolumeChart = memo(function VolumeChart({ data }) {
   );
 });
 
+// User Inspector Modal
+const UserInspector = memo(function UserInspector({ userId, onClose, sidebarOpen }) {
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    if (userId) {
+      // Find the profile in the profiles list or fetch it if needed.
+      // For simplicity, we just fetch it or get from profilesList in Appv2.
+      // Wait, we need the actual profile data. Let's just use the api.
+      api.getProfiles(500).then(res => {
+        const list = res.profiles || res;
+        const p = list.find(x => x.user_id === userId);
+        if (p) setProfile(p);
+      }).catch(e => console.error(e));
+    }
+  }, [userId]);
+
+  if (!userId) return null;
+
+  return (
+    <div className={clsx(
+      "fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-8 bg-black/60 backdrop-blur-md animate-fade-in transition-all duration-300",
+      sidebarOpen ? "left-52" : "left-16"
+    )} onClick={onClose}>
+      <div 
+        className="bg-white/10 dark:bg-[#1C1C1E]/80 backdrop-blur-[40px] rounded-[32px] w-full max-w-2xl max-h-[80vh] shadow-2xl overflow-hidden flex flex-col border border-white/20 dark:border-[#3A3A3C] ring-1 ring-white/20"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="px-8 py-6 border-b border-white/10 flex items-center justify-between bg-black/20">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-apple-blue to-[#BF5AF2] flex items-center justify-center text-white font-black text-lg shadow-lg">
+               {userId.substring(0,2).toUpperCase()}
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-0.5">User Profile</p>
+              <h2 className="text-xl font-black font-mono tracking-tighter text-[#F5F5F7] leading-none">{userId}</h2>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2.5 rounded-full bg-black/30 hover:bg-apple-red text-white transition-all hover:rotate-90 active:scale-90">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-8 space-y-6 flex-1 overflow-y-auto">
+           {profile ? (
+             <>
+                <div className="grid grid-cols-2 gap-4">
+                   <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Maturity Status</p>
+                      <p className={clsx("text-lg font-black uppercase", profile.is_mature ? "text-apple-green" : "text-apple-orange")}>
+                        {profile.is_mature ? "MATURE" : "BUILDING"}
+                      </p>
+                   </div>
+                   <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Total Transactions</p>
+                      <p className="text-lg font-black font-mono text-white">{profile.transaction_count || 0}</p>
+                   </div>
+                   <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Avg Amount</p>
+                      <p className="text-lg font-black font-mono text-white">{formatINR(profile.statistics?.avg_amount || 0)}</p>
+                   </div>
+                   <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+                      <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Profile Age</p>
+                      <p className="text-lg font-black font-mono text-white">{profile.profile_age_days || 0} Days</p>
+                   </div>
+                </div>
+
+                <div className="pt-6 border-t border-white/10 flex justify-end gap-4">
+                   <button 
+                      onClick={() => {
+                         api.blockUser(userId).then(() => {
+                           window.dispatchEvent(new CustomEvent('argus-notify', { detail: { message: `User ${userId} blocked successfully`, type: 'success' } }));
+                           onClose();
+                         });
+                      }}
+                      className="bg-apple-red hover:bg-red-600 text-white font-bold py-3 px-6 rounded-full flex items-center gap-2 shadow-lg shadow-apple-red/30 transition-colors"
+                   >
+                     <Shield className="w-4 h-4" /> BLOCK USER
+                   </button>
+                </div>
+             </>
+           ) : (
+             <div className="py-12 text-center text-gray-500">
+                <Users className="w-12 h-12 mx-auto opacity-30 mb-4" />
+                <p>Loading profile data...</p>
+             </div>
+           )}
+        </div>
+      </div>
+    </div>
+  );
+});
+
 
 // Main App
 export default function Appv2() {
@@ -512,7 +605,11 @@ export default function Appv2() {
 
   // Inspector & Auto-Pause State
   const [inspectedTxn, setInspectedTxn] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [isStreamPaused, setIsStreamPaused] = useState(false);
+  const [engineWeights, setEngineWeights] = useState({
+    xgboost: 30, lightgbm: 25, isolation_forest: 15, rule_engine: 15, dynamic_behavior: 15
+  });
 
   const isPausedRef = useRef(false);
   const bufferRef = useRef([]);
@@ -521,6 +618,9 @@ export default function Appv2() {
   const [filters, setFilters] = useState({ riskLevel: 'all', channel: 'all', search: '' });
   const [alertsList, setAlertsList] = useState([]);
   const [profilesList, setProfilesList] = useState([]);
+  const [graphData, setGraphData] = useState({ nodes: [], edges: [] });
+  const [auditLogs, setAuditLogs] = useState([]);
+  const [complianceReport, setComplianceReport] = useState([]);
 
   // Global Notification Listener
   useEffect(() => {
@@ -552,11 +652,30 @@ export default function Appv2() {
 
   // Fetch real data for views
   useEffect(() => {
-    if (currentView === 'Alerts') {
-      api.getAlerts(50).then(res => setAlertsList(res.alerts || res)).catch(e => console.error(e));
-    } else if (currentView === 'Profiles') {
-      api.getProfiles(50).then(res => setProfilesList(res.profiles || [])).catch(e => console.error(e));
+    let interval;
+    const fetchData = () => {
+      if (currentView === 'Alerts') {
+        api.getAlerts(50).then(res => setAlertsList(res.alerts || res)).catch(e => console.error(e));
+      } else if (currentView === 'Profiles') {
+        api.getProfiles(50).then(res => setProfilesList(res.profiles || [])).catch(e => console.error(e));
+      } else if (currentView === 'Graph') {
+        api.getVisualGraph().then(res => setGraphData(res)).catch(e => console.error(e));
+      } else if (currentView === 'Audit Logs') {
+        api.getAuditLogs().then(res => setAuditLogs(res)).catch(e => console.error(e));
+      } else if (currentView === 'Compliance') {
+        api.getComplianceReport().then(res => setComplianceReport(res)).catch(e => console.error(e));
+      }
+    };
+    
+    // Initial fetch
+    fetchData();
+    
+    // Setup polling for live tabs
+    if (['Graph', 'Audit Logs', 'Compliance', 'Alerts'].includes(currentView)) {
+      interval = setInterval(fetchData, 2000);
     }
+    
+    return () => clearInterval(interval);
   }, [currentView]);
 
   // WebSocket Connection
@@ -637,6 +756,16 @@ export default function Appv2() {
      setIsStreamPaused(false);
      setInspectedTxn(null);
   }
+
+  const handleAlertClick = async (txnId) => {
+    try {
+      const txn = await api.getTransaction(txnId);
+      handleInspect(txn);
+    } catch (e) {
+      console.error(e);
+      window.dispatchEvent(new CustomEvent('argus-notify', { detail: { message: 'Failed to load transaction details', type: 'error' } }));
+    }
+  };
 
   const renderContent = () => {
      switch(currentView) {
@@ -961,9 +1090,11 @@ export default function Appv2() {
                ) : (
                  <div className="space-y-3">
                    {highRiskAlerts.map((al, idx) => (
-                     <div key={idx} className={clsx(
-                       "glass-card border p-5 transition-all relative overflow-hidden",
-                       al.status === 'confirmed' ? "border-apple-red/30 opacity-60" : al.status === 'dismissed' ? "border-white/5 opacity-40" : "border-white/10 hover:border-apple-orange/30"
+                     <div key={idx} 
+                       onClick={() => handleAlertClick(al.transaction_id)}
+                       className={clsx(
+                         "glass-card border p-5 transition-all relative overflow-hidden cursor-pointer hover:bg-white/5",
+                         al.status === 'confirmed' ? "border-apple-red/30 opacity-60" : al.status === 'dismissed' ? "border-white/5 opacity-40" : "border-white/10 hover:border-apple-orange/30"
                      )}>
                        {al.risk_level === 'CRITICAL' && al.status === 'pending' && <div className="absolute top-0 left-0 w-1 h-full bg-apple-red shadow-[0_0_10px_rgba(255,59,48,0.6)]" />}
                        <div className="flex items-center gap-4">
@@ -983,11 +1114,11 @@ export default function Appv2() {
                              {al.status === 'pending' ? (
                                <>
                                  <button
-                                   onClick={() => { api.updateAlert(al.id, 'confirmed'); setAlertsList(prev => prev.map(a => a.id === al.id ? {...a, status: 'confirmed'} : a)); }}
+                                   onClick={(e) => { e.stopPropagation(); api.updateAlert(al.id, 'confirmed'); setAlertsList(prev => prev.map(a => a.id === al.id ? {...a, status: 'confirmed'} : a)); }}
                                    className="px-3 py-1.5 bg-apple-red/10 text-apple-red text-[10px] font-black uppercase tracking-wider rounded-lg hover:bg-apple-red hover:text-white transition-all"
                                  >Confirm Fraud</button>
                                  <button
-                                   onClick={() => { api.updateAlert(al.id, 'dismissed'); setAlertsList(prev => prev.map(a => a.id === al.id ? {...a, status: 'dismissed'} : a)); }}
+                                   onClick={(e) => { e.stopPropagation(); api.updateAlert(al.id, 'dismissed'); setAlertsList(prev => prev.map(a => a.id === al.id ? {...a, status: 'dismissed'} : a)); }}
                                    className="px-3 py-1.5 bg-white/5 text-gray-500 text-[10px] font-black uppercase tracking-wider rounded-lg hover:bg-white/10 transition-all"
                                  >Dismiss</button>
                                </>
@@ -1044,12 +1175,165 @@ export default function Appv2() {
              </div>
           );
 
-        case 'Settings':
+        case 'Graph':
+          return (
+             <div className="flex-1 overflow-auto p-6 md:p-8 z-10 relative">
+               <div className="mb-6">
+                 <h1 className="text-2xl font-black tracking-tight mb-1">Fraud Network Graph</h1>
+                 <p className="text-gray-500 font-medium text-sm">Visualizing nodes and edges to detect fraud rings and mule accounts.</p>
+               </div>
+               <div className="glass-card p-5 border border-white/10 w-full h-[600px] flex items-center justify-center relative overflow-hidden bg-black/5 dark:bg-white/5">
+                 {graphData.nodes.length === 0 ? (
+                    <div className="text-gray-500 flex flex-col items-center">
+                       <Network className="w-12 h-12 mb-4 opacity-30" />
+                       <span>No graph data available. Wait for more transactions.</span>
+                    </div>
+                 ) : (
+                    <svg width="100%" height="100%" viewBox="-500 -500 1000 1000">
+                      <g className="edges">
+                        {graphData.edges.map((edge, i) => {
+                          const src = graphData.nodes.find(n => n.id === edge.source);
+                          const tgt = graphData.nodes.find(n => n.id === edge.target);
+                          if (!src || !tgt) return null;
+                          // Simple circular layout for nodes
+                          const srcAngle = (graphData.nodes.indexOf(src) / graphData.nodes.length) * Math.PI * 2;
+                          const tgtAngle = (graphData.nodes.indexOf(tgt) / graphData.nodes.length) * Math.PI * 2;
+                          const srcX = Math.cos(srcAngle) * 350;
+                          const srcY = Math.sin(srcAngle) * 350;
+                          const tgtX = Math.cos(tgtAngle) * 350;
+                          const tgtY = Math.sin(tgtAngle) * 350;
+                          return (
+                             <line key={i} x1={srcX} y1={srcY} x2={tgtX} y2={tgtY} stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                          );
+                        })}
+                      </g>
+                      <g className="nodes">
+                        {graphData.nodes.map((node, i) => {
+                          const angle = (i / graphData.nodes.length) * Math.PI * 2;
+                          const x = Math.cos(angle) * 350;
+                          const y = Math.sin(angle) * 350;
+                          const color = node.risk === 'CRITICAL' ? '#FF3B30' : (node.type === 'merchant' ? '#0A84FF' : '#34C759');
+                          return (
+                            <g key={node.id} transform={`translate(${x},${y})`}>
+                              <circle r="8" fill={color} />
+                              {node.risk === 'CRITICAL' && <circle r="12" fill="none" stroke="#FF3B30" strokeWidth="2" strokeDasharray="2,2" className="animate-spin-slow" />}
+                            </g>
+                          );
+                        })}
+                      </g>
+                    </svg>
+                 )}
+               </div>
+             </div>
+          );
+
+        case 'Audit Logs':
+          return (
+             <div className="flex-1 overflow-auto p-6 md:p-8 z-10 relative">
+               <div className="mb-6">
+                 <h1 className="text-2xl font-black tracking-tight mb-1">System Audit Logs</h1>
+                 <p className="text-gray-500 font-medium text-sm">Tracking automated actions and analyst reviews.</p>
+               </div>
+               <div className="glass-card border border-white/10 overflow-hidden">
+                 <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead>
+                      <tr className="bg-black/5 dark:bg-white/5 border-b border-[#E5E5EA]/30 dark:border-[#3A3A3C]/30 uppercase text-[10px] font-black tracking-widest text-gray-500">
+                        <th className="px-4 py-3">Timestamp</th>
+                        <th className="px-4 py-3">User/System</th>
+                        <th className="px-4 py-3">Action</th>
+                        <th className="px-4 py-3">Target</th>
+                        <th className="px-4 py-3">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#E5E5EA]/30 dark:divide-[#3A3A3C]/30">
+                      {auditLogs.length === 0 ? (
+                        <tr><td colSpan="5" className="px-4 py-8 text-center text-gray-500">No logs found</td></tr>
+                      ) : (
+                        auditLogs.map((log) => (
+                          <tr key={log.id} className="hover:bg-black/5 dark:hover:bg-white/5">
+                            <td className="px-4 py-3 font-mono text-[10px] text-gray-500">{new Date(log.timestamp).toLocaleString()}</td>
+                            <td className="px-4 py-3 font-semibold">{log.user}</td>
+                            <td className="px-4 py-3">
+                              <span className={clsx("px-2 py-0.5 rounded text-[10px] font-bold uppercase", {
+                                'bg-apple-red/20 text-apple-red': log.action === 'Confirmed Fraud',
+                                'bg-apple-green/20 text-apple-green': log.action === 'Dismissed',
+                                'bg-apple-orange/20 text-apple-orange': log.action === 'Flagged',
+                              })}>{log.action}</span>
+                            </td>
+                            <td className="px-4 py-3 font-mono text-xs">{log.target}</td>
+                            <td className="px-4 py-3 text-xs text-gray-400">{log.details}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                 </table>
+               </div>
+             </div>
+          );
+
+        case 'Compliance':
+          return (
+             <div className="flex-1 overflow-auto p-6 md:p-8 z-10 relative">
+               <div className="mb-6 flex justify-between items-center">
+                 <div>
+                   <h1 className="text-2xl font-black tracking-tight mb-1">Compliance & Regulatory Reports</h1>
+                   <p className="text-gray-500 font-medium text-sm">Download aggregated data dumps formatted for RBI/NPCI compliance audits.</p>
+                 </div>
+                 <button 
+                   onClick={() => {
+                     const csvContent = "data:text/csv;charset=utf-8," 
+                       + "Transaction ID,User ID,Amount,Channel,Risk Score,Risk Level,Action Taken,Flags,Timestamp\n"
+                       + complianceReport.map(r => `${r.transaction_id},${r.user_id},${r.amount},${r.channel},${r.risk_score},${r.risk_level},${r.action_taken},"${r.flags}",${r.timestamp}`).join("\n");
+                     const encodedUri = encodeURI(csvContent);
+                     const link = document.createElement("a");
+                     link.setAttribute("href", encodedUri);
+                     link.setAttribute("download", `ARGUS_Compliance_Report_${new Date().toISOString().split('T')[0]}.csv`);
+                     document.body.appendChild(link);
+                     link.click();
+                     link.remove();
+                   }}
+                   className="flex items-center gap-2 bg-apple-blue text-white px-4 py-2 rounded-full font-bold shadow-lg shadow-apple-blue/30 text-sm hover:bg-blue-600 transition-colors"
+                 >
+                   <Download className="w-4 h-4" /> Export CSV Report
+                 </button>
+               </div>
+               <div className="glass-card border border-white/10 overflow-hidden">
+                 <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead>
+                      <tr className="bg-black/5 dark:bg-white/5 border-b border-[#E5E5EA]/30 dark:border-[#3A3A3C]/30 uppercase text-[10px] font-black tracking-widest text-gray-500">
+                        <th className="px-4 py-3">Txn ID</th>
+                        <th className="px-4 py-3">Amount</th>
+                        <th className="px-4 py-3">Risk Level</th>
+                        <th className="px-4 py-3">Action</th>
+                        <th className="px-4 py-3">Timestamp</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#E5E5EA]/30 dark:divide-[#3A3A3C]/30">
+                      {complianceReport.length === 0 ? (
+                        <tr><td colSpan="5" className="px-4 py-8 text-center text-gray-500">No report data generated</td></tr>
+                      ) : (
+                        complianceReport.map((r) => (
+                          <tr key={r.transaction_id} className="hover:bg-black/5 dark:hover:bg-white/5">
+                            <td className="px-4 py-3 font-mono text-[10px] text-gray-500">{r.transaction_id.substring(0,12)}...</td>
+                            <td className="px-4 py-3 font-mono font-bold text-[#1D1D1F] dark:text-[#F5F5F7]">{formatINR(r.amount)}</td>
+                            <td className="px-4 py-3 text-xs font-bold text-apple-red">{r.risk_level}</td>
+                            <td className="px-4 py-3 text-xs">{r.action_taken}</td>
+                            <td className="px-4 py-3 text-[10px] text-gray-500 font-mono">{new Date(r.timestamp).toLocaleString()}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                 </table>
+               </div>
+             </div>
+          );
+
+        case 'Info':
           return (
              <div className="flex-1 overflow-auto p-6 md:p-8 z-10 relative">
                <div className="max-w-5xl">
                  <div className="mb-6">
-                   <h1 className="text-2xl font-black tracking-tight mb-1">Platform Configuration</h1>
+                   <h1 className="text-2xl font-black tracking-tight mb-1">Platform Information</h1>
                    <p className="text-gray-500 font-medium text-sm">Engine parameters, regulatory limits, and model registry. Read-only view.</p>
                  </div>
                  
@@ -1160,6 +1444,61 @@ export default function Appv2() {
              </div>
           );
           
+        case 'Settings':
+          return (
+             <div className="flex-1 overflow-auto p-6 md:p-8 z-10 relative">
+               <div className="max-w-3xl">
+                 <div className="mb-6">
+                   <h1 className="text-2xl font-black tracking-tight mb-1">Engine Tuning</h1>
+                   <p className="text-gray-500 font-medium text-sm">Dynamically adjust Machine Learning ensemble weights.</p>
+                 </div>
+                 
+                 <div className="glass-card p-6 border border-white/10 space-y-6">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                       <h3 className="text-sm font-bold tracking-widest text-gray-500 uppercase flex items-center gap-2"><Brain className="w-5 h-5 text-apple-blue" /> Current Weights</h3>
+                       <div className="text-xl font-mono font-black">{Object.values(engineWeights).reduce((a,b)=>a+b,0)}%</div>
+                    </div>
+                    
+                    <div className="space-y-6">
+                       {Object.entries(engineWeights).map(([key, val]) => (
+                         <div key={key}>
+                            <div className="flex justify-between items-center mb-2">
+                               <span className="text-xs font-bold uppercase tracking-widest text-gray-400">{key.replace('_', ' ')}</span>
+                               <span className="text-sm font-mono font-bold text-white">{val}%</span>
+                            </div>
+                            <input 
+                              type="range" min="0" max="100" 
+                              value={val} 
+                              onChange={(e) => {
+                                setEngineWeights(prev => ({...prev, [key]: parseInt(e.target.value)}));
+                              }}
+                              className="w-full accent-apple-blue h-2 bg-white/10 rounded-full appearance-none"
+                            />
+                         </div>
+                       ))}
+                    </div>
+
+                    <div className="pt-4 border-t border-white/10 flex justify-end">
+                       <button 
+                         onClick={() => {
+                            // normalize client side just in case
+                            const total = Object.values(engineWeights).reduce((a,b)=>a+b,0);
+                            const normalized = {};
+                            for (let k in engineWeights) normalized[k] = engineWeights[k]/total;
+                            api.updateEngineWeights(normalized).then(() => {
+                               window.dispatchEvent(new CustomEvent('argus-notify', { detail: { message: 'Engine weights dynamically updated', type: 'success' } }));
+                            });
+                         }}
+                         className="bg-apple-blue hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors flex items-center gap-2"
+                       >
+                         <Zap className="w-4 h-4" /> APPLY NEW WEIGHTS
+                       </button>
+                    </div>
+                 </div>
+               </div>
+             </div>
+          );
+          
         default: return null;
      }
   };
@@ -1196,6 +1535,10 @@ export default function Appv2() {
                { icon: Activity, label: 'Live Traffic' },
                { icon: AlertTriangle, label: 'Alerts' },
                { icon: Users, label: 'Profiles' },
+               { icon: Network, label: 'Graph' },
+               { icon: List, label: 'Audit Logs' },
+               { icon: Shield, label: 'Compliance' },
+               { icon: Info, label: 'Info' },
                { icon: Settings, label: 'Settings' },
              ].map((item, idx) => (
                <button key={idx} 
@@ -1296,7 +1639,8 @@ export default function Appv2() {
       </div>
       
       {/* The Inspector Overlay - Moved outside main for correct stacking and positioning */}
-      <TransactionInspector transaction={inspectedTxn} onClose={closeInspector} sidebarOpen={sidebarOpen} />
+      <TransactionInspector transaction={inspectedTxn} onClose={closeInspector} sidebarOpen={sidebarOpen} onUserClick={setSelectedUser} />
+      <UserInspector userId={selectedUser} onClose={() => setSelectedUser(null)} sidebarOpen={sidebarOpen} />
     </div>
   );
 }

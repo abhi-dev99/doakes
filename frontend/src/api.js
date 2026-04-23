@@ -112,6 +112,48 @@ const api = {
     const res = await fetch(`${API_BASE}/api/performance/metrics`);
     if (!res.ok) throw new Error('Failed to fetch performance metrics');
     return res.json();
+  },
+
+  async getVisualGraph() {
+    const res = await fetch(`${API_BASE}/api/graph/visualize`);
+    if (!res.ok) throw new Error('Failed to fetch visual graph');
+    return res.json();
+  },
+
+  async getAuditLogs(limit = 50) {
+    const res = await fetch(`${API_BASE}/api/audit-logs?limit=${limit}`);
+    if (!res.ok) throw new Error('Failed to fetch audit logs');
+    return res.json();
+  },
+
+  async getComplianceReport(limit = 100) {
+    const res = await fetch(`${API_BASE}/api/compliance-report?limit=${limit}`);
+    if (!res.ok) throw new Error('Failed to fetch compliance report');
+    return res.json();
+  },
+
+  async updateEngineWeights(weights) {
+    const res = await fetch(`${API_BASE}/api/settings/engines`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(weights)
+    });
+    if (!res.ok) throw new Error('Failed to update engine weights');
+    return res.json();
+  },
+
+  async blockUser(userId) {
+    const res = await fetch(`${API_BASE}/api/user/${userId}/block`, {
+      method: 'POST'
+    });
+    if (!res.ok) throw new Error('Failed to block user');
+    return res.json();
+  },
+
+  async getTransaction(txnId) {
+    const res = await fetch(`${API_BASE}/api/transactions/${txnId}`);
+    if (!res.ok) throw new Error('Failed to fetch transaction');
+    return res.json();
   }
 };
 
