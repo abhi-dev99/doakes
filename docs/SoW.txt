@@ -2,8 +2,8 @@
 STATEMENT OF WORK (SOW)
 ================================================================================
 
-Project Title: ARGUS - Advanced Real-time Guard & User Security System
-              AI-Powered Fraud Detection for Digital Payment Ecosystem
+Project Title: 
+Project Argus: an AI-based Fraud Detection System
 
 Document Version: 1.0
 Date: January 9, 2026

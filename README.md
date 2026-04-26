@@ -1,4 +1,4 @@
-# ARGUS: Pre-Authorization Fraud Prevention Engine
+# Project ARGUS: an AI-based Fraud Detection System
 ## Advanced Real-time Guard & User Security for Digital Payments
 
 ARGUS is a high-performance, low-latency fraud detection and prevention system designed for the Indian digital payment ecosystem (UPI, IMPS, Cards). Unlike traditional reactive systems that analyze transactions post-authorization, ARGUS implements a proactive pre-authorization decision engine that evaluates risk and enforces blocking or step-up authentication (3DS/OTP) within a <20ms execution window.

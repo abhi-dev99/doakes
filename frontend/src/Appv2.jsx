@@ -424,7 +424,7 @@ const TransactionRowDesktop = memo(function TransactionRowDesktop({ transaction,
       )}
       onClick={() => onOpenInspector(transaction)}
     >
-      <div className="col-span-3 flex items-center gap-3">
+      <div className="col-span-2 flex items-center gap-3">
         <div className={clsx("w-2 h-2 rounded-full shrink-0", {
           'bg-apple-green': risk === 'LOW',
           'bg-apple-orange': risk === 'MEDIUM',
@@ -432,30 +432,74 @@ const TransactionRowDesktop = memo(function TransactionRowDesktop({ transaction,
         })} />
         <div className="min-w-0">
           <div className="text-sm font-bold font-mono tracking-tight text-[#1D1D1F] dark:text-[#F5F5F7] group-hover:text-apple-blue transition-colors truncate">
-            {transaction.transaction_id}
+            {transaction.transaction_id?.split('-')[0]}...
           </div>
-          <div className="text-xs font-semibold text-gray-500 mt-0.5">{timeAgo(transaction.timestamp)}</div>
+          <div className="text-[10px] font-semibold text-gray-500 mt-0.5">{timeAgo(transaction.timestamp)}</div>
         </div>
       </div>
       
-      <div className="col-span-2 flex items-center gap-2">
-        <div className="w-7 h-7 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-gray-600 dark:text-gray-300 shrink-0">
-          <ChannelIcon className="w-3.5 h-3.5" />
+      <div className="col-span-1 flex items-center gap-2">
+        <div className="w-6 h-6 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-gray-600 dark:text-gray-300 shrink-0">
+          <ChannelIcon className="w-3 h-3" />
         </div>
-        <span className="text-sm font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] truncate">{channel.label}</span>
+        <span className="text-[11px] font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] truncate">{channel.label}</span>
       </div>
       
-      <div className="col-span-3 min-w-0">
-        <div className="text-sm font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] truncate">{transaction.merchant_category || 'General Merchant'}</div>
-        <div className="text-xs font-medium text-gray-500 mt-0.5 truncate">{transaction.city || 'Location Unknown'}</div>
+      <div className="col-span-2 min-w-0">
+        <div className="text-xs font-semibold text-[#1D1D1F] dark:text-[#F5F5F7] truncate">{transaction.merchant_category || 'General Merchant'}</div>
+        <div className="text-[10px] font-medium text-gray-500 mt-0.5 truncate">{transaction.city || 'Location Unknown'}</div>
       </div>
       
-      <div className="col-span-2 flex items-center">
-        <span className={clsx("badge", getRiskBadgeClass(risk))}>{risk}</span>
+      <div className="col-span-1 flex items-center">
+        <span className={clsx("badge text-[9px]", getRiskBadgeClass(risk))}>{risk}</span>
+      </div>
+
+      <div className="col-span-1 flex items-center">
+        <span className={clsx("px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-lg border shadow-sm", {
+          'bg-apple-green/10 text-apple-green border-apple-green/30': transaction.recommendation === 'ALLOW' || transaction.recommendation === 'APPROVE' || !transaction.recommendation,
+          'bg-apple-red/10 text-apple-red border-apple-red/30': transaction.recommendation === 'BLOCK',
+          'bg-apple-orange/10 text-apple-orange border-apple-orange/30': transaction.recommendation === 'FLAG' || transaction.recommendation === 'REVIEW' || transaction.recommendation === 'MANUAL_REVIEW'
+        })}>
+          {transaction.recommendation || 'ALLOW'}
+        </span>
+      </div>
+
+      <div className="col-span-3 relative group/vectors flex items-center gap-1 flex-wrap overflow-visible max-h-8">
+        {transaction.triggered_rules && transaction.triggered_rules.length > 0 ? (
+          <>
+            {transaction.triggered_rules.map((rule, i) => {
+              const ruleName = typeof rule === 'string' ? rule.split(':')[0] : 'ANOMALY';
+              const isSevere = ruleName.includes('PHISHING') || ruleName.includes('MULE') || ruleName.includes('ARREST') || ruleName.includes('VPN');
+              return (
+                <span key={i} className={clsx("text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border truncate max-w-[80px]", isSevere ? "bg-apple-red/10 text-apple-red border-apple-red/20" : "bg-gray-500/10 text-gray-500 dark:text-gray-400 border-gray-500/20")}>
+                  {ruleName}
+                </span>
+              );
+            })}
+            
+            {/* Custom Hover Box for Vectors */}
+            <div className="absolute left-0 top-full mt-2 hidden group-hover/vectors:block z-[999] w-64 bg-[#F5F5F7] dark:bg-[#1C1C1E] border border-[#E5E5EA] dark:border-white/10 shadow-2xl rounded-xl p-3">
+              <p className="text-[9px] font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-widest">Triggered Vectors</p>
+              <div className="space-y-1.5">
+                {transaction.triggered_rules.map((rule, i) => {
+                  const isSevere = typeof rule === 'string' && (rule.includes('PHISHING') || rule.includes('MULE') || rule.includes('ARREST') || rule.includes('VPN'));
+                  return (
+                    <div key={i} className="flex items-start gap-2">
+                      <div className={clsx("w-1.5 h-1.5 rounded-full mt-1.5 shrink-0", isSevere ? "bg-apple-red shadow-[0_0_8px_rgba(255,59,48,0.6)]" : "bg-apple-orange")} />
+                      <p className="text-[10px] font-mono text-[#1D1D1F] dark:text-gray-300 break-words leading-tight">{rule}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        ) : (
+          <span className="text-[10px] text-gray-400 font-mono">-</span>
+        )}
       </div>
       
       <div className="col-span-2 flex items-center justify-end gap-3 text-right">
-        <div className="text-[15px] font-bold font-mono text-[#1D1D1F] dark:text-[#F5F5F7] whitespace-nowrap">{formatINR(transaction.amount)}</div>
+        <div className="text-sm font-bold font-mono text-[#1D1D1F] dark:text-[#F5F5F7] whitespace-nowrap">{formatINR(transaction.amount)}</div>
         <ChevronRight className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 group-hover:text-apple-blue transition-all shrink-0 -mr-2" />
       </div>
     </div>
@@ -1043,11 +1087,13 @@ export default function Appv2() {
                 
                 <div className="flex-1 overflow-auto">
                   {/* Strict Grid Header */}
-                  <div className="grid grid-cols-12 gap-4 text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest px-6 py-4 border-b border-[#E5E5EA] dark:border-[#3A3A3C] sticky top-0 bg-[#F5F5F7]/95 dark:bg-[#1C1C1E]/95 backdrop-blur-xl z-10">
-                    <div className="col-span-3">Transaction ID</div>
-                    <div className="col-span-2">Channel</div>
-                    <div className="col-span-3">Origin / Location</div>
-                    <div className="col-span-2">System Risk</div>
+                  <div className="grid grid-cols-12 gap-4 text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest px-6 py-4 border-b border-[#E5E5EA] dark:border-[#3A3A3C] sticky top-0 bg-[#F5F5F7]/95 dark:bg-[#1C1C1E]/95 backdrop-blur-xl z-10">
+                    <div className="col-span-2">Transaction ID</div>
+                    <div className="col-span-1">Channel</div>
+                    <div className="col-span-2">Origin / Location</div>
+                    <div className="col-span-1">Risk</div>
+                    <div className="col-span-1">Decision</div>
+                    <div className="col-span-3">Anomaly Vectors</div>
                     <div className="col-span-2 text-right pr-6">Traded Value</div>
                   </div>
                   
@@ -1535,7 +1581,6 @@ export default function Appv2() {
                { icon: Activity, label: 'Live Traffic' },
                { icon: AlertTriangle, label: 'Alerts' },
                { icon: Users, label: 'Profiles' },
-               { icon: Network, label: 'Graph' },
                { icon: List, label: 'Audit Logs' },
                { icon: Shield, label: 'Compliance' },
                { icon: Info, label: 'Info' },
