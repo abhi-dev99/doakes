@@ -14,14 +14,17 @@ The platform utilizes a multi-layered defense-in-depth architecture to evaluate 
 - **Geospatial Analysis:** Real-time IP-to-location mapping with "impossible travel" velocity checks and VPN/Proxy/Tor exit-node detection.
 - **Behavioral Biometrics:** Analyzes user interaction patterns (cadence, velocity, timing) against historical profiles to identify account takeover (ATO).
 
-### 2. Machine Learning Ensemble
-- **XGBoost Classifier:** Supervised learning model trained on 6M+ transactions (PaySim & Kaggle UPI datasets), optimized for high-precision fraud identification.
-- **Isolation Forest:** Unsupervised anomaly detection for identifying novel, "zero-day" fraud patterns that lack historical precedent.
-- **Temporal Sequence Analysis:** LSTM-based recurrent neural networks for detecting sophisticated multi-stage fraud attempts over time.
+### 2. Machine Learning Ensemble (v4.0)
+The core decision engine utilizes a weighted ensemble of five distinct analytical modules:
+- **XGBoost Classifier (30%):** Supervised model optimized for high-precision fraud identification in structured transaction data.
+- **LightGBM (25%):** Gradient boosting framework designed for handling large-scale categorical features with high efficiency.
+- **Isolation Forest (15%):** Unsupervised anomaly detection for identifying novel, "zero-day" fraud patterns without historical precedent.
+- **Rule Engine & Heuristics (15%):** India-specific business logic (RBI/NPCI compliant) for velocity, geofencing, and digital arrest mitigation.
+- **Dynamic Behavioral Analysis (15%):** Real-time comparison of incoming transactions against a rolling 30-day personalized user profile.
 
 ### 3. Relationship Analytics (Graph)
 - **Mule Account Detection:** Identification of money-laundering clusters and high-frequency "pass-through" nodes.
-- **Fraud Ring Identification:** Using NetworkX and community detection algorithms to find cyclic transaction patterns (A → B → C → A) and shared infrastructure.
+- **Fraud Ring Identification:** Using NetworkX and community detection algorithms to find cyclic transaction patterns (A → B → C → A).
 
 ### 4. Explainable AI (XAI)
 - **SHAP Integration:** Provides granular transparency into every decision, mapping specific features (e.g., "high-value to new merchant," "unusual hour") to their impact on the final risk score.
