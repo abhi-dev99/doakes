@@ -56,7 +56,7 @@ ARGUS is engineered to align with the **RBI Digital Payment Security Controls** 
 ## Technology Stack
 
 - **Backend:** Python 3.11+, FastAPI (Asynchronous I/O), SQLite (Local Store)
-- **ML/Data:** XGBoost, Scikit-learn, NetworkX, PyTorch, Pandas
+- **ML/Data:** XGBoost, LightGBM, Scikit-learn, NetworkX, PyTorch, Pandas
 - **Frontend:** React 18, Vite, Tailwind CSS, Recharts (Real-time Telemetry)
 - **Integration:** WebSockets for live traffic stream, REST API for system configuration
 
