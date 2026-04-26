@@ -33,7 +33,7 @@ Thumbs.db
 AIML Dataset.csv
 backend/ml/data/*.csv
 dataset/
-assignments/
+assignments/prep/
 
 # Agent scripts and internal guides
 agent/
