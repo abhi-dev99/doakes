@@ -43,6 +43,8 @@ Understand the user interface and the business validation strategy.
 22. `22_frontend.md` (React Dashboard)
 23. `23_survey_form.md` (Market Validation Simulation)
 24. `24_project_root.md`
+25. `25_ml_architecture_deepdive.md` (Detailed ML Architecture Breakdown)
+26. `26_project_contributions.md` (Team Roles & Contribution Guide)
 
 ---
 
